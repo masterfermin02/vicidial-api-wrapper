@@ -124,13 +124,20 @@ class Client {
      * @return string
      * @throws Exception
      */
-    public function dispo(string $agent_user, string $status)
+    public function dispo(string $agent_user, array $options)
     {
-        return $this->call_api_url($this->base_url,[
+        $options = $this->encode($options) + [
             'agent_user' => urlencode(trim($agent_user)),
-            'function' => 'external_status',
-            'value' => urlencode(trim($status))
-        ]);
+            'function' => 'external_status'
+        ];
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    private function encode(array $options): array
+    {
+        return array_map(function ($option) {
+            return urlencode(trim($option));
+        }, $options);
     }
 
     /**

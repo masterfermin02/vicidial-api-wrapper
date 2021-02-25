@@ -31,8 +31,8 @@ $fields['last_name'] = "Doe";
 $fields['address1'] = "123 Fake St";
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "VicidialAPI", "gabriel", "Sup3rP4ss");
-     echo $vicidialAPI->update_fields("gabriel", $fields);
+     $agent_api = new Client("127.0.0.1", "gabriel", "Sup3rP4ss");
+     echo $agent_api->update_fields("gabriel", $fields);
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -47,11 +47,11 @@ Example 2:  Hangup Call, Dispo it and Pause Agent
 use Vicidal\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "VicidialAPI", "gabriel", "Sup3rP4ss");
-     $vicidialAPI->pause("gabriel", "PAUSE");
-     $vicidialAPI->hangup("gabriel");
-     $vicidialAPI->dispo("gabriel", "SALE");
-     $vicidialAPI->pause_code("gabriel", "BREAK");
+     $agent_api = new Client("127.0.0.1", "gabriel", "Sup3rP4ss");
+     $agent_api->pause("gabriel", "PAUSE");
+     $agent_api->hangup("gabriel");
+     $agent_api->dispo("gabriel", ['value' => 'SALE']);
+     $agent_api->pause_code("gabriel", "BREAK");
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }

@@ -1,5 +1,5 @@
 ### Agent API functions:
-- version - shows version and build of the API, along with the date/time
+- (version)[#version] - shows version and build of the API, along with the date/time
 - external_hangup - sends command to hangup the current phone call for one specific agent(Hangup Customer)
 - external_status - sends command to set the disposition for one specific agent and move on to next call
 - external_pause - sends command to pause/resume an agent now if not on a call, or pause after their next call if on call
@@ -33,27 +33,46 @@
 - user - is the API user
 - pass - is the API user password
 - agent_user - is the vicidial agent user whose session that you want to affect
-- source - description of what originated the API call (maximum 20 characters)
+- source - description of what originated the API call (maximum 20 characters) default (test)
+- hasSSl - Tell the client if use http or https default (true)
 
-### Optional variable for all API calls:
-- close_window_link - will display a link to close the window, useful if you pop up the API link in a browser window
-- language - currently only works for close window link: en=English, es=Spanish
+```php
+    <?php
+    
+    use Vicidal\Api\Wrapper\Agent\Client;
+    
+    $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+```
 
-
-
+#### Example 
 To hangup the call, disposition it and then pause the agent, do the following in order:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=external_pause&value=PAUSE
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=external_hangup&value=1
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=external_status&value=A
 
+```php 
 
+<?php
+
+use Vicidal\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->pause($agent_user, "PAUSE");
+     $vicidialAPI->hangup($agent_user);
+     $vicidialAPI->dispo($agent_user, ['value' => 'SALE']);
+     $vicidialAPI->pause_code($agent_user, "BREAK");
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
 
 Response to calls will return either an ERROR or a SUCCESS along with an explanation.
 for example:
+```
 SUCCESS: external_status function set - 6666|A
 ERROR: agent_user is not logged in - 6666
 ERROR: auth USER DOES NOT HAVE PERMISSION TO USE THIS FUNCTION - 6666|webserver|ADMIN
-
+```
 
 
 DETAIL OF EACH FUNCTION:
@@ -61,31 +80,38 @@ DETAIL OF EACH FUNCTION:
 
 
 --------------------------------------------------------------------------------
-version -
+version
+---
 
 DESCRIPTION:
 shows version and build of the API, along with the date/time
-
-VALUES: NONE
-
-EXAMPLE URL:
-http://server/agc/api.php?function=version
 
 RESPONSES:
 VERSION: 2.0.5-2|BUILD: 90116-1229|DATE: 2009-01-15 14:59:33|EPOCH: 1222020803 
 
+```php 
+
+<?php
+
+use Vicidal\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     echo $vicidialAPI->version(); // VERSION: 2.0.5-2|BUILD: 90116-1229|DATE: 2009-01-15 14:59:33|EPOCH: 1222020803 
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
+
 
 
 --------------------------------------------------------------------------------
-webserver -
+webserver
+---
 
 DESCRIPTION:
 shows version and build of the API, along with the date/time
-
-VALUES: NONE
-
-EXAMPLE URL:
-http://server/agc/api.php?source=test&user=6666&pass=1234&function=webserver
 
 RESPONSES:
 Webserver Data:
@@ -108,20 +134,29 @@ post_max_size: 48M
 upload_max_filesize: 42M
 default_socket_timeout: 360
 
+```php 
+
+<?php
+
+use Vicidal\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     echo $vicidialAPI->webserver();
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
 
 
 
 --------------------------------------------------------------------------------
-external_hangup - 
+external_hangup 
+---
 
 DESCRIPTION:
 Hangs up the current customer call on the agent screen
-
-VALUES: (value)
-1  - the only valid value for this function
-
-EXAMPLE URL:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=external_hangup&value=1
 
 RESPONSES:
 ERROR: external_hangup not valid - 1|6666
@@ -129,29 +164,72 @@ ERROR: no user found - 6666
 ERROR: agent_user is not logged in - 6666
 SUCCESS: external_hangup function set - 1|6666
 
+```php 
+
+<?php
+
+use Vicidal\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     echo $vicidialAPI->hangup("agent_name");
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
+
 
 
 --------------------------------------------------------------------------------
-external_status - 
+external_status
+---
 
 DESCRIPTION:
 Sets the status of the current customer call on the agent dispotion screen
 
 VALUES: (value)
-value - 
+- value - 
  Any valid status in the VICIDIAL system will work for this function
-callback_datetime -
+- callback_datetime -
  YYYY-MM-DD+HH:MM:SS, date and time of scheduled callback. REQUIRED if callback is set and status is flagged as a scheduled callback
-callback_type -	
+- callback_type -	
  USERONLY or ANYONE, default is ANYONE
-callback_comments -
+- callback_comments -
  Optional comments to appear when the callback is called back, must be less than 200 characters in length
-qm_dispo_code - 
+- qm_dispo_code - 
  Option callstatus code used if QM is enabled
+ callback_type=USERONLY&callback_comments=callback+comments+go+here&qm_dispo_code=1234
 
-EXAMPLE URL:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=external_status&value=A
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=external_status&value=CALLBK&callback_datetime=2012-01-25+12:00:00&callback_type=USERONLY&callback_comments=callback+comments+go+here&qm_dispo_code=1234
+```php 
+
+<?php
+
+use Vicidal\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     echo $vicidialAPI->dispo("agent_user",[
+        'value' => 'A'
+     ]);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     echo $vicidialAPI->dispo("agent_user",[
+        'value' => 'CALLBK',
+        'callback_datetime' => '2012-01-25+12:00:00',
+        'callback_type' => 'USERONLY',
+        'callback_comments' => 'callback+comments+go+here',
+        'qm_dispo_code' => 123
+     ]);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
 
 RESPONSES:
 ERROR: external_status not valid - A|6666
@@ -171,15 +249,27 @@ VALUES: (value)
 PAUSE  - Pauses the agent session
 RESUME  - Resumes the agent session
 
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=external_pause&value=PAUSE
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=external_pause&value=RESUME
-
 RESPONSES:
 ERROR: external_pause not valid - PAUSE|6666
 ERROR: no user found - 6666
 ERROR: agent_user is not logged in - 6666
 SUCCESS: external_pause function set - PAUSE|1232020456|6666
+
+```php 
+
+<?php
+
+use Vicidal\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->pause($agent_user, "PAUSE");
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
 
 
 
@@ -192,16 +282,26 @@ Logs the agent out of the agent interface. If the agent is on a live call, will 
 VALUES: (value)
 LOGOUT  - Logout the agent session
 
-
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=logout&value=LOGOUT
-
 RESPONSES:
 ERROR: logout not valid - PAUSE|6666
 ERROR: no user found - 6666
 ERROR: agent_user is not logged in - 6666
 SUCCESS: logout function set - LOGOUT|1232020456|6666
 
+```php 
+
+<?php
+
+use Vicidal\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI->logout($agent_user);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
 
 
 --------------------------------------------------------------------------------
