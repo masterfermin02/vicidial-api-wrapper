@@ -178,7 +178,6 @@ class Client {
      * @return string
      * @throws Exception
      */
-
     public function webserver()
     {
         return $this->call_api_url($this->base_url,[
@@ -191,7 +190,6 @@ class Client {
      * @return string
      * @throws Exception
      */
-
     public function version()
     {
         return $this->call_api_url($this->base_url,[
@@ -205,7 +203,6 @@ class Client {
      * @return string
      * @throws Exception
      */
-
     public function logout($agent_user)
     {
         return $this->call_api_url($this->base_url,[
@@ -222,14 +219,13 @@ class Client {
      * @return string
      * @throws Exception
      */
-
     public function dial($agent_user, $options)
     {
         if (!isset($options['phone_number']) ) {
             throw new Exception("Please provide a valid phone number");
         }
 
-        $options += [
+        $options = $this->encode($options) + [
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'external_dial',
             'value' => urlencode(trim($options['phone_numer'])),
@@ -238,6 +234,66 @@ class Client {
             'preview' => 'NO',
             'focues' => 'YES'
         ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     * Sends a SKIP, DIALONLY, ALTDIAL, ADR3DIAL or FINISH when a lead is being previewed or in Manual Alt Dial
+     * @param $agent_user
+     * @param $value
+     * @return string
+     * @throws Exception
+     */
+    public function preview_dial($agent_user, $value)
+    {
+        $options = [
+                'agent_user' => urlencode(trim($agent_user)),
+                'function' => 'preview_dial_action',
+                'value' => urlencode(trim($value))
+        ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     * Adds a lead in the manual dial list of the campaign for logged-in agent. A much simplified add lead function compared to the Non-Agent API function
+     * @param $agent_user
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function add_lead($agent_user, $options)
+    {
+
+        $options = $this->encode($options) + [
+            'agent_user' => urlencode(trim($agent_user)),
+            'function' => 'external_add_lead'
+        ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     * This function will change the selected in-groups for an agent that is logged into a campaign that allows
+     * for inbound calls to be handled. Allows the selected in-groups for an agent to be changed while they are
+     * logged-in to the ViciDial Agent screen only. Once changed in this way, the agent would need to log out
+     * and back in to be able to select in-groups themselves(If Agent Choose In-Groups is enabled for that user).
+     * The blended checkbox can also be changed using this function. The API user performing this function must
+     * have vicidial_users.change_agent_campaign = 1.
+     *
+     * @param $agent_user
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function change_ingroups($agent_user, $options)
+    {
+
+        $options = $this->encode($options) + [
+                'agent_user' => urlencode(trim($agent_user)),
+                'function' => 'change_ingroups'
+            ];
 
         return $this->call_api_url($this->base_url, $options);
     }
@@ -273,6 +329,59 @@ class Client {
                 'function' => 'update_fields'
             ];
         return $this->call_api_url($this->base_url,$options);
+    }
+
+    /**
+     * Updates the fields that are specified with the values. This will update the data
+     * that is on the agent's screen in the customer information section.
+     *
+     * @param $agent_user
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function set_timer_action($agent_user, $options)
+    {
+        $options = $this->encode($options) + [
+                'agent_user' => urlencode(trim($agent_user)),
+                'function' => 'set_timer_action'
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     * Looks up the vicidial_users.custom_three field(as "agentId") to associate with a vicidial user ID.
+     * If found it will populate the custom_four field with a "teamId" value, then output the vicidial user ID
+     *
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function st_login_log($options)
+    {
+        $options = $this->encode($options) + [
+                'function' => 'st_login_log'
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     * Looks up the vicidial_users.custom_three field(as "agentId") to associate with a vicidial user ID.
+     * If found it will output the active lead_id and phone number, vendor_lead_code, province, security_phrase and source_id fields.
+     *
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function st_get_agent_active_lead($options)
+    {
+        $options = $this->encode($options) + [
+                'function' => 'st_get_agent_active_lead'
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
     }
 
     /**
