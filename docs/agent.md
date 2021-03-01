@@ -39,7 +39,7 @@
 ```php
     <?php
     
-    use Vicidal\Api\Wrapper\Agent\Client;
+    use Vicidial\Api\Wrapper\Agent\Client;
     
     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
 ```
@@ -51,7 +51,7 @@ To hangup the call, disposition it and then pause the agent, do the following in
 
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -95,7 +95,7 @@ Code:
 
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -142,7 +142,7 @@ Code:
 
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -172,7 +172,7 @@ SUCCESS: external_hangup function set - 1|6666
 
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -210,7 +210,7 @@ Code:
 
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -258,7 +258,7 @@ Code:
 
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -295,7 +295,7 @@ Code:
 
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -374,7 +374,7 @@ Code:
 ```
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -393,7 +393,7 @@ Next dial example:
 ```
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -435,7 +435,7 @@ Code:
 ```
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -509,7 +509,7 @@ Code:
 ```
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -567,7 +567,7 @@ Code:
 ```
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -641,7 +641,7 @@ Code:
 ```
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -692,7 +692,7 @@ Code:
 ```
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -735,7 +735,7 @@ Code:
 ```
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -754,7 +754,7 @@ try {
 
 
 --------------------------------------------------------------------------------
-st_get_agent_active_lead - 
+st_get_agent_active_lead
 ---
 
 DESCRIPTION:
@@ -783,7 +783,7 @@ Code:
 ```
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
@@ -800,7 +800,7 @@ try {
 
 
 --------------------------------------------------------------------------------
-ra_call_control - 
+ra_call_control
 ---
 
 DESCRIPTION:
@@ -820,9 +820,7 @@ phone_number -
 status -
  OPTIONAL, status of the call, maximum of 6 characters, if not set, status will be RAXFER
 
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1028&function=ra_call_control&stage=INGROUPTRANSFER&ingroup_choices=DEFAULTINGROUP&value=Y0316001655000402028
-
+```
 RESPONSES:
 ERROR: ra_call_control not valid - Y0315201639000402027|6666|INGROUPTRANSFER
 ERROR: no user found - 6666
@@ -833,19 +831,21 @@ ERROR: ingroup is not valid - TESTINGROUP
 ERROR: stage is not valid - XYZ
 SUCCESS: ra_call_control transferred - 6666|Y0315201639000402027|SALESLINE
 SUCCESS: ra_call_control hungup - 6666|Y0315201639000402027|HANGUP
+```
 
 Code:
 ```
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->st_get_agent_active_lead($agent_user, [
-        'value' => 876543,
-        'vendor_id' => 207
+     $vicidialAPI->ra_call_control($agent_user, [
+        'stage' => 'INGROUPTRANSFER',
+        'ingroup_choices' => 'DEFAULTINGROUP',
+        'value' => 'Y0316001655000402028'
      ]);
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
@@ -856,32 +856,47 @@ try {
 
 
 --------------------------------------------------------------------------------
-send_dtmf - 
+send_dtmf
+---
 
 DESCRIPTION:
 Sends dtmf signal string to agent's session
 
 VALUES: (value)
-only valid DTMF characters with these replacements:
-  P = # (pound or hash)
-  S = * (star)
-  Q = (one second of silence)
-
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=send_dtmf&value=QQQQ1234SQQQQQ6654P
-
+- only valid DTMF characters with these replacements:
+    - P = # (pound or hash)
+    - S = * (star)
+    - Q = (one second of silence)
+```
 RESPONSES:
 ERROR: send_dtmf not valid - QQ|6666
 ERROR: no user found - 6666
 ERROR: agent_user is not logged in - 6666
 SUCCESS: send_dtmf function set - QQQQ1234SQQQQQ6654P|6666
+```
 
 
+Code:
+```
+<?php
 
+use Vicidial\Api\Wrapper\Agent\Client;
 
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->send_dtmf($agent_user, [
+        'value' => 'QQQQ1234SQQQQQ6654P'
+     ]);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
 
 --------------------------------------------------------------------------------
 park_call - 
+---
 
 DESCRIPTION:
 sends command to park customer or grab customer out of park
@@ -894,25 +909,47 @@ VALUES:
    PARK_IVR_CUSTOMER - send customer to the park ivr as defined in the campaign the agent is logged into, customer will come back after finishing IVR
    GRAB_IVR_CUSTOMER - grab customer from the park ivr and send them to the agent session
 
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=park_call&value=PARK_CUSTOMER
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=park_call&value=GRAB_CUSTOMER
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=park_call&value=PARK_IVR_CUSTOMER
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=park_call&value=GRAB_IVR_CUSTOMER
-
+```
 RESPONSES:
 ERROR: park_call not valid - PARK_CUSTOMER|6666
 ERROR: no user found - 6666
 ERROR: agent_user is not logged in - 6666
 ERROR: agent_user does not have a lead on their screen - 6666
 SUCCESS: park_call function set - PARK_CUSTOMER|6666
+```
 
+Code:
+```
+<?php
 
+use Vicidial\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->park_call($agent_user, [
+       'value' => 'PARK_CUSTOMER'
+     ]);
+     $vicidialAPI->park_call($agent_user, [
+             'value' => 'GRAB_CUSTOMER'
+          ]);
+     $vicidialAPI->park_call($agent_user, [
+             'value' => 'PARK_IVR_CUSTOMER'
+          ]);
+     $vicidialAPI->park_call($agent_user, [
+                   'value' => 'GRAB_IVR_CUSTOMER'
+                ]);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
 
 
 
 --------------------------------------------------------------------------------
-transfer_conference - 
+transfer_conference
+---
 
 DESCRIPTION:
 sends several commands related to the agent transfer-conf frame
@@ -940,22 +977,7 @@ VALUES:
   OPTIONAL, defines what caller ID number to use when doing DIAL_WITH_CUSTOMER or PARK_CUSTOMER_DIAL
  cid_choice - 
   OPTIONAL, alternate method for caller ID number to use when doing DIAL_WITH_CUSTOMER or PARK_CUSTOMER_DIAL: 'CAMPAIGN','AGENT_PHONE','CUSTOMER','CUSTOM_CID'
-
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=HANGUP_XFER
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=HANGUP_BOTH
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=BLIND_TRANSFER&phone_number=8500
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=LEAVE_VM
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=LOCAL_CLOSER&ingroup_choices=DEFAULTINGROUP
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=LOCAL_CLOSER&ingroup_choices=AGENTDIRECT&phone_number=6666
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=LOCAL_CLOSER&ingroup_choices=SALESLINE
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=DIAL_WITH_CUSTOMER&ingroup_choices=TEST_IN3&consultative=YES
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=DIAL_WITH_CUSTOMER&phone_number=8500
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=DIAL_WITH_CUSTOMER&phone_number=919998888112&dial_override=YES
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=DIAL_WITH_CUSTOMER&phone_number=919998888112&cid_choice=CUSTOMER
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=PARK_CUSTOMER_DIAL&ingroup_choices=TEST_IN3&consultative=YES
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=transfer_conference&value=LEAVE_3WAY_CALL
-
+```
 RESPONSES:
 ERROR: transfer_conference not valid - QQ|6666
 ERROR: value is not valid - XYZFUNCTION|6666
@@ -967,9 +989,32 @@ ERROR: caller_id_number from group_alias is not valid - 6666|TESTING|123
 ERROR: group_alias is not valid - 6666|TESTING
 ERROR: cid_choice is not valid - 6666|TESTING
 SUCCESS: transfer_conference function set - LOCAL_CLOSER|SALESLINE||YES|6666|M2141842580000000044|
+```
 
+Code:
+```
+<?php
 
+use Vicidial\Api\Wrapper\Agent\Client;
 
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->transfer_conference($agent_user, [
+        'value' => 'HANGUP_XFER'
+     ]);
+     $vicidialAPI->transfer_conference($agent_user, [
+             'value' => 'HANGUP_BOTH'
+          ]);
+     $vicidialAPI->transfer_conference($agent_user, [
+                  'value' => 'BLIND_TRANSFER',
+                  'phone_number' => 8500
+               ]);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
 
 
 --------------------------------------------------------------------------------
@@ -1011,7 +1056,8 @@ NOTICE: recording active - 6666|121242|20120810-012008__6666_|192.168.1.5|2012-0
 
 
 --------------------------------------------------------------------------------
-webphone_url - 
+webphone_url
+---
 
 DESCRIPTION:
 display or launch the webphone url for the current agent's session
@@ -1026,6 +1072,7 @@ EXAMPLE URLS:
 http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=webphone_url&value=DISPLAY
 http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=webphone_url&value=LAUNCH
 
+```
 RESPONSES:
 <if function is successful, the URL will be displayed or launched>
 ERROR: no user found - 6666
@@ -1033,13 +1080,29 @@ ERROR: agent_user is not logged in - 6666
 ERROR: webphone_url not valid - 6666|DISPLAY
 ERROR: webphone_url error - webphone url is empty - 6666
 ERROR: webphone_url error - no session data - 6666
+```
 
 
+Code:
+```
+<?php
 
+use Vicidial\Api\Wrapper\Agent\Client;
 
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->webphone_url('DISPLAY');
+     $vicidialAPI->webphone_url('LAUNCH');
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
 
 --------------------------------------------------------------------------------
-call_agent - 
+call_agent
+---
 
 DESCRIPTION:
 send a call to connect the agent to their session
@@ -1052,9 +1115,7 @@ VALUES:
 NOTES:
 this function is not designed to work with on-hook agents
 
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=call_agent&value=CALL
-
+```
 RESPONSES:
 ERROR: no user found - 6666
 ERROR: agent_user is not logged in - 6666 
@@ -1062,13 +1123,29 @@ ERROR: call_agent not valid - 6666|CALL
 ERROR: call_agent error - entry is empty - 6666
 ERROR: call_agent error - no session data - 6666
 SUCCESS: call_agent function sent - 6666
+```
 
+Code:
+```
+<?php
+
+use Vicidial\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->call_agent($agent,'CALL');
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
 
 
 
 
 --------------------------------------------------------------------------------
-audio_playback - 
+audio_playback
+---
 
 DESCRIPTION:
 Basic play/stop/pause/resume/restart audio in agent session
@@ -1098,6 +1175,7 @@ http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&functi
 http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=audio_playback&stage=RESTART
 http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=audio_playback&value=ss-noservice&stage=PLAY&dial_override=Y
 
+```
 RESPONSES:
 ERROR: no user found - 6666
 ERROR: agent_user is not logged in - PLAY|6666 
@@ -1108,9 +1186,22 @@ ERROR: audio_playback error - no audio playing in agent session - 8600051|10.10.
 ERROR: audio_playback error - audio already playing in agent session - 8600051|10.10.10.15|PLAY|6666
 NOTICE: audio_playback previous playback stopped - PLAY|Y|6666
 SUCCESS: audio_playback function sent - ss-noservice|PLAY|6666
+```
 
+Code:
+```
+<?php
 
+use Vicidial\Api\Wrapper\Agent\Client;
 
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->call_agent($agent,'CALL');
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
 
 
 --------------------------------------------------------------------------------

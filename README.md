@@ -24,7 +24,7 @@ Example 1: Update fields on agent screen
 
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 $fields['first_name'] = "John";
 $fields['last_name'] = "Doe";
@@ -44,7 +44,7 @@ Example 2:  Hangup Call, Dispo it and Pause Agent
 
 <?php
 
-use Vicidal\Api\Wrapper\Agent\Client;
+use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
      $agent_api = new Client("127.0.0.1", "gabriel", "Sup3rP4ss");

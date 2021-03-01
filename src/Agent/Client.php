@@ -56,7 +56,7 @@ class Client {
         string $server_ip,
         string $api_user,
         string $api_password,
-        string $source,
+        string $source = "test",
         bool $hasSSl = true
     ) {
         // Validates if valid IP or resolv hostname WARNING: Not fully tested !!
@@ -83,8 +83,8 @@ class Client {
      */
     public function call_api_url(string $url, array $options)
     {
-        if ( filter_var(urldecode($url), FILTER_VALIDATE_URL, FILTER_FLAG_QUERY_REQUIRED) === false )
-            throw new Exception("URL may contain malicious code: $url");
+        if ( filter_var(urldecode($url), FILTER_VALIDATE_URL) === false )
+          throw new Exception("URL may contain malicious code: $url");
 
         $options += [
             'api_user' => $this->api_user,
@@ -93,7 +93,9 @@ class Client {
         ];
 
         try {
-            $response = $this->client->get($url, $options);
+            $response = $this->client->get($url,[
+                'form_params' => $options
+            ]);
         } catch (GuzzleException $exception) {
             throw new Exception($exception->getMessage());
         }
@@ -175,13 +177,15 @@ class Client {
 
     /**
      * Creates the URL for the webserver method and calls 'call_api_url' to execute it
+     * @param $option
      * @return string
      * @throws Exception
      */
-    public function webserver()
+    public function webserver($option)
     {
         return $this->call_api_url($this->base_url,[
-            'function' => 'webserver'
+            'function' => 'webserver',
+            'value' => $option
         ]);
     }
 
@@ -379,6 +383,98 @@ class Client {
     {
         $options = $this->encode($options) + [
                 'function' => 'st_get_agent_active_lead'
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     *
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function ra_call_control($options)
+    {
+        $options = $this->encode($options) + [
+                'function' => 'ra_call_control'
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     *
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function send_dtmf($options)
+    {
+        $options = $this->encode($options) + [
+                'function' => 'send_dtmf'
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     *
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function transfer_conference($options)
+    {
+        $options = $this->encode($options) + [
+                'function' => 'transfer_conference'
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     *
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function park_call($options)
+    {
+        $options = $this->encode($options) + [
+                'function' => 'park_call'
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     *
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function call_agent($agent_user, $value)
+    {
+        $options = [
+                'function' => 'call_agent',
+                'agent_user' => urlencode(trim($agent_user)),
+                'value' => $value
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     *
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function park_call($options)
+    {
+        $options = $this->encode($options) + [
+                'function' => 'park_call'
             ];
 
         return $this->call_api_url($this->base_url, $options);
