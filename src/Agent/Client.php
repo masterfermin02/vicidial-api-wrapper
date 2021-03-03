@@ -87,8 +87,8 @@ class Client {
           throw new Exception("URL may contain malicious code: $url");
 
         $options += [
-            'api_user' => $this->api_user,
-            'api_password' => $this->api_password,
+            'user' => $this->api_user,
+            'pass' => $this->api_password,
             'source' => $this->source
         ];
 
@@ -177,15 +177,13 @@ class Client {
 
     /**
      * Creates the URL for the webserver method and calls 'call_api_url' to execute it
-     * @param $option
      * @return string
      * @throws Exception
      */
-    public function webserver($option)
+    public function webserver()
     {
         return $this->call_api_url($this->base_url,[
-            'function' => 'webserver',
-            'value' => $option
+            'function' => 'webserver'
         ]);
     }
 
@@ -390,12 +388,14 @@ class Client {
 
     /**
      *
+     * @param $agent
      * @param $options
      * @return string
      * @throws Exception
      */
-    public function ra_call_control($options)
+    public function ra_call_control($agent, $options)
     {
+        $options['agent_user'] = $agent;
         $options = $this->encode($options) + [
                 'function' => 'ra_call_control'
             ];
@@ -420,12 +420,14 @@ class Client {
 
     /**
      *
+     * @param $agent
      * @param $options
      * @return string
      * @throws Exception
      */
-    public function transfer_conference($options)
+    public function transfer_conference($agent, $options)
     {
+        $options['agent_user'] = $agent;
         $options = $this->encode($options) + [
                 'function' => 'transfer_conference'
             ];
@@ -435,12 +437,14 @@ class Client {
 
     /**
      *
+     * @param $agent
      * @param $options
      * @return string
      * @throws Exception
      */
-    public function park_call($options)
+    public function park_call($agent, $options)
     {
+        $options['agent_user'] = $agent;
         $options = $this->encode($options) + [
                 'function' => 'park_call'
             ];
@@ -450,7 +454,8 @@ class Client {
 
     /**
      *
-     * @param $options
+     * @param $agent_user
+     * @param $value
      * @return string
      * @throws Exception
      */
@@ -467,14 +472,49 @@ class Client {
 
     /**
      *
+     * @param $agent
      * @param $options
      * @return string
      * @throws Exception
      */
-    public function park_call($options)
+    public function recording($agent, $options)
     {
+        $options['agent_user'] = $agent;
         $options = $this->encode($options) + [
-                'function' => 'park_call'
+                'function' => 'recording'
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     *
+     * @param $agent_user
+     * @param $value
+     * @return string
+     * @throws Exception
+     */
+    public function webphone_url($agent_user, $value)
+    {
+        return $this->call_api_url($this->base_url,[
+            'agent_user' => urlencode(trim($agent_user)),
+            'function' => 'webphone_url',
+            'value' => urlencode(trim($value))
+        ]);
+    }
+
+    /**
+     *
+     * @param $agent_user
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function audio_playback($agent_user, $options)
+    {
+        $options['agent_user'] = $agent_user;
+        $options = $this->encode($options) + [
+                'function' => 'audio_playback'
             ];
 
         return $this->call_api_url($this->base_url, $options);
@@ -495,4 +535,70 @@ class Client {
             'value' => urlencode(trim($lead_id))
         ]);
     }
+
+    /**
+     * Set a custom voicemail message to be played when agent clicks the VM button on the agent screen
+     * @param $agent_user
+     * @param $options
+     * @return string
+     * @throws Exception
+     */
+    public function vm_message($agent_user, $options)
+    {
+        $options['agent_user'] = $agent_user;
+        $options = $this->encode($options) + [
+                'function' => 'vm_message'
+            ];
+
+        return $this->call_api_url($this->base_url, $options);
+    }
+
+    /**
+     * display a count of the calls waiting in queue for the specific agent
+     * @param $agent_user
+     * @param $status
+     * @return string
+     * @throws Exception
+     */
+    public function calls_in_queue_count($agent_user, $status)
+    {
+        return $this->call_api_url($this->base_url,[
+            'agent_user' => urlencode(trim($agent_user)),
+            'function' => 'calls_in_queue_count',
+            'value' => urlencode(trim($status))
+        ]);
+    }
+
+    /**
+     *
+     * @param $agent_user
+     * @param $status
+     * @return string
+     * @throws Exception
+     */
+    public function force_fronter_leave_3way($agent_user, $status)
+    {
+        return $this->call_api_url($this->base_url,[
+            'agent_user' => urlencode(trim($agent_user)),
+            'function' => 'force_fronter_leave_3way',
+            'value' => urlencode(trim($status))
+        ]);
+    }
+
+    /**
+     *
+     * @param $agent_user
+     * @param $status
+     * @return string
+     * @throws Exception
+     */
+    public function force_fronter_audio_stop($agent_user, $status)
+    {
+        return $this->call_api_url($this->base_url,[
+            'agent_user' => urlencode(trim($agent_user)),
+            'function' => 'force_fronter_leave_3way',
+            'value' => urlencode(trim($status))
+        ]);
+    }
+
 }

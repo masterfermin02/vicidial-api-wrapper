@@ -47,8 +47,7 @@
 #### Example 
 To hangup the call, disposition it and then pause the agent, do the following in order:
 
-```php 
-
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -63,7 +62,6 @@ try {
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
-
 ```
 
 Response to calls will return either an ERROR or a SUCCESS along with an explanation.
@@ -91,7 +89,7 @@ RESPONSES:
 VERSION: 2.0.5-2|BUILD: 90116-1229|DATE: 2009-01-15 14:59:33|EPOCH: 1222020803 
 ```
 Code:
-```php 
+```php
 
 <?php
 
@@ -138,7 +136,7 @@ upload_max_filesize: 42M
 default_socket_timeout: 360
 ```
 Code:
-```php 
+```php
 
 <?php
 
@@ -168,7 +166,7 @@ ERROR: no user found - 6666
 ERROR: agent_user is not logged in - 6666
 SUCCESS: external_hangup function set - 1|6666
 
-```php 
+```php
 
 <?php
 
@@ -206,7 +204,7 @@ VALUES: (value)
  callback_type=USERONLY&callback_comments=callback+comments+go+here&qm_dispo_code=1234
  
 Code:
-```php 
+```php
 
 <?php
 
@@ -236,7 +234,7 @@ try {
 
 ```
 
-logout - 
+logout
 ---
 
 DESCRIPTION:
@@ -254,7 +252,7 @@ SUCCESS: external_status function set - A|6666
 ```
 
 Code:
-```php 
+```php
 
 <?php
 
@@ -271,7 +269,7 @@ try {
 
 
 --------------------------------------------------------------------------------
-external_pause - 
+external_pause
 ---
 
 DESCRIPTION:
@@ -291,7 +289,7 @@ SUCCESS: external_pause function set - PAUSE|1232020456|6666
 
 Code:
 
-```php 
+```php
 
 <?php
 
@@ -308,7 +306,7 @@ try {
 ```
 
 --------------------------------------------------------------------------------
-external_dial - 
+external_dial
 ---
 
 DESCRIPTION:
@@ -370,8 +368,9 @@ ERROR: phone number lead_id search not found - 6666|7275551212|1234567|
 SUCCESS: external_dial function set - 7275551212|6666|1|YES|NO|YES|123456|1232020456|9|TESTING|7275551211|
 ```
 
+Next dial example:
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -389,8 +388,8 @@ try {
 
 ```
 
-Next dial example:
-```
+Manual dial example:
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -409,7 +408,7 @@ try {
 ```
 
 --------------------------------------------------------------------------------
-preview_dial_action - 
+preview_dial_action
 ---
 
 DESCRIPTION:
@@ -432,7 +431,7 @@ SUCCESS: preview_dial_action function set - DIALONLY|6666|DIALONLY
 ```
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -452,7 +451,7 @@ try {
 
 
 --------------------------------------------------------------------------------
-external_add_lead - 
+external_add_lead
 ---
 
 DESCRIPTION:
@@ -506,7 +505,7 @@ SUCCESS: lead added - 7275551212|TESTCAMP|101|123456|6666
 ```
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -529,7 +528,7 @@ try {
 
 
 --------------------------------------------------------------------------------
-change_ingroups - 
+change_ingroups
 ---
 
 DESCRIPTION:
@@ -564,7 +563,7 @@ SUCCESS: change_ingroups function set - YES| TEST_IN SALESLINE -|6666
 ```
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -584,7 +583,7 @@ try {
 ```
 
 --------------------------------------------------------------------------------
-update_fields -
+update_fields
 ---
 
 DESCRIPTION:
@@ -638,7 +637,7 @@ SUCCESS: update_fields lead updated - 6666|1234|87498|vendor_lead_code='1234567'
 ```
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -647,7 +646,7 @@ try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
      $vicidialAPI->update_fields($agent_user, [
-        'vendor_lead_code' => '1234567' 
+        'vendor_lead_code' => '1234567',
         'address1' => ''
      ]);
 } catch (Exception $e) {
@@ -661,7 +660,7 @@ try {
 
 
 --------------------------------------------------------------------------------
-set_timer_action - 
+set_timer_action
 ---
 
 DESCRIPTION:
@@ -689,7 +688,7 @@ SUCCESS: set_timer_action lead updated - 6666|1234|MESSAGE_ONLY|test message|15
 ```
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -731,8 +730,9 @@ ERROR: st_login_log not valid - 6666|207
 ERROR: no user found - 6666
 SUCCESS: st_login_log user found - 6666
 ```
+
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -740,7 +740,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->st_login_log($agent_user, [
+     $vicidialAPI->st_login_log([
         'value' => 876543,
         'vendor_id' => 207
      ]);
@@ -780,7 +780,7 @@ ERROR: no active lead found - 6666
 SUCCESS: st_get_agent_active_lead lead found - 6666|7275551212|123456|9987-1234765|SK|WILLIAMS|JUH764AJJJ9
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -788,7 +788,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->st_get_agent_active_lead($agent_user, [
+     $vicidialAPI->st_get_agent_active_lead([
         'value' => 876543,
         'vendor_id' => 207
      ]);
@@ -834,7 +834,7 @@ SUCCESS: ra_call_control hungup - 6666|Y0315201639000402027|HANGUP
 ```
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -860,6 +860,7 @@ send_dtmf
 ---
 
 DESCRIPTION:
+
 Sends dtmf signal string to agent's session
 
 VALUES: (value)
@@ -877,7 +878,7 @@ SUCCESS: send_dtmf function set - QQQQ1234SQQQQQ6654P|6666
 
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -885,7 +886,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->send_dtmf($agent_user, [
+     $vicidialAPI->send_dtmf([
         'value' => 'QQQQ1234SQQQQQ6654P'
      ]);
 } catch (Exception $e) {
@@ -895,7 +896,7 @@ try {
 ```
 
 --------------------------------------------------------------------------------
-park_call - 
+park_call
 ---
 
 DESCRIPTION:
@@ -919,7 +920,7 @@ SUCCESS: park_call function set - PARK_CUSTOMER|6666
 ```
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -952,6 +953,7 @@ transfer_conference
 ---
 
 DESCRIPTION:
+
 sends several commands related to the agent transfer-conf frame
 
 VALUES:
@@ -992,7 +994,7 @@ SUCCESS: transfer_conference function set - LOCAL_CLOSER|SALESLINE||YES|6666|M21
 ```
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -1018,29 +1020,25 @@ try {
 
 
 --------------------------------------------------------------------------------
-recording - 
-
+recording 
+---
 DESCRIPTION:
+
 sends a recording start/stop signal or status of agent recording
 
 VALUES:
  value - 
   REQUIRED, choices are below
-   START - sends a "start recording" signal to the agent screen
+  - START - sends a "start recording" signal to the agent screen
             (you can have multiple recordings going at the same time)
-   STOP - sends a "stop recording" signal to the agent screen
+  - STOP - sends a "stop recording" signal to the agent screen
             (this will stop all active recordings onthe agent screen)
-   STATUS - displays results of active recording and agent session information
+  - STATUS - displays results of active recording and agent session information
             (returns: user|recording_id|filename|server|start_time|agent_server|session|agent_status)
-  stage - 
+  - stage - 
     OPTIONAL, value to append to the recording filename, limited to 14 characters, if more it will truncate. Only works with START value
 
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=recording&value=START
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=recording&value=STOP
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=recording&value=STATUS
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=recording&value=START&stage=_MIDCALL
-
+```
 RESPONSES:
 ERROR: no user found - 6666
 ERROR: agent_user is not logged in - 6666 
@@ -1050,7 +1048,35 @@ SUCCESS: recording function sent - 6666|START||||192.168.1.5|8600051|PAUSED
 SUCCESS: recording function sent - 6666|START_MIDCALL||||192.168.1.5|8600051|PAUSED 
 NOTICE: not recording - 6666|||||192.168.1.5|8600051|PAUSED
 NOTICE: recording active - 6666|121242|20120810-012008__6666_|192.168.1.5|2012-08-10 01:20:10|192.168.1.5|8600051|PAUSED
+```
 
+Code:
+```php
+<?php
+
+use Vicidial\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->recording($agent_user, [
+        'value' => 'START'
+     ]);
+     $vicidialAPI->recording($agent_user, [
+             'value' => 'STOP'
+     ]);
+     $vicidialAPI->recording($agent_user, [
+             'value' => 'STATUS'
+     ]);
+     $vicidialAPI->recording($agent_user, [
+             'value' => 'START',
+             'stage' => '_MIDCALL'
+     ]);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
 
 
 
@@ -1060,6 +1086,7 @@ webphone_url
 ---
 
 DESCRIPTION:
+
 display or launch the webphone url for the current agent's session
 
 VALUES:
@@ -1068,9 +1095,6 @@ VALUES:
    DISPLAY - displays only the URL for the webphone if enabled
    LAUNCH - redirects the url to the webphone url to launch it
 
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=webphone_url&value=DISPLAY
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=webphone_url&value=LAUNCH
 
 ```
 RESPONSES:
@@ -1084,7 +1108,7 @@ ERROR: webphone_url error - no session data - 6666
 
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -1092,8 +1116,8 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->webphone_url('DISPLAY');
-     $vicidialAPI->webphone_url('LAUNCH');
+     $vicidialAPI->webphone_url($agent_user, 'DISPLAY');
+     $vicidialAPI->webphone_url($agent_user, 'LAUNCH');
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -1105,6 +1129,7 @@ call_agent
 ---
 
 DESCRIPTION:
+
 send a call to connect the agent to their session
 
 VALUES:
@@ -1113,6 +1138,7 @@ VALUES:
    CALL - places call from the agent session to the agent's phone
 
 NOTES:
+
 this function is not designed to work with on-hook agents
 
 ```
@@ -1126,7 +1152,7 @@ SUCCESS: call_agent function sent - 6666
 ```
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -1134,7 +1160,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->call_agent($agent,'CALL');
+     $vicidialAPI->call_agent($agent_user,'CALL');
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -1148,6 +1174,7 @@ audio_playback
 ---
 
 DESCRIPTION:
+
 Basic play/stop/pause/resume/restart audio in agent session
 
 NOTE: PAUSE/RESUME/RESTART features only work with Asterisk 1.8 and higher
@@ -1166,15 +1193,6 @@ VALUES:
  dial_override - 
   OPTIONAL, (Y or N), default is N. Allows you to PLAY without issuing a STOP to a currently playing audio file
 
-
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=audio_playback&value=ss-noservice&stage=PLAY
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=audio_playback&stage=STOP
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=audio_playback&stage=PAUSE
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=audio_playback&stage=RESUME
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=audio_playback&stage=RESTART
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=audio_playback&value=ss-noservice&stage=PLAY&dial_override=Y
-
 ```
 RESPONSES:
 ERROR: no user found - 6666
@@ -1189,7 +1207,7 @@ SUCCESS: audio_playback function sent - ss-noservice|PLAY|6666
 ```
 
 Code:
-```
+```php
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
@@ -1197,7 +1215,24 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->call_agent($agent,'CALL');
+     $vicidialAPI->audio_playback($agent_user,[
+                'value' => 'ss-noservices',
+                'stage' => 'PLAY'
+           ]);
+     $vicidialAPI->audio_playback($agent_user,[
+                 'stage' => 'STOP'
+          ]);
+     $vicidialAPI->audio_playback($agent_user,[
+                 'stage' => 'RESUME'
+          ]);
+     $vicidialAPI->audio_playback($agent_user,[
+                      'stage' => 'RESTART'
+               ]);
+     $vicidialAPI->audio_playback($agent_user,[
+                      'value' => 'ss-noservices',
+                      'stage' => 'PLAY',
+                      'dial_override' => 'Y'
+               ]);
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -1205,22 +1240,21 @@ try {
 
 
 --------------------------------------------------------------------------------
-switch_lead - 
+switch_lead
+---
 
 DESCRIPTION:
+
 For agents on a live inbound call, switches lead_id of live inbound call on agent screen including associated logs. You can define a lead_id or a vendor_lead_code to switch to. Works like the SELECT function of the LEAD SEARCH feature in the agent screen.
 
 VALUES:
-lead_id -
+- lead_id -
  Any valid lead_id from the system(either lead_id or vendor_lead_code are required) if both are defined, lead_id will override vendor_lead_code
-vendor_lead_code -
+- vendor_lead_code -
  OPTIONAL, any valid Vendor lead code
 
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=switch_lead&lead_id=12345
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=switch_lead&vendor_lead_code=1234567890
-
 RESPONSES:
+```
 ERROR: switch_lead not valid - ||6666
 ERROR: no user found - 6666
 ERROR: agent_user is not logged in - 6666
@@ -1230,25 +1264,46 @@ ERROR: campaign not found - 6666|TESTCAMP
 ERROR: campaign does not allow inbound lead search - 6666|TESTCAMP
 ERROR: switch-to lead not found - 6666|12345|123456789
 SUCCESS: switch_lead function set - 6666|12345|1234567890|TESTCAMP|12346
+```
 
+Code:
+```php
+<?php
 
+use Vicidial\Api\Wrapper\Agent\Client;
 
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->switch_lead($agent_user,[
+                'lead_id' => '12345'
+           ]);
+     $vicidialAPI->audio_playback($agent_user,[
+                 'vendor_lead_code' => '1234567890'
+          ]);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
 
 
 --------------------------------------------------------------------------------
-vm_message - 
+vm_message
+---
 
 IMPORTANT NOTES: 
+
 - Set the campaign "Answering Machine Message" setting to 'LTTagent' for this to work.
 - There are some other campaign settings that can override this function, so you will want to disable 'AM Message Wildcards' and 'VM Message Groups'.
 
 DESCRIPTION:
+
 Set a custom voicemail message to be played when agent clicks the VM button on the agent screen
 
 VALUES:
-value -
+- value -
  REQUIRED, One audio file or multiple audio files(separated by pipes) to play when the call is sent to VM by the agent
-lead_id -
+- lead_id -
  OPTIONAL, The lead_id of the call that the agent is currently on, if populated it will validate that is the lead the agent is talking to
 
 EXAMPLE URLS:
@@ -1256,96 +1311,152 @@ http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&functi
 http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=vm_message&lead_id=12345&value=appointment_reminder2
 
 RESPONSES:
-ERROR: vm_message not valid - ||6666
-ERROR: no user found - 6666
-ERROR: agent_user is not logged in - 6666
-ERROR: current call does not match lead_id submitted - 6666
-ERROR: agent_user does not have a live call - 6666
-SUCCESS: vm_message function set - 6666|12345|EXship01|EXship02|EXship03
 
+- ERROR: vm_message not valid - ||6666
+- ERROR: no user found - 6666
+- ERROR: agent_user is not logged in - 6666
+- ERROR: current call does not match lead_id submitted - 6666
+- ERROR: agent_user does not have a live call - 6666
+- SUCCESS: vm_message function set - 6666|12345|EXship01|EXship02|EXship03
 
+Code:
+```php
+<?php
+
+use Vicidial\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->vm_message($agent_user,[
+                'value' => 'EXship01|EXship02|EXship03'
+           ]);
+     $vicidialAPI->vm_message($agent_user,[
+                 'lead_id' => 12345,
+                 'value' => 'appointment_reminder2'
+          ]);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
 
 
 
 --------------------------------------------------------------------------------
-pause_code - 
+pause_code
+---
 
 DESCRIPTION:
+
 set a pause code for an agent that is paused
 
 VALUES:
- value - pause code to set, must be 6 characters or less
+ - value - pause code to set, must be 6 characters or less
 
 NOTES:
+
 this function will not work if the agent is not paused
 
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=pause_code&value=BREAK
-
 RESPONSES:
-ERROR: no user found - 6666
-ERROR: agent_user is not logged in - 6666 
-ERROR: pause_code not valid - 6666|JUMPING
-ERROR: pause_code error - agent is not paused - 6666
-SUCCESS: pause_code function sent - 6666
+- ERROR: no user found - 6666
+- ERROR: agent_user is not logged in - 6666 
+- ERROR: pause_code not valid - 6666|JUMPING
+- ERROR: pause_code error - agent is not paused - 6666
+- SUCCESS: pause_code function sent - 6666
 
+Code:
+```php
+<?php
 
+use Vicidial\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->pause_code($agent_user,'BREAK');
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
 
 
 
 --------------------------------------------------------------------------------
-calls_in_queue_count - 
+calls_in_queue_count
+---
 
 DESCRIPTION:
+
 display a count of the calls waiting in queue for the specific agent
 
 VALUES:
- value - 
+ - value - 
   REQUIRED, choices are below:
    DISPLAY - displays number of calls in queue that could be sent to this agent
 
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=calls_in_queue_count&value=DISPLAY
-
 RESPONSES:
-ERROR: no user found - 6666
-ERROR: agent_user is not logged in - 6666 
-SUCCESS: calls_in_queue_count - 0
+- ERROR: no user found - 6666
+- ERROR: agent_user is not logged in - 6666 
+- SUCCESS: calls_in_queue_count - 0
 
+Code:
+```php
+<?php
+
+use Vicidial\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->calls_in_queue_count($agent_user,'DISPLAY');
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
 
 
 
 
 --------------------------------------------------------------------------------
-force_fronter_leave_3way - 
+force_fronter_leave_3way
+---
 
 DESCRIPTION:
+
 will send a command to fronter agent to leave-3way call that executing agent is on. Will not execute command for the named 'agent_user', but will look for oldest other user currently on a call with the same lead_id that the named agent_user is on the phone with.
 
 VALUES:
- value - 
+ - value - 
   REQUIRED, choices are below:
-   LOCAL_ONLY - looks for fronter only on local cluster
-   LOCAL_AND_CCC - looks on local cluster and remote CCC to send command to (will always check local first)
-   CCC_REMOTE - use this when the closer is not on this cluster
-  lead_id - 
-    OPTIONAL, only to be used with CCC_REMOTE value commands
-
-EXAMPLE URLS:
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=force_fronter_leave_3way&value=LOCAL_ONLY
-http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=force_fronter_leave_3way&value=LOCAL_AND_CCC
+   - LOCAL_ONLY - looks for fronter only on local cluster
+   - LOCAL_AND_CCC - looks on local cluster and remote CCC to send command to (will always check local first)
+   - CCC_REMOTE - use this when the closer is not on this cluster
+   - lead_id - 
+        - OPTIONAL, only to be used with CCC_REMOTE value commands
 
 RESPONSES:
-ERROR: no user found - 6666
-ERROR: agent_user is not logged in - 6666
-ERROR: agent_user is not on a phone call - 6666
-ERROR: no fronter found - 6666
-SUCCESS: force_fronter_leave_3way SENT - 6667
-SUCCESS: force_fronter_leave_3way command sent over CCC - test_ccc
+- ERROR: no user found - 6666
+- ERROR: agent_user is not logged in - 6666
+- ERROR: agent_user is not on a phone call - 6666
+- ERROR: no fronter found - 6666
+- SUCCESS: force_fronter_leave_3way SENT - 6667
+- SUCCESS: force_fronter_leave_3way command sent over CCC - test_ccc
 
+Code:
+```php
+<?php
 
+use Vicidial\Api\Wrapper\Agent\Client;
 
-
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->force_fronter_leave_3way($agent_user,'LOCAL_ONLY');
+     $vicidialAPI->force_fronter_leave_3way($agent_user,'LOCAL_AND_CCC');
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
 
 --------------------------------------------------------------------------------
 force_fronter_audio_stop - 
@@ -1354,13 +1465,13 @@ DESCRIPTION:
 will send a command to fronter agent session to stop any audio_playback playing on it. Will not execute command for the named 'agent_user', but will look for other user session currently on a call with the same lead_id that the named agent_user is on the phone with.
 
 VALUES:
- value - 
+- value - 
   REQUIRED, choices are below:
-   LOCAL_ONLY - looks for fronter only on local cluster
-   LOCAL_AND_CCC - looks on local cluster and remote CCC to send command to (will always check local first)
-   CCC_REMOTE - use this when the closer is not on this cluster
-  lead_id - 
-    OPTIONAL, only to be used with CCC_REMOTE value commands
+   - LOCAL_ONLY - looks for fronter only on local cluster
+   - LOCAL_AND_CCC - looks on local cluster and remote CCC to send command to (will always check local first)
+   - CCC_REMOTE - use this when the closer is not on this cluster
+   - lead_id - 
+        - OPTIONAL, only to be used with CCC_REMOTE value commands
 
 EXAMPLE URLS:
 http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=force_fronter_audio_stop&value=LOCAL_ONLY
@@ -1377,3 +1488,19 @@ ERROR: no fronter found - 6666
 ERROR: force_fronter_audio_stop error - no audio playing in other agent session - 8600051|10.0.0.5||6666|1234
 SUCCESS: force_fronter_audio_stop function SENT - LOCAL_AND_CCC||6667|1234
 SUCCESS: force_fronter_audio_stop command sent over CCC - test_ccc
+
+Code:
+```php
+<?php
+
+use Vicidial\Api\Wrapper\Agent\Client;
+
+try {
+     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $agent_user = '1000';
+     $vicidialAPI->force_fronter_audio_stop($agent_user,'LOCAL_ONLY');
+     $vicidialAPI->force_fronter_audio_stop($agent_user,'LOCAL_AND_CCC');
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
