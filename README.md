@@ -1,6 +1,6 @@
 # Vicidial API PHP WRAPPER
 
-Simple and beautiful integration with vicidial api
+Beautiful and simple Implementation to integrate Vicidial API
 
 DISCLAIMER: VICIdial is a registered trademark of the Vicidial Group which i am not related in anyway.
 
