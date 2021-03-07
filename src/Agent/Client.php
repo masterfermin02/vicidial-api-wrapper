@@ -2,46 +2,20 @@
 
 namespace Vicidial\Api\Wrapper\Agent;
 
+use Api\Wrapper\BaseClient;
 use Vicidial\Api\Wrapper\Exceptions\InvalidIpException;
 use Exception;
-use GuzzleHttp\Client as GuzzleClient;
-use GrahamCampbell\GuzzleFactory\GuzzleFactory;
-use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * Class Connection
  * @package Api\Wrapper
  */
-class Client {
-    /**
-     * @var string
-     */
-    private $server_ip;
+class Client extends BaseClient {
 
     /**
      * @var string
      */
-    private $source;
-
-    /**
-     * @var string
-     */
-    private $api_user;
-
-    /**
-     * @var string
-     */
-    private $api_password;
-
-    /**
-     * @var string
-     */
-    private $base_url;
-
-    /**
-     * @var GuzzleClient
-     */
-    protected $client;
+    protected $base_url;
 
     /**
      * Client constructor.
@@ -59,48 +33,9 @@ class Client {
         string $source = "test",
         bool $hasSSl = true
     ) {
-        // Validates if valid IP or resolv hostname WARNING: Not fully tested !!
-        if (( filter_var($server_ip, FILTER_VALIDATE_IP ) === false) && ( filter_var(gethostbyname($server_ip), FILTER_VALIDATE_IP) === false ))
-        {
-            throw new InvalidIpException;
-        }
-
-        $this->server_ip = urlencode($server_ip);
-        $this->source = urlencode($source ?? 'test');
-        $this->api_user = urlencode($api_user);
-        $this->api_password = urlencode($api_password);
-
         $this->base_url = $hasSSl ? 'https://' : 'http://';
         $this->base_url .= $this->server_ip . '/agc/api.php';
-        $this->client = new GuzzleClient(['handler' => GuzzleFactory::handler()]);
-    }
-
-    /**
-     * @param $url
-     * @param $options
-     * @return string
-     * @throws Exception
-     */
-    public function call_api_url(string $url, array $options)
-    {
-        if ( filter_var(urldecode($url), FILTER_VALIDATE_URL) === false )
-          throw new Exception("URL may contain malicious code: $url");
-
-        $options += [
-            'user' => $this->api_user,
-            'pass' => $this->api_password,
-            'source' => $this->source
-        ];
-
-        try {
-            $response = $this->client->get($url,[
-                'form_params' => $options
-            ]);
-        } catch (GuzzleException $exception) {
-            throw new Exception($exception->getMessage());
-        }
-
-        return $response->getBody();
+        parent::__construct($server_ip, $api_user, $api_password, $source);
     }
 
     /**
