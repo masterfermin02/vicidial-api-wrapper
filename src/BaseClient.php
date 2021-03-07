@@ -77,4 +77,11 @@ class BaseClient implements Client
 
         return $response->getBody();
     }
+
+    protected function encode(array $options): array
+    {
+        return array_map(function ($option) {
+            return urlencode(trim($option));
+        }, $options);
+    }
 }

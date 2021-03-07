@@ -70,13 +70,6 @@ class Client extends BaseClient {
         return $this->call_api_url($this->base_url, $options);
     }
 
-    private function encode(array $options): array
-    {
-        return array_map(function ($option) {
-            return urlencode(trim($option));
-        }, $options);
-    }
-
     /**
      * Creates the URL for  the external_pause method and calls 'call_api_url' to execute it
      * @param $agent_user
