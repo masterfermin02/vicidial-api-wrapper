@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Api\Wrapper;
+namespace Vicidial\Api\Wrapper;
 
 
 use Exception;
@@ -12,11 +12,6 @@ use Vicidial\Api\Wrapper\Exceptions\InvalidIpException;
 
 class BaseClient implements Client
 {
-    /**
-     * @var string
-     */
-    protected $server_ip;
-
     /**
      * @var string
      */
@@ -47,18 +42,10 @@ class BaseClient implements Client
      * @throws InvalidIpException
      */
     public function __construct(
-        string $server_ip,
         string $api_user,
         string $api_password,
         string $source = "test"
     ) {
-        // Validates if valid IP or resolv hostname WARNING: Not fully tested !!
-        if (( filter_var($server_ip, FILTER_VALIDATE_IP ) === false) && ( filter_var(gethostbyname($server_ip), FILTER_VALIDATE_IP) === false ))
-        {
-            throw new InvalidIpException;
-        }
-
-        $this->server_ip = urlencode($server_ip);
         $this->source = urlencode($source ?? 'test');
         $this->api_user = urlencode($api_user);
         $this->api_password = urlencode($api_password);
@@ -83,9 +70,7 @@ class BaseClient implements Client
         ];
 
         try {
-            $response = $this->client->get($url,[
-                'form_params' => $options
-            ]);
+            $response = $this->client->get($url . '?' . http_build_query($options));
         } catch (GuzzleException $exception) {
             throw new Exception($exception->getMessage());
         }

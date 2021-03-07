@@ -2,7 +2,7 @@
 
 namespace Vicidial\Api\Wrapper\Admin;
 
-use Api\Wrapper\BaseClient;
+use Vicidial\Api\Wrapper\BaseClient;
 use Exception;
 use Vicidial\Api\Wrapper\Exceptions\InvalidIpException;
 
@@ -34,8 +34,8 @@ class Client extends BaseClient {
         bool $hasSSl = true
     ) {
         $this->base_url = $hasSSl ? 'https://' : 'http://';
-        $this->base_url .= $this->server_ip . '/vicidial/non_agent_api.php';
-        parent::__construct($server_ip, $api_user, $api_password, $source);
+        $this->base_url .= $server_ip . '/vicidial/non_agent_api.php';
+        parent::__construct($api_user, $api_password, $source);
     }
 
     /**

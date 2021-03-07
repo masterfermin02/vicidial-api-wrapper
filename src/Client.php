@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Api\Wrapper;
+namespace Vicidial\Api\Wrapper;
 
 
 interface Client
