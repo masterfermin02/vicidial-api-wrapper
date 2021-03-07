@@ -78,7 +78,8 @@ DETAIL OF EACH FUNCTION:
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 version
 ---
 
@@ -108,7 +109,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 webserver
 ---
 
@@ -156,7 +158,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 external_hangup 
 ---
 
@@ -187,7 +190,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 external_status
 ---
 
@@ -238,7 +242,8 @@ try {
 
 ```
 
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 logout
 ---
 
@@ -274,7 +279,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 external_pause
 ---
 
@@ -312,7 +318,8 @@ try {
 ```
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 external_dial
 ---
 
@@ -415,7 +422,8 @@ try {
 ```
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 preview_dial_action
 ---
 
@@ -459,7 +467,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 external_add_lead
 ---
 
@@ -537,7 +546,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 change_ingroups
 ---
 
@@ -593,7 +603,8 @@ try {
 ```
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 update_fields
 ---
 
@@ -671,7 +682,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 set_timer_action
 ---
 
@@ -721,8 +733,9 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
-st_login_log - 
+[↑ Top](#agent-api-functions)
+
+st_login_log
 ---
 
 DESCRIPTION:
@@ -767,7 +780,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 st_get_agent_active_lead
 ---
 
@@ -814,7 +828,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 ra_call_control
 ---
 
@@ -871,7 +886,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 send_dtmf
 ---
 
@@ -912,7 +928,8 @@ try {
 ```
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 park_call
 ---
 
@@ -966,7 +983,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 transfer_conference
 ---
 
@@ -1038,7 +1056,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 recording 
 ---
 DESCRIPTION:
@@ -1101,7 +1120,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 webphone_url
 ---
 
@@ -1145,7 +1165,8 @@ try {
 ```
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 call_agent
 ---
 
@@ -1191,7 +1212,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 audio_playback
 ---
 
@@ -1262,7 +1284,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 switch_lead
 ---
 
@@ -1311,7 +1334,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 vm_message
 ---
 
@@ -1367,7 +1391,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 pause_code
 ---
 
@@ -1407,7 +1432,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 calls_in_queue_count
 ---
 
@@ -1444,7 +1470,8 @@ try {
 
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 force_fronter_leave_3way
 ---
 
@@ -1486,8 +1513,10 @@ try {
 ```
 
 --------------------------------------------------------------------------------
-[↑ Top](##agent-api-functions)
+[↑ Top](#agent-api-functions)
+
 force_fronter_audio_stop
+---
 
 DESCRIPTION:
 will send a command to fronter agent session to stop any audio_playback playing on it. Will not execute command for the named 'agent_user', but will look for other user session currently on a call with the same lead_id that the named agent_user is on the phone with.
