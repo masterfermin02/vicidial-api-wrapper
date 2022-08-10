@@ -158,7 +158,7 @@ class Client extends BaseClient {
         $options = $this->encode($options) + [
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'external_dial',
-            'value' => urlencode(trim($options['phone_numer'])),
+            'value' => urlencode(trim($options['phone_number'])),
             'phone_code' => urlencode(trim($options['phone_code'] ?? '')),
             'search' => 'YES',
             'preview' => 'NO',
