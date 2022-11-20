@@ -4,3 +4,4 @@ composer.lock
 test-coverage/
 coverage.xml
 .phpunit.result.cache
+build

@@ -2,10 +2,10 @@
 
 namespace Vicidial\Api\Wrapper\Exceptions;
 
-class InvalidIpException extends \InvalidArgumentException {
-
+class InvalidUrlException extends \InvalidArgumentException
+{
     public function __construct(
-        string $message = "Invalid IP Address or hostname not found",
+        string $message = "URL may contain malicious code",
         int $code = 0,
         \Throwable $previous = null
     ) {

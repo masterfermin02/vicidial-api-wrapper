@@ -2,8 +2,8 @@
 
 namespace Vicidial\Api\Wrapper\Agent;
 
+use GuzzleHttp\Client as GuzzleClient;
 use Vicidial\Api\Wrapper\BaseClient;
-use Vicidial\Api\Wrapper\Exceptions\InvalidIpException;
 use Exception;
 
 /**
@@ -12,30 +12,37 @@ use Exception;
  */
 class Client extends BaseClient {
 
-    /**
-     * @var string
-     */
-    protected $base_url;
+    protected string $base_url;
 
-    /**
-     * Client constructor.
-     * @param $server_ip
-     * @param $api_user
-     * @param $api_password
-     * @param $source
-     * @param bool $hasSSl
-     * @throws InvalidIpException
-     */
     public function __construct(
         string $server_ip,
         string $api_user,
         string $api_password,
         string $source = "test",
-        bool $hasSSl = true
+        bool $hasSSl = true,
+        ?GuzzleClient $client = null
     ) {
         $this->base_url = $hasSSl ? 'https://' : 'http://';
         $this->base_url .= $server_ip . '/agc/api.php';
-        parent::__construct($api_user, $api_password, $source);
+        parent::__construct($api_user, $api_password, $source, $client);
+    }
+
+    public static function create(
+        string $serveIp,
+        string $apiUser,
+        string $apiPassword,
+        string $source = 'test',
+        bool $hasSSl = true,
+        ?GuzzleClient $client = null
+    ): self {
+        return new static(
+            $serveIp,
+            urlencode($apiUser),
+            urlencode($apiPassword),
+            urlencode($source),
+            $hasSSl,
+            $client
+        );
     }
 
     /**
@@ -47,7 +54,7 @@ class Client extends BaseClient {
      */
     public function hangup(string $agent_user)
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'external_hangup',
             'value' => '1'
@@ -67,7 +74,7 @@ class Client extends BaseClient {
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'external_status'
         ];
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -79,7 +86,7 @@ class Client extends BaseClient {
      */
     public function pause($agent_user, $status)
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'external_pause',
             'value' => urlencode(trim($status))
@@ -96,7 +103,7 @@ class Client extends BaseClient {
      */
     public function pause_code($agent_user, $code)
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'pause_code',
             'value' => urlencode(trim($code))
@@ -110,7 +117,7 @@ class Client extends BaseClient {
      */
     public function webserver()
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'function' => 'webserver'
         ]);
     }
@@ -122,7 +129,7 @@ class Client extends BaseClient {
      */
     public function version()
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'function' => 'version'
         ]);
     }
@@ -135,7 +142,7 @@ class Client extends BaseClient {
      */
     public function logout($agent_user)
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'logout',
             'value' => 'LOGOUT'
@@ -165,7 +172,7 @@ class Client extends BaseClient {
             'focues' => 'YES'
         ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -183,7 +190,7 @@ class Client extends BaseClient {
                 'value' => urlencode(trim($value))
         ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -201,7 +208,7 @@ class Client extends BaseClient {
             'function' => 'external_add_lead'
         ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -225,7 +232,7 @@ class Client extends BaseClient {
                 'function' => 'change_ingroups'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -258,7 +265,7 @@ class Client extends BaseClient {
                 'agent_user' => urlencode(trim($agent_user)),
                 'function' => 'update_fields'
             ];
-        return $this->call_api_url($this->base_url,$options);
+        return $this->callApiUrl($this->base_url,$options);
     }
 
     /**
@@ -277,7 +284,7 @@ class Client extends BaseClient {
                 'function' => 'set_timer_action'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -294,7 +301,7 @@ class Client extends BaseClient {
                 'function' => 'st_login_log'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -311,7 +318,7 @@ class Client extends BaseClient {
                 'function' => 'st_get_agent_active_lead'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -328,7 +335,7 @@ class Client extends BaseClient {
                 'function' => 'ra_call_control'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -343,7 +350,7 @@ class Client extends BaseClient {
                 'function' => 'send_dtmf'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -360,7 +367,7 @@ class Client extends BaseClient {
                 'function' => 'transfer_conference'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -377,7 +384,7 @@ class Client extends BaseClient {
                 'function' => 'park_call'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -395,7 +402,7 @@ class Client extends BaseClient {
                 'value' => $value
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -412,7 +419,7 @@ class Client extends BaseClient {
                 'function' => 'recording'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -424,7 +431,7 @@ class Client extends BaseClient {
      */
     public function webphone_url($agent_user, $value)
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'webphone_url',
             'value' => urlencode(trim($value))
@@ -445,7 +452,7 @@ class Client extends BaseClient {
                 'function' => 'audio_playback'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -457,7 +464,7 @@ class Client extends BaseClient {
      */
     public function switch_lead($agent_user, $lead_id)
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'switch_lead',
             'value' => urlencode(trim($lead_id))
@@ -478,7 +485,7 @@ class Client extends BaseClient {
                 'function' => 'vm_message'
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
@@ -490,7 +497,7 @@ class Client extends BaseClient {
      */
     public function calls_in_queue_count($agent_user, $status)
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'calls_in_queue_count',
             'value' => urlencode(trim($status))
@@ -506,7 +513,7 @@ class Client extends BaseClient {
      */
     public function force_fronter_leave_3way($agent_user, $status)
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'force_fronter_leave_3way',
             'value' => urlencode(trim($status))
@@ -522,7 +529,7 @@ class Client extends BaseClient {
      */
     public function force_fronter_audio_stop($agent_user, $status)
     {
-        return $this->call_api_url($this->base_url,[
+        return $this->callApiUrl($this->base_url,[
             'agent_user' => urlencode(trim($agent_user)),
             'function' => 'force_fronter_leave_3way',
             'value' => urlencode(trim($status))

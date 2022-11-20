@@ -3,6 +3,8 @@
 namespace Vicidial\Api\Wrapper\Admin;
 
 use Exception;
+use GrahamCampbell\GuzzleFactory\GuzzleFactory;
+use GuzzleHttp\Client as GuzzleClient;
 use Vicidial\Api\Wrapper\BaseClient;
 use Vicidial\Api\Wrapper\Exceptions\InvalidIpException;
 use BadMethodCallException;
@@ -132,6 +134,20 @@ class Client extends BaseClient {
         parent::__construct($api_user, $api_password, $source);
     }
 
+    public static function create(
+        string $apiUser,
+        string $apiPassword,
+        string $source = 'test',
+        ?GuzzleClient $client = null
+    ): self {
+        return new static(
+            urlencode($apiUser),
+            urlencode($apiPassword),
+            urlencode($source),
+            $client ?? new GuzzleClient(['handler' => GuzzleFactory::handler()])
+        );
+    }
+
     /**
      * Make the api call and return an string
      *
@@ -150,7 +166,7 @@ class Client extends BaseClient {
                 'function' => $fun
             ];
 
-        return $this->call_api_url($this->base_url, $options);
+        return $this->callApiUrl($this->base_url, $options);
     }
 
     /**
