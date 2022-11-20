@@ -129,24 +129,34 @@ class Client extends BaseClient {
         string $api_user,
         string $api_password,
         string $source = "test",
-        bool $hasSSl = true
+        bool $hasSSl = true,
+        ?GuzzleClient $client = null
     ) {
         $this->base_url = $hasSSl ? 'https://' : 'http://';
         $this->base_url .= $server_ip . '/vicidial/non_agent_api.php';
-        parent::__construct($api_user, $api_password, $source);
+        parent::__construct(
+            $api_user,
+            $api_password,
+            $source,
+            $client ?? new GuzzleClient(['handler' => GuzzleFactory::handler()])
+        );
     }
 
     public static function create(
+        string $serverIp,
         string $apiUser,
         string $apiPassword,
         string $source = 'test',
+        bool $hasSSl = true,
         ?GuzzleClient $client = null
     ): self {
         return new static(
+            $serverIp,
             urlencode($apiUser),
             urlencode($apiPassword),
             urlencode($source),
-            $client ?? new GuzzleClient(['handler' => GuzzleFactory::handler()])
+            $hasSSl,
+            $client
         );
     }
 

@@ -14,8 +14,9 @@ class BaseClient implements Client
         public readonly string $api_user,
         public readonly string $api_password,
         public readonly string $source,
-        public readonly ?GuzzleClient $client = null
+        public ?GuzzleClient $client = null
     ) {
+        $this->client =  $client ?? new GuzzleClient(['handler' => GuzzleFactory::handler()]);
     }
 
     public static function make(
@@ -28,7 +29,7 @@ class BaseClient implements Client
             urlencode($apiUser),
             urlencode($apiPassword),
             urlencode($source),
-            $client ?? new GuzzleClient(['handler' => GuzzleFactory::handler()])
+            $client
         );
     }
 

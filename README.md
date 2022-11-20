@@ -14,9 +14,13 @@ Vicidial has an AGENT API and NON AGENT API, this classes are intended to make i
 - http://vicidial.org/docs/AGENT_API.txt
 
 ## Install
-Requires PHP 7.4+
+Requires PHP 8.1
 
 `composer require masterfermin02/vicidial-api-wrapper`
+
+### For PHP 7.4+ must install this version
+
+`composer require masterfermin02/vicidial-api-wrapper:1.0.3`
 
 ## How to use it
 Example 1: Update fields on agent screen
@@ -52,6 +56,26 @@ try {
      $agent_api->hangup("gabriel");
      $agent_api->dispo("gabriel", ['value' => 'SALE']);
      $agent_api->pause_code("gabriel", "BREAK");
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+
+```
+
+Example 3: Update fields on agent screen
+```php 
+
+<?php
+
+use Vicidial\Api\Wrapper\Agent\Client;
+
+$fields['first_name'] = "John";
+$fields['last_name'] = "Doe";
+$fields['address1'] = "123 Fake St";
+
+try {
+     $agent_api = Client::create("127.0.0.1", "gabriel", "Sup3rP4ss");
+     echo $agent_api->update_fields("gabriel", $fields);
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
