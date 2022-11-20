@@ -57,6 +57,7 @@ use BadMethodCallException;
  * @method string add_did(array $options)
  * @method string update_did(array $options)
  * @method string update_cid_group_entry(array $options)
+ * @method string copy_user(array $options)
  */
 class Client extends BaseClient {
 
@@ -110,7 +111,8 @@ class Client extends BaseClient {
         'update_campaign',
         'add_did',
         'update_did',
-        'update_cid_group_entry'
+	'update_cid_group_entry',
+	'copy_user'
     ];
 
     /**
