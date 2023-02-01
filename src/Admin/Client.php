@@ -59,12 +59,11 @@ use BadMethodCallException;
  * @method string update_cid_group_entry(array $options)
  * @method string copy_user(array $options)
  */
-class Client extends BaseClient {
+class Client extends BaseClient
+{
 
-    /**
-     * @var string
-     */
-    protected $base_url;
+    protected string $base_url;
+    protected bool   $encodeUrl = false;
 
     protected $actions = [
         'version',
@@ -111,17 +110,19 @@ class Client extends BaseClient {
         'update_campaign',
         'add_did',
         'update_did',
-	'update_cid_group_entry',
-	'copy_user'
+        'update_cid_group_entry',
+        'copy_user',
     ];
 
     /**
      * Client constructor.
-     * @param $server_ip
-     * @param $api_user
-     * @param $api_password
-     * @param $source
+     *
+     * @param      $server_ip
+     * @param      $api_user
+     * @param      $api_password
+     * @param      $source
      * @param bool $hasSSl
+     *
      * @throws InvalidIpException
      */
     public function __construct(
@@ -160,13 +161,21 @@ class Client extends BaseClient {
         );
     }
 
+    public function withUrlEncode(bool $encodeUrl): self
+    {
+        $this->encodeUrl = $encodeUrl;
+
+        return $this;
+    }
+
     /**
      * Make the api call and return an string
      *
-     * @throws BadMethodCallException
      * @param string $fun
-     * @param array $options
+     * @param array  $options
+     *
      * @return string
+     * @throws BadMethodCallException
      * @throws Exception
      */
     public function run(string $fun, array $options = []): string
@@ -174,18 +183,22 @@ class Client extends BaseClient {
         if (!in_array($fun, $this->actions)) {
             throw new BadMethodCallException("Method {$fun} does not exist");
         }
-        $options = $this->encode($options) + [
-                'function' => $fun
-            ];
+        $options = $this->encodeUrl ? $this->encode($options) : $options;
 
-        return $this->callApiUrl($this->base_url, $options);
+        return $this->callApiUrl(
+            $this->base_url,
+            $options + [
+                'function' => $fun,
+            ]
+        );
     }
 
     /**
      * Handle calls to non-existent methods.
      *
      * @param string $method
-     * @param array $arguments
+     * @param array  $arguments
+     *
      * @return mixed
      */
     public function __call($method, array $arguments = [])

@@ -102,6 +102,29 @@ try {
     }
 ```
 
+Url encode
+```php
+    <?php
+    
+    require_once 'vendor/autoload.php';
+    
+    use Vicidial\Api\Wrapper\Admin\Client;
+
+    $fields['first_name'] = "John";
+    $fields['last_name']  = "Doe";
+    $fields['address1']   = "123 Fake St";
+    $fields['phone_number']   = "18002474747";
+    
+    try {
+        $agent_api = new Client("10.0.0.15", "apiuser", "apipass", "test", false);
+        echo $agent_api
+        ->withUrlEncode(true)
+        ->add_lead($fields);
+    } catch (Exception $e) {
+        echo 'Exception: ', $e->getMessage(), "\n";
+    }
+```
+
 ### Docs:
 - [Agent](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/agent.md)
 - [Admin](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/admin.md)

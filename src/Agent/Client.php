@@ -244,7 +244,7 @@ class Client extends BaseClient {
      */
     public function update_fields($agent_user, $fields_to_update)
     {
-        if ( !is_array($fields_to_update)) {
+        if (!is_array($fields_to_update)) {
             throw new Exception('Fields must be an array');
         }
 
@@ -256,15 +256,17 @@ class Client extends BaseClient {
         );
 
         // Validate that every single field to update us valid
-        foreach( $fields_to_update as $key => $value ){
-            if ( !in_array($key, $permited_fields))
+        foreach($fields_to_update as $key => $value ) {
+            if (!in_array($key, $permited_fields)) {
                 throw new Exception("$key is not a valid field");
+            }
         }
 
         $options = $fields_to_update + [
                 'agent_user' => urlencode(trim($agent_user)),
                 'function' => 'update_fields'
-            ];
+        ];
+
         return $this->callApiUrl($this->base_url,$options);
     }
 
