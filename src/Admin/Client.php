@@ -67,7 +67,7 @@ class Client extends BaseClient
 
     protected $actions = [
         'version',
-        'string moh_list',
+        'moh_list',
         'vm_list',
         'blind_monitor',
         'agent_ingroup_info',
