@@ -393,7 +393,7 @@ try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
      $vicidialAPI->dial($agent_user, [
-        'phone_numer' => 'MANUALNEXT',
+        'phone_number' => 'MANUALNEXT',
         'phone_code' => '1'
      ]);
 } catch (Exception $e) {
@@ -412,7 +412,7 @@ try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
      $vicidialAPI->dial($agent_user, [
-        'phone_numer' => 7275551212,
+        'phone_number' => 7275551212,
         'phone_code' => '1'
      ]);
 } catch (Exception $e) {
