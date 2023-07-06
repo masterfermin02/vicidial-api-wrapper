@@ -169,7 +169,7 @@ class Client extends BaseClient {
             'phone_code' => urlencode(trim($options['phone_code'] ?? '')),
             'search' => 'YES',
             'preview' => 'NO',
-            'focues' => 'YES'
+            'focus' => 'YES'
         ];
 
         return $this->callApiUrl($this->base_url, $options);
