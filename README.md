@@ -24,7 +24,7 @@ Requires PHP 8.1
 
 ## How to use it
 Example 1: Update fields on agent screen
-```php 
+```php
 
 <?php
 
@@ -35,8 +35,8 @@ $fields['last_name'] = "Doe";
 $fields['address1'] = "123 Fake St";
 
 try {
-     $agent_api = new Client("127.0.0.1", "gabriel", "Sup3rP4ss");
-     echo $agent_api->update_fields("gabriel", $fields);
+     $agentApi = new Client("127.0.0.1", "gabriel", "Sup3rP4ss");
+     echo $agentApi->updateFields("gabriel", $fields);
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -44,18 +44,18 @@ try {
 ```
 
 Example 2:  Hangup Call, Dispo it and Pause Agent
-```php 
+```php
 
 <?php
 
 use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $agent_api = new Client("127.0.0.1", "gabriel", "Sup3rP4ss");
-     $agent_api->pause("gabriel", "PAUSE");
-     $agent_api->hangup("gabriel");
-     $agent_api->dispo("gabriel", ['value' => 'SALE']);
-     $agent_api->pause_code("gabriel", "BREAK");
+     $agentApi = new Client("127.0.0.1", "gabriel", "Sup3rP4ss");
+     $agentApi->pause("gabriel", "PAUSE");
+     $agentApi->hangup("gabriel");
+     $agentApi->dispo("gabriel", ['value' => 'SALE']);
+     $agentApi->pauseCode("gabriel", "BREAK");
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -63,22 +63,21 @@ try {
 ```
 
 Example 3: Update fields on agent screen
-```php 
-
-<?php
-
-use Vicidial\Api\Wrapper\Agent\Client;
-
-$fields['first_name'] = "John";
-$fields['last_name'] = "Doe";
-$fields['address1'] = "123 Fake St";
-
-try {
-     $agent_api = Client::create("127.0.0.1", "gabriel", "Sup3rP4ss");
-     echo $agent_api->update_fields("gabriel", $fields);
-} catch (Exception $e) {
-     echo 'Exception: ',  $e->getMessage(), "\n";
-}
+```php
+    <?php
+    
+    use Vicidial\Api\Wrapper\Agent\Client;
+    
+    $fields['first_name'] = "John";
+    $fields['last_name'] = "Doe";
+    $fields['address1'] = "123 Fake St";
+    
+    try {
+         $agentApi = Client::create("127.0.0.1", "gabriel", "Sup3rP4ss");
+         echo $agentApi->updateFields("gabriel", $fields);
+    } catch (Exception $e) {
+         echo 'Exception: ',  $e->getMessage(), "\n";
+    }
 
 ```
 
@@ -91,8 +90,8 @@ try {
     use Vicidial\Api\Wrapper\Admin\Client;
     
     try {
-        $agent_api = new Client("viciexperts.com/admin_demo/", "12345", "12345");
-        echo $agent_api->moh_list([
+        $agentApi = new Client("viciexperts.com/admin_demo/", "12345", "12345");
+        echo $agentApi->moh_list([
             'format' => 'selectframe',
             'comments' => 'fieldname',
             'stage' => 'date'
@@ -116,8 +115,8 @@ Url encode
     $fields['phone_number']   = "18002474747";
     
     try {
-        $agent_api = new Client("10.0.0.15", "apiuser", "apipass", "test", false);
-        echo $agent_api
+        $agentApi = new Client("10.0.0.15", "apiuser", "apipass", "test", false);
+        echo $agentApi
         ->withUrlEncode(true)
         ->add_lead($fields);
     } catch (Exception $e) {

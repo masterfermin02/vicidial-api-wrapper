@@ -11,7 +11,7 @@ $fields['address1'] = "123 Fake St";
 
 try {
     $agent_api = new Client("viciexperts.com/admin_demo", "gabriel", "Sup3rP4ss");
-    echo $agent_api->update_fields("gabriel", $fields);
+    echo $agent_api->updateFields("gabriel", $fields);
 } catch (Exception $e) {
     echo 'Exception: ',  $e->getMessage(), "\n";
 }

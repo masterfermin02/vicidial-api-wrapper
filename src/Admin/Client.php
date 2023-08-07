@@ -62,10 +62,10 @@ use BadMethodCallException;
 class Client extends BaseClient
 {
 
-    protected string $base_url;
+    protected string $baseUrl;
     protected bool   $encodeUrl = false;
 
-    protected $actions = [
+    protected array $actions = [
         'version',
         'moh_list',
         'vm_list',
@@ -117,27 +117,21 @@ class Client extends BaseClient
     /**
      * Client constructor.
      *
-     * @param      $server_ip
-     * @param      $api_user
-     * @param      $api_password
-     * @param      $source
-     * @param bool $hasSSl
-     *
      * @throws InvalidIpException
      */
     public function __construct(
-        string $server_ip,
-        string $api_user,
-        string $api_password,
-        string $source = "test",
-        bool $hasSSl = true,
+        string        $serverIp,
+        string        $apiUser,
+        string        $apiPassword,
+        string        $source = "test",
+        bool          $hasSSl = true,
         ?GuzzleClient $client = null
     ) {
-        $this->base_url = $hasSSl ? 'https://' : 'http://';
-        $this->base_url .= $server_ip . '/vicidial/non_agent_api.php';
+        $this->baseUrl = $hasSSl ? 'https://' : 'http://';
+        $this->baseUrl .= $serverIp . '/vicidial/non_agent_api.php';
         parent::__construct(
-            $api_user,
-            $api_password,
+            $apiUser,
+            $apiPassword,
             $source,
             $client ?? new GuzzleClient(['handler' => GuzzleFactory::handler()])
         );
@@ -186,7 +180,7 @@ class Client extends BaseClient
         $options = $this->encodeUrl ? $this->encode($options) : $options;
 
         return $this->callApiUrl(
-            $this->base_url,
+            $this->baseUrl,
             $options + [
                 'function' => $fun,
             ]
@@ -201,7 +195,7 @@ class Client extends BaseClient
      *
      * @return mixed
      */
-    public function __call($method, array $arguments = [])
+    public function __call(string $method, array $arguments = [])
     {
         if (empty($arguments)) {
             return call_user_func([$this, 'run'], $method, $arguments);

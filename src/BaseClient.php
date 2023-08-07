@@ -11,10 +11,10 @@ use GuzzleHttp\Exception\GuzzleException;
 class BaseClient implements Client
 {
     public function __construct(
-        public readonly string $api_user,
-        public readonly string $api_password,
+        public readonly string $apiUser,
+        public readonly string $apiPassword,
         public readonly string $source,
-        public ?GuzzleClient $client = null
+        public ?GuzzleClient   $client = null
     ) {
         $this->client =  $client ?? new GuzzleClient(['handler' => GuzzleFactory::handler()]);
     }
@@ -47,8 +47,8 @@ class BaseClient implements Client
         }
 
         $options += [
-            'user'   => $this->api_user,
-            'pass'   => $this->api_password,
+            'user'   => $this->apiUser,
+            'pass'   => $this->apiPassword,
             'source' => $this->source,
         ];
 

@@ -58,7 +58,7 @@ try {
      $vicidialAPI->pause($agent_user, "PAUSE");
      $vicidialAPI->hangup($agent_user);
      $vicidialAPI->dispo($agent_user, ['value' => 'SALE']);
-     $vicidialAPI->pause_code($agent_user, "BREAK");
+     $vicidialAPI->pauseCode($agent_user, "BREAK");
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -447,6 +447,7 @@ SUCCESS: preview_dial_action function set - DIALONLY|6666|DIALONLY
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -455,7 +456,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->preview_dial($agent_user, 'SKIP');
+     $vicidialAPI->previewDial($agent_user, 'SKIP');
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -523,6 +524,7 @@ SUCCESS: lead added - 7275551212|TESTCAMP|101|123456|6666
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -531,7 +533,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->add_lead($agent_user, [
+     $vicidialAPI->addLead($agent_user, [
         'phone_number' => 7275551212,
         'phone_code' => 1,
         'first_name' => 'Bob',
@@ -583,6 +585,7 @@ SUCCESS: change_ingroups function set - YES| TEST_IN SALESLINE -|6666
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -591,7 +594,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->change_ingroups($agent_user, [
+     $vicidialAPI->changeIngroups($agent_user, [
         'value' => 'REMOVE',
         'blended' => 'NO',
         'ingroup_choices' => '+TEST_IN2+TEST_IN4+-'
@@ -659,6 +662,7 @@ SUCCESS: update_fields lead updated - 6666|1234|87498|vendor_lead_code='1234567'
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -667,7 +671,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->update_fields($agent_user, [
+     $vicidialAPI->updateFields($agent_user, [
         'vendor_lead_code' => '1234567',
         'address1' => ''
      ]);
@@ -712,6 +716,7 @@ SUCCESS: set_timer_action lead updated - 6666|1234|MESSAGE_ONLY|test message|15
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -720,7 +725,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->set_timer_action($agent_user, [
+     $vicidialAPI->setTimerAction($agent_user, [
         'value' => 'MESSAGE_ONLY',
         'notes' => 'test+message',
         'rank' => '15'
@@ -758,6 +763,7 @@ SUCCESS: st_login_log user found - 6666
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -766,7 +772,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->st_login_log([
+     $vicidialAPI->stLoginLog([
         'value' => 876543,
         'vendor_id' => 207
      ]);
@@ -808,6 +814,7 @@ ERROR: no active lead found - 6666
 SUCCESS: st_get_agent_active_lead lead found - 6666|7275551212|123456|9987-1234765|SK|WILLIAMS|JUH764AJJJ9
 
 Code:
+
 ```php
 <?php
 
@@ -816,7 +823,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->st_get_agent_active_lead([
+     $vicidialAPI->stGetAgentActiveLead([
         'value' => 876543,
         'vendor_id' => 207
      ]);
@@ -864,6 +871,7 @@ SUCCESS: ra_call_control hungup - 6666|Y0315201639000402027|HANGUP
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -872,7 +880,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->ra_call_control($agent_user, [
+     $vicidialAPI->raCallControl($agent_user, [
         'stage' => 'INGROUPTRANSFER',
         'ingroup_choices' => 'DEFAULTINGROUP',
         'value' => 'Y0316001655000402028'
@@ -910,6 +918,7 @@ SUCCESS: send_dtmf function set - QQQQ1234SQQQQQ6654P|6666
 
 
 Code:
+
 ```php
 <?php
 
@@ -918,7 +927,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->send_dtmf([
+     $vicidialAPI->sendDtmf([
         'value' => 'QQQQ1234SQQQQQ6654P'
      ]);
 } catch (Exception $e) {
@@ -954,6 +963,7 @@ SUCCESS: park_call function set - PARK_CUSTOMER|6666
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -962,16 +972,16 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->park_call($agent_user, [
+     $vicidialAPI->parkCall($agent_user, [
        'value' => 'PARK_CUSTOMER'
      ]);
-     $vicidialAPI->park_call($agent_user, [
+     $vicidialAPI->parkCall($agent_user, [
              'value' => 'GRAB_CUSTOMER'
           ]);
-     $vicidialAPI->park_call($agent_user, [
+     $vicidialAPI->parkCall($agent_user, [
              'value' => 'PARK_IVR_CUSTOMER'
           ]);
-     $vicidialAPI->park_call($agent_user, [
+     $vicidialAPI->parkCall($agent_user, [
                    'value' => 'GRAB_IVR_CUSTOMER'
                 ]);
 } catch (Exception $e) {
@@ -1030,6 +1040,7 @@ SUCCESS: transfer_conference function set - LOCAL_CLOSER|SALESLINE||YES|6666|M21
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -1038,13 +1049,13 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->transfer_conference($agent_user, [
+     $vicidialAPI->transferConference($agent_user, [
         'value' => 'HANGUP_XFER'
      ]);
-     $vicidialAPI->transfer_conference($agent_user, [
+     $vicidialAPI->transferConference($agent_user, [
              'value' => 'HANGUP_BOTH'
           ]);
-     $vicidialAPI->transfer_conference($agent_user, [
+     $vicidialAPI->transferConference($agent_user, [
                   'value' => 'BLIND_TRANSFER',
                   'phone_number' => 8500
                ]);
@@ -1148,6 +1159,7 @@ ERROR: webphone_url error - no session data - 6666
 
 
 Code:
+
 ```php
 <?php
 
@@ -1156,8 +1168,8 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->webphone_url($agent_user, 'DISPLAY');
-     $vicidialAPI->webphone_url($agent_user, 'LAUNCH');
+     $vicidialAPI->webphoneUrl($agent_user, 'DISPLAY');
+     $vicidialAPI->webphoneUrl($agent_user, 'LAUNCH');
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -1194,6 +1206,7 @@ SUCCESS: call_agent function sent - 6666
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -1202,7 +1215,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->call_agent($agent_user,'CALL');
+     $vicidialAPI->callAgent($agent_user,'CALL');
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -1251,6 +1264,7 @@ SUCCESS: audio_playback function sent - ss-noservice|PLAY|6666
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -1259,20 +1273,20 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->audio_playback($agent_user,[
+     $vicidialAPI->audioPlayBack($agent_user,[
                 'value' => 'ss-noservices',
                 'stage' => 'PLAY'
            ]);
-     $vicidialAPI->audio_playback($agent_user,[
+     $vicidialAPI->audioPlayBack($agent_user,[
                  'stage' => 'STOP'
           ]);
-     $vicidialAPI->audio_playback($agent_user,[
+     $vicidialAPI->audioPlayBack($agent_user,[
                  'stage' => 'RESUME'
           ]);
-     $vicidialAPI->audio_playback($agent_user,[
+     $vicidialAPI->audioPlayBack($agent_user,[
                       'stage' => 'RESTART'
                ]);
-     $vicidialAPI->audio_playback($agent_user,[
+     $vicidialAPI->audioPlayBack($agent_user,[
                       'value' => 'ss-noservices',
                       'stage' => 'PLAY',
                       'dial_override' => 'Y'
@@ -1313,6 +1327,7 @@ SUCCESS: switch_lead function set - 6666|12345|1234567890|TESTCAMP|12346
 ```
 
 Code:
+
 ```php
 <?php
 
@@ -1321,10 +1336,10 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->switch_lead($agent_user,[
+     $vicidialAPI->switchLead($agent_user,[
                 'lead_id' => '12345'
            ]);
-     $vicidialAPI->audio_playback($agent_user,[
+     $vicidialAPI->audioPlayBack($agent_user,[
                  'vendor_lead_code' => '1234567890'
           ]);
 } catch (Exception $e) {
@@ -1368,6 +1383,7 @@ RESPONSES:
 - SUCCESS: vm_message function set - 6666|12345|EXship01|EXship02|EXship03
 
 Code:
+
 ```php
 <?php
 
@@ -1376,10 +1392,10 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->vm_message($agent_user,[
+     $vicidialAPI->vmMessage($agent_user,[
                 'value' => 'EXship01|EXship02|EXship03'
            ]);
-     $vicidialAPI->vm_message($agent_user,[
+     $vicidialAPI->vmMessage($agent_user,[
                  'lead_id' => 12345,
                  'value' => 'appointment_reminder2'
           ]);
@@ -1415,6 +1431,7 @@ RESPONSES:
 - SUCCESS: pause_code function sent - 6666
 
 Code:
+
 ```php
 <?php
 
@@ -1423,7 +1440,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->pause_code($agent_user,'BREAK');
+     $vicidialAPI->pauseCode($agent_user,'BREAK');
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -1452,6 +1469,7 @@ RESPONSES:
 - SUCCESS: calls_in_queue_count - 0
 
 Code:
+
 ```php
 <?php
 
@@ -1460,7 +1478,7 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->calls_in_queue_count($agent_user,'DISPLAY');
+     $vicidialAPI->callsInQueueCount($agent_user,'DISPLAY');
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -1497,6 +1515,7 @@ RESPONSES:
 - SUCCESS: force_fronter_leave_3way command sent over CCC - test_ccc
 
 Code:
+
 ```php
 <?php
 
@@ -1505,8 +1524,8 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->force_fronter_leave_3way($agent_user,'LOCAL_ONLY');
-     $vicidialAPI->force_fronter_leave_3way($agent_user,'LOCAL_AND_CCC');
+     $vicidialAPI->forceFronterLeave3way($agent_user,'LOCAL_ONLY');
+     $vicidialAPI->forceFronterLeave3way($agent_user,'LOCAL_AND_CCC');
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }
@@ -1547,6 +1566,7 @@ SUCCESS: force_fronter_audio_stop function SENT - LOCAL_AND_CCC||6667|1234
 SUCCESS: force_fronter_audio_stop command sent over CCC - test_ccc
 
 Code:
+
 ```php
 <?php
 
@@ -1555,8 +1575,8 @@ use Vicidial\Api\Wrapper\Agent\Client;
 try {
      $vicidialAPI = new Client("127.0.0.1", "6666", "123");
      $agent_user = '1000';
-     $vicidialAPI->force_fronter_audio_stop($agent_user,'LOCAL_ONLY');
-     $vicidialAPI->force_fronter_audio_stop($agent_user,'LOCAL_AND_CCC');
+     $vicidialAPI->forceFronterAudioStop($agent_user,'LOCAL_ONLY');
+     $vicidialAPI->forceFronterAudioStop($agent_user,'LOCAL_AND_CCC');
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }

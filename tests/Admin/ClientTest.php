@@ -95,7 +95,7 @@ class ClientTest extends TestCase
             true,
             new FakeGuzzleClient()
         );
-        $response = $baseClient->mohList();
+        $response = $baseClient->moh_list([]);
 
         $this->assertEquals('', $response);
     }
