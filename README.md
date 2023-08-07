@@ -35,7 +35,7 @@ $fields['last_name'] = "Doe";
 $fields['address1'] = "123 Fake St";
 
 try {
-     $agentApi = new Client("127.0.0.1", "gabriel", "Sup3rP4ss");
+     $agentApi = new Client(getenv('YOUR_VICIDIAL_IP'), getenv('YOUR_VICIDIAL_USER'), getenv('YOUR_VICIDIAL_PASSWORD'));
      echo $agentApi->updateFields("gabriel", $fields);
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
@@ -51,7 +51,7 @@ Example 2:  Hangup Call, Dispo it and Pause Agent
 use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $agentApi = new Client("127.0.0.1", "gabriel", "Sup3rP4ss");
+     $agentApi = new Client(getenv('YOUR_VICIDIAL_IP'), getenv('YOUR_VICIDIAL_USER'), getenv('YOUR_VICIDIAL_PASSWORD'));
      $agentApi->pause("gabriel", "PAUSE");
      $agentApi->hangup("gabriel");
      $agentApi->dispo("gabriel", ['value' => 'SALE']);
@@ -73,7 +73,7 @@ Example 3: Update fields on agent screen
     $fields['address1'] = "123 Fake St";
     
     try {
-         $agentApi = Client::create("127.0.0.1", "gabriel", "Sup3rP4ss");
+         $agentApi = Client::create(getenv('YOUR_VICIDIAL_IP'), getenv('YOUR_VICIDIAL_USER'), getenv('YOUR_VICIDIAL_PASSWORD'));
          echo $agentApi->updateFields("gabriel", $fields);
     } catch (Exception $e) {
          echo 'Exception: ',  $e->getMessage(), "\n";
@@ -90,7 +90,7 @@ Example 3: Update fields on agent screen
     use Vicidial\Api\Wrapper\Admin\Client;
     
     try {
-        $agentApi = new Client("viciexperts.com/admin_demo/", "12345", "12345");
+        $agentApi = new Client(getenv('YOUR_VICIDIAL_IP'), getenv('YOUR_VICIDIAL_USER'), getenv('YOUR_VICIDIAL_PASSWORD'));
         echo $agentApi->moh_list([
             'format' => 'selectframe',
             'comments' => 'fieldname',
@@ -115,7 +115,7 @@ Url encode
     $fields['phone_number']   = "18002474747";
     
     try {
-        $agentApi = new Client("10.0.0.15", "apiuser", "apipass", "test", false);
+        $agentApi = new Client(getenv('YOUR_VICIDIAL_IP'), getenv('YOUR_VICIDIAL_USER'), getenv('YOUR_VICIDIAL_PASSWORD'), "test", false);
         echo $agentApi
         ->withUrlEncode(true)
         ->add_lead($fields);

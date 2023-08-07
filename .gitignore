@@ -5,3 +5,4 @@ test-coverage/
 coverage.xml
 .phpunit.result.cache
 build
+example/.env
