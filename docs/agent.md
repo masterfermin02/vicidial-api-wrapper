@@ -39,9 +39,7 @@
 ```php
     <?php
     
-    use Vicidial\Api\Wrapper\Agent\Client;
-    
-    $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+    $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
 ```
 
 #### Example 
@@ -50,10 +48,8 @@ To hangup the call, disposition it and then pause the agent, do the following in
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->pause($agent_user, "PAUSE");
      $vicidialAPI->hangup($agent_user);
@@ -95,10 +91,8 @@ Code:
 
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      echo $vicidialAPI->version(); // VERSION: 2.0.5-2|BUILD: 90116-1229|DATE: 2009-01-15 14:59:33|EPOCH: 1222020803 
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
@@ -144,10 +138,9 @@ Code:
 
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      echo $vicidialAPI->webserver();
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
@@ -176,10 +169,8 @@ SUCCESS: external_hangup function set - 1|6666
 
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      echo $vicidialAPI->hangup("agent_name");
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
@@ -216,10 +207,8 @@ Code:
 
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      echo $vicidialAPI->dispo("agent_user",[
         'value' => 'A'
      ]);
@@ -228,7 +217,7 @@ try {
 }
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      echo $vicidialAPI->dispo("agent_user",[
         'value' => 'CALLBK',
         'callback_datetime' => '2012-01-25+12:00:00',
@@ -266,10 +255,8 @@ Code:
 
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      echo $vicidialAPI->logout("agent_user");
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
@@ -305,10 +292,8 @@ Code:
 
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->pause($agent_user, "PAUSE");
 } catch (Exception $e) {
@@ -387,10 +372,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->dial($agent_user, [
         'phone_number' => 'MANUALNEXT',
@@ -406,10 +389,8 @@ Manual dial example:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->dial($agent_user, [
         'phone_number' => 7275551212,
@@ -451,10 +432,9 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->previewDial($agent_user, 'SKIP');
 } catch (Exception $e) {
@@ -528,10 +508,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->addLead($agent_user, [
         'phone_number' => 7275551212,
@@ -589,10 +567,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->changeIngroups($agent_user, [
         'value' => 'REMOVE',
@@ -669,7 +645,7 @@ Code:
 use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->updateFields($agent_user, [
         'vendor_lead_code' => '1234567',
@@ -723,7 +699,7 @@ Code:
 use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->setTimerAction($agent_user, [
         'value' => 'MESSAGE_ONLY',
@@ -767,10 +743,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->stLoginLog([
         'value' => 876543,
@@ -818,10 +792,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->stGetAgentActiveLead([
         'value' => 876543,
@@ -875,10 +847,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->raCallControl($agent_user, [
         'stage' => 'INGROUPTRANSFER',
@@ -922,10 +892,9 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->sendDtmf([
         'value' => 'QQQQ1234SQQQQQ6654P'
@@ -967,10 +936,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->parkCall($agent_user, [
        'value' => 'PARK_CUSTOMER'
@@ -1044,10 +1011,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->transferConference($agent_user, [
         'value' => 'HANGUP_XFER'
@@ -1103,10 +1068,9 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->recording($agent_user, [
         'value' => 'START'
@@ -1163,10 +1127,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->webphoneUrl($agent_user, 'DISPLAY');
      $vicidialAPI->webphoneUrl($agent_user, 'LAUNCH');
@@ -1210,10 +1172,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->callAgent($agent_user,'CALL');
 } catch (Exception $e) {
@@ -1268,10 +1228,9 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->audioPlayBack($agent_user,[
                 'value' => 'ss-noservices',
@@ -1331,10 +1290,9 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->switchLead($agent_user,[
                 'lead_id' => '12345'
@@ -1390,7 +1348,7 @@ Code:
 use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->vmMessage($agent_user,[
                 'value' => 'EXship01|EXship02|EXship03'
@@ -1438,7 +1396,7 @@ Code:
 use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->pauseCode($agent_user,'BREAK');
 } catch (Exception $e) {
@@ -1476,7 +1434,7 @@ Code:
 use Vicidial\Api\Wrapper\Agent\Client;
 
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->callsInQueueCount($agent_user,'DISPLAY');
 } catch (Exception $e) {
@@ -1519,10 +1477,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->forceFronterLeave3way($agent_user,'LOCAL_ONLY');
      $vicidialAPI->forceFronterLeave3way($agent_user,'LOCAL_AND_CCC');
@@ -1570,10 +1526,8 @@ Code:
 ```php
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $vicidialAPI = new Client("127.0.0.1", "6666", "123");
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
      $agent_user = '1000';
      $vicidialAPI->forceFronterAudioStop($agent_user,'LOCAL_ONLY');
      $vicidialAPI->forceFronterAudioStop($agent_user,'LOCAL_AND_CCC');

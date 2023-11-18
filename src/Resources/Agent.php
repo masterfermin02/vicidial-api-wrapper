@@ -1,49 +1,16 @@
 <?php
 
-namespace Vicidial\Api\Wrapper\Agent;
+namespace VicidialApi\Resources;
 
-use GuzzleHttp\Client as GuzzleClient;
-use Vicidial\Api\Wrapper\BaseClient;
+use VicidialApi\Contracts\AgentContract;
+use VicidialApi\ValueObjects\Transporter\Payload;
 use Exception;
 
-/**
- * Class Connection
- * @package Api\Wrapper
- */
-class Client extends BaseClient {
+class Agent implements AgentContract
+{
+    use Concerns\Transportable;
 
-    protected string $baseUrl;
-
-    public function __construct(
-        string        $serverIp,
-        string        $apiUser,
-        string        $apiPassword,
-        string        $source = "test",
-        bool          $hasSSl = true,
-        ?GuzzleClient $client = null
-    ) {
-        $this->baseUrl = $hasSSl ? 'https://' : 'http://';
-        $this->baseUrl .= $serverIp . '/agc/api.php';
-        parent::__construct($apiUser, $apiPassword, $source, $client);
-    }
-
-    public static function create(
-        string $serveIp,
-        string $apiUser,
-        string $apiPassword,
-        string $source = 'test',
-        bool $hasSSl = true,
-        ?GuzzleClient $client = null
-    ): self {
-        return new static(
-            $serveIp,
-            urlencode($apiUser),
-            urlencode($apiPassword),
-            urlencode($source),
-            $hasSSl,
-            $client
-        );
-    }
+    const AGENT_URL = '/agc/api.php';
 
     /**
      * Creates the URL for  the external_hangup method and calls 'call_api_url' to execute it
@@ -53,25 +20,31 @@ class Client extends BaseClient {
      */
     public function hangup(string $agentUser): string
     {
-        return $this->callApiUrl($this->baseUrl,[
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'external_hangup',
             'value' => '1'
         ]);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      * Creates the URL for  the external_status method and calls 'call_api_url' to execute it
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function dispo(string $agentUser, array $options): string
     {
-        $options = $this->encode($options) + [
-            'agent_user' => urlencode(trim($agentUser)),
-            'function' => 'external_status'
-        ];
-        return $this->callApiUrl($this->baseUrl, $options);
+        $options = $options + [
+                'agent_user' => urlencode(trim($agentUser)),
+                'function' => 'external_status'
+            ];
+
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -81,11 +54,13 @@ class Client extends BaseClient {
      */
     public function pause(string $agentUser, string $status): string
     {
-        return $this->callApiUrl($this->baseUrl,[
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'external_pause',
             'value' => urlencode(trim($status))
         ]);
+
+        return $this->transporter->requestContent($payload);
     }
 
 
@@ -96,11 +71,13 @@ class Client extends BaseClient {
      */
     public function pauseCode(string $agentUser, int $code): string
     {
-        return $this->callApiUrl($this->baseUrl,[
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'pause_code',
-            'value' => urlencode(trim($code))
+            'value' => $code
         ]);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -110,9 +87,11 @@ class Client extends BaseClient {
      */
     public function webserver(): string
     {
-        return $this->callApiUrl($this->baseUrl,[
-            'function' => 'webserver'
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
+            'function' => 'webserver',
         ]);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -122,9 +101,11 @@ class Client extends BaseClient {
      */
     public function version(): string
     {
-        return $this->callApiUrl($this->baseUrl,[
-            'function' => 'version'
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
+            'function' => 'version',
         ]);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -134,15 +115,18 @@ class Client extends BaseClient {
      */
     public function logout(string $agentUser): string
     {
-        return $this->callApiUrl($this->baseUrl,[
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'logout',
-            'value' => 'LOGOUT'
+            'value' => 'LOGOUT',
         ]);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      * Creates the URL for  the external_dial method and calls 'call_api_url' to execute it
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
@@ -152,7 +136,7 @@ class Client extends BaseClient {
             throw new Exception("Please provide a valid phone number");
         }
 
-        $options = $this->encode($options) + [
+        $options = $options + [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'external_dial',
             'value' => urlencode(trim($options['phone_number'])),
@@ -162,7 +146,9 @@ class Client extends BaseClient {
             'focus' => 'YES'
         ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -173,27 +159,32 @@ class Client extends BaseClient {
     public function previewDial(string $agentUser, string $value): string
     {
         $options = [
-                'agent_user' => urlencode(trim($agentUser)),
-                'function' => 'preview_dial_action',
-                'value' => urlencode(trim($value))
+            'agent_user' => urlencode(trim($agentUser)),
+            'function' => 'preview_dial_action',
+            'value' => urlencode(trim($value))
         ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      * Adds a lead in the manual dial list of the campaign for logged-in agent. A much simplified add lead function compared to the Non-Agent API function
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function addLead(string $agentUser, array $options): string
     {
-        $options = $this->encode($options) + [
-            'agent_user' => urlencode(trim($agentUser)),
-            'function' => 'external_add_lead'
-        ];
+        $options = $options + [
+                'agent_user' => urlencode(trim($agentUser)),
+                'function' => 'external_add_lead'
+            ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -204,22 +195,27 @@ class Client extends BaseClient {
      * The blended checkbox can also be changed using this function. The API user performing this function must
      * have vicidial_users.change_agent_campaign = 1.
      *
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function changeInGroups(string $agentUser, array $options): string
     {
 
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'agent_user' => urlencode(trim($agentUser)),
                 'function' => 'change_ingroups'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      * Creates the URL for  the external_dial method and calls 'call_api_url' to execute it
+     *
+     * @param array<string, string> $fieldsToUpdate
      * @return string
      * @throws Exception
      */
@@ -242,117 +238,140 @@ class Client extends BaseClient {
         $options = $fieldsToUpdate + [
                 'agent_user' => urlencode(trim($agentUser)),
                 'function' => 'update_fields'
-        ];
+            ];
 
-        return $this->callApiUrl($this->baseUrl,$options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      * Updates the fields that are specified with the values. This will update the data
      * that is on the agent's screen in the customer information section.
      *
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function setTimerAction(string $agentUser, array $options): string
     {
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'agent_user' => urlencode(trim($agentUser)),
                 'function' => 'set_timer_action'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      * Looks up the vicidial_users.custom_three field(as "agentId") to associate with a vicidial user ID.
      * If found it will populate the custom_four field with a "teamId" value, then output the vicidial user ID
      *
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function stLoginLog(array $options): string
     {
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'function' => 'st_login_log'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      * Looks up the vicidial_users.custom_three field(as "agentId") to associate with a vicidial user ID.
      * If found it will output the active lead_id and phone number, vendor_lead_code, province, security_phrase and source_id fields.
      *
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function stGetAgentActiveLead(array $options): string
     {
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'function' => 'st_get_agent_active_lead'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      *
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function raCallControl(string $agent, array $options): string
     {
         $options['agent_user'] = $agent;
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'function' => 'ra_call_control'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      *
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function sendDtmf(array $options): string
     {
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'function' => 'send_dtmf'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      *
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function transferConference(string $agent, array $options): string
     {
         $options['agent_user'] = $agent;
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'function' => 'transfer_conference'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      *
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function parkCall(string $agent, array $options): string
     {
         $options['agent_user'] = $agent;
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'function' => 'park_call'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -363,27 +382,32 @@ class Client extends BaseClient {
     public function callAgent(string $agentUser, string $value): string
     {
         $options = [
-                'function' => 'call_agent',
-                'agent_user' => urlencode(trim($agentUser)),
-                'value' => $value
-            ];
+            'function' => 'call_agent',
+            'agent_user' => urlencode(trim($agentUser)),
+            'value' => $value
+        ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      *
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function recording(string $agent, array $options): string
     {
         $options['agent_user'] = $agent;
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'function' => 'recording'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -393,26 +417,31 @@ class Client extends BaseClient {
      */
     public function webPhoneUrl(string $agentUser, string $value): string
     {
-        return $this->callApiUrl($this->baseUrl,[
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'webphone_url',
             'value' => urlencode(trim($value))
         ]);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      *
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function audioPlayBack(string $agentUser, array $options): string
     {
         $options['agent_user'] = $agentUser;
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'function' => 'audio_playback'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -422,26 +451,33 @@ class Client extends BaseClient {
      */
     public function switchLead(string $agentUser, string $leadId): string
     {
-        return $this->callApiUrl($this->baseUrl,[
+        $options = [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'switch_lead',
             'value' => urlencode(trim($leadId))
-        ]);
+        ];
+
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
      * Set a custom voicemail message to be played when agent clicks the VM button on the agent screen
+     * @param array<string, string> $options
      * @return string
      * @throws Exception
      */
     public function vmMessage(string $agentUser, array $options): string
     {
         $options['agent_user'] = $agentUser;
-        $options = $this->encode($options) + [
+        $options = $options + [
                 'function' => 'vm_message'
             ];
 
-        return $this->callApiUrl($this->baseUrl, $options);
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -451,25 +487,32 @@ class Client extends BaseClient {
      */
     public function callsInQueueCount(string $agentUser, string $status): string
     {
-        return $this->callApiUrl($this->baseUrl,[
+        $options = [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'calls_in_queue_count',
             'value' => urlencode(trim($status))
-        ]);
+        ];
+
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
-     *
      * @return string
      * @throws Exception
      */
     public function forceFronterLeave3way(string $agentUser, string $status): string
     {
-        return $this->callApiUrl($this->baseUrl,[
+        $options = [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'force_fronter_leave_3way',
             'value' => urlencode(trim($status))
-        ]);
+        ];
+
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 
     /**
@@ -479,10 +522,14 @@ class Client extends BaseClient {
      */
     public function forceFronterAudioStop(string $agentUser, string $status): string
     {
-        return $this->callApiUrl($this->baseUrl,[
+        $options = [
             'agent_user' => urlencode(trim($agentUser)),
-            'function' => 'force_fronter_leave_3way',
+            'function' => 'force_fronter_audio_stop',
             'value' => urlencode(trim($status))
-        ]);
+        ];
+
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
+
+        return $this->transporter->requestContent($payload);
     }
 }

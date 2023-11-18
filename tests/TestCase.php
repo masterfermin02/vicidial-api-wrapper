@@ -1,6 +1,6 @@
 <?php
 
-namespace Vicidial\Api\Tests;
+namespace Test;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {

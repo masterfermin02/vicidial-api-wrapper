@@ -1,10 +1,26 @@
 <?php
 
+namespace VicidialApi;
 
-namespace Vicidial\Api\Wrapper;
+use VicidialApi\Contracts\TransporterContract;
+use VicidialApi\Resources\Agent;
+use VicidialApi\Resources\Admin;
 
-
-interface Client
+final class Client
 {
-    public function callApiUrl(string $url, array $options): string;
+    public function __construct(
+        public readonly TransporterContract $transporter,
+    ) {
+        // ...
+    }
+
+    public function agent(): Agent
+    {
+        return new Agent($this->transporter);
+    }
+
+    public function admin(): Admin
+    {
+        return new Admin($this->transporter);
+    }
 }

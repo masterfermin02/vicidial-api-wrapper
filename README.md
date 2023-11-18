@@ -28,18 +28,16 @@ Example 1: Update fields on agent screen
 
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 $fields['first_name'] = "John";
 $fields['last_name'] = "Doe";
 $fields['address1'] = "123 Fake St";
 
 try {
-     $agentApi = new Client(
+     $agentApi = VicidialApi::create(
         getenv('YOUR_VICIDIAL_IP'),
         getenv('YOUR_VICIDIAL_USER'),
         getenv('YOUR_VICIDIAL_PASSWORD')
-     );
+     )->agent();
      echo $agentApi->updateFields("gabriel", $fields);
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
@@ -52,14 +50,12 @@ Example 2:  Hangup Call, Dispo it and Pause Agent
 
 <?php
 
-use Vicidial\Api\Wrapper\Agent\Client;
-
 try {
-     $agentApi = new Client(
+     $agentApi = VicidialApi::create(
         getenv('YOUR_VICIDIAL_IP'),
         getenv('YOUR_VICIDIAL_USER'),
         getenv('YOUR_VICIDIAL_PASSWORD')
-     );
+     )->agent();
      $agentApi->pause("gabriel", "PAUSE");
      $agentApi->hangup("gabriel");
      $agentApi->dispo("gabriel", ['value' => 'SALE']);
@@ -74,18 +70,16 @@ Example 3: Update fields on agent screen
 ```php
     <?php
     
-    use Vicidial\Api\Wrapper\Agent\Client;
-    
     $fields['first_name'] = "John";
     $fields['last_name'] = "Doe";
     $fields['address1'] = "123 Fake St";
     
     try {
-         $agentApi = Client::create(
+         $agentApi = VicidialApi::create(
              getenv('YOUR_VICIDIAL_IP'),
              getenv('YOUR_VICIDIAL_USER'),
              getenv('YOUR_VICIDIAL_PASSWORD')
-         );
+         )->agent();
          echo $agentApi->updateFields("gabriel", $fields);
     } catch (Exception $e) {
          echo 'Exception: ',  $e->getMessage(), "\n";
@@ -99,15 +93,13 @@ Example 3: Update fields on agent screen
     
     require_once 'vendor/autoload.php';
     
-    use Vicidial\Api\Wrapper\Admin\Client;
-    
     try {
-        $agentApi = new Client(
+        $agentApi = VicidialApi::create(
             getenv('YOUR_VICIDIAL_IP'),
             getenv('YOUR_VICIDIAL_USER'),
             getenv('YOUR_VICIDIAL_PASSWORD')
-        );
-        echo $agentApi->moh_list([
+        )->admin();
+        echo $agentApi->mohList([
             'format' => 'selectframe',
             'comments' => 'fieldname',
             'stage' => 'date'
@@ -122,8 +114,6 @@ Url encode
     <?php
     
     require_once 'vendor/autoload.php';
-    
-    use Vicidial\Api\Wrapper\Admin\Client;
 
     $fields['first_name'] = "John";
     $fields['last_name']  = "Doe";
@@ -131,16 +121,16 @@ Url encode
     $fields['phone_number']   = "18002474747";
     
     try {
-        $agentApi = new Client(
+        $agentApi = VicidialApi::create(
             getenv('YOUR_VICIDIAL_IP'),
             getenv('YOUR_VICIDIAL_USER'),
             getenv('YOUR_VICIDIAL_PASSWORD'),
             "test",
             false
-        );
+        )->admin();
         echo $agentApi
         ->withUrlEncode(true)
-        ->add_lead($fields);
+        ->addLead($fields);
     } catch (Exception $e) {
         echo 'Exception: ', $e->getMessage(), "\n";
     }

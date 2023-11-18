@@ -1,6 +1,6 @@
 <?php
 
-namespace Vicidial\Api\Wrapper\Exceptions;
+namespace VicidialApi\Exceptions;
 
 class InvalidUrlException extends \InvalidArgumentException
 {

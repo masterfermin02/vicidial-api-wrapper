@@ -3,14 +3,17 @@
 
 require_once 'vendor/autoload.php';
 
-use Vicidial\Api\Wrapper\Admin\Client;
-
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 try {
-    $agent_api = new Client(getenv('VICIDIAL_ADMIN_URL'), getenv('VICIDIAL_USER'), getenv('VICIDIAL_PASS'));
-    echo $agent_api->moh_list([
+    $agent_api = VicidialApi::create(
+            getenv('VICIDIAL_ADMIN_URL'),
+            getenv('VICIDIAL_USER'),
+            getenv('VICIDIAL_PASS')
+    )->admin();
+
+    echo $agent_api->mohList([
         'format' => 'selectframe',
         'comments' => 'fieldname',
         'stage' => 'date'
