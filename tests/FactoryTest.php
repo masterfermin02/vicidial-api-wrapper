@@ -57,7 +57,7 @@ class FactoryTest extends TestCase
             ->withBaseUri('http://localhost')
             ->withApiUser('testUser')
             ->withApiPass('testPassword')
-            ->withHttpHeader('X-Test','test')
+            ->withHttpHeader('X-Test', 'test')
             ->make();
 
         $this->assertInstanceOf(Client::class, $client);
@@ -69,7 +69,7 @@ class FactoryTest extends TestCase
             ->withBaseUri('http://localhost')
             ->withApiUser('testUser')
             ->withApiPass('testPassword')
-            ->withQueryParam('test','test')
+            ->withQueryParam('test', 'test')
             ->make();
 
         $this->assertInstanceOf(Client::class, $client);

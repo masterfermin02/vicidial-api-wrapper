@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace VicidialApi\Transporters;
 
+use Closure;
 use GuzzleHttp\Exception\ClientException;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
-use Closure;
 use Psr\Http\Message\ResponseInterface;
 use VicidialApi\Contracts\TransporterContract;
 use VicidialApi\Enums\Transporter\ContentType;

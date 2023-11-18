@@ -3,14 +3,12 @@
 
 require_once 'vendor/autoload.php';
 
-use Vicidial\Api\Wrapper\Admin\Client;
-
-$dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/../');
+$dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__.'/../');
 $dotenv->load();
 
-$fields['first_name'] = "John";
-$fields['last_name'] = "Doe";
-$fields['address1'] = "123 Fake St";
+$fields['first_name'] = 'John';
+$fields['last_name'] = 'Doe';
+$fields['address1'] = '123 Fake St';
 
 try {
     $agent_api = VicidialApi::create(

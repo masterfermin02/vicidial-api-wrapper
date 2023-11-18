@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace VicidialApi\Contracts;
 
+use Psr\Http\Message\ResponseInterface;
 use VicidialApi\Exceptions\ErrorException;
 use VicidialApi\Exceptions\TransporterException;
 use VicidialApi\Exceptions\UnserializableResponse;
 use VicidialApi\ValueObjects\Transporter\Payload;
 use VicidialApi\ValueObjects\Transporter\Response;
-use Psr\Http\Message\ResponseInterface;
 
 interface TransporterContract
 {

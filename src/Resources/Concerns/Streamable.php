@@ -7,7 +7,8 @@ use VicidialApi\Exceptions\InvalidArgumentException;
 trait Streamable
 {
     /**
-     * @param array<string, mixed> $parameters
+     * @param  array<string, mixed>  $parameters
+     *
      * @throws InvalidArgumentException
      */
     private function ensureNotStreamed(array $parameters): void

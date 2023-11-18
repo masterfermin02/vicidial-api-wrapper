@@ -4,9 +4,9 @@ namespace VicidialApi\Responses;
 
 use Generator;
 use IteratorAggregate;
-use VicidialApi\Exceptions\ErrorException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use VicidialApi\Exceptions\ErrorException;
 
 /**
  * @template TResponse

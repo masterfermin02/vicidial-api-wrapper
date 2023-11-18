@@ -1,9 +1,8 @@
 <?php
 
 use Test\TestCase;
-
-use VicidialApi\Resources\Agent;
 use VicidialApi\Resources\Admin;
+use VicidialApi\Resources\Agent;
 
 class ClientTest extends TestCase
 {

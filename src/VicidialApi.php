@@ -11,8 +11,7 @@ final class VicidialApi
         string $baseUri,
         string $apiUser,
         string $apiPassword
-    ): Client
-    {
+    ): Client {
         return self::factory()
             ->withBaseUri($baseUri)
             ->withApiUser($apiUser)

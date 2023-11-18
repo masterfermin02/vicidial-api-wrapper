@@ -44,8 +44,7 @@ class Admin implements AdminContract
     /**
      * Get the campaigns list.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function campaignsList(array $options): string
     {
@@ -55,8 +54,7 @@ class Admin implements AdminContract
     /**
      * Get the hopper list.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function hopperList(array $options): string
     {
@@ -66,8 +64,7 @@ class Admin implements AdminContract
     /**
      * Look up recording information.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function recordingLookup(array $options): string
     {
@@ -77,8 +74,7 @@ class Admin implements AdminContract
     /**
      * Export DID log.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function didLogExport(array $options): string
     {
@@ -88,8 +84,7 @@ class Admin implements AdminContract
     /**
      * Get phone number log.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function phoneNumberLog(array $options): string
     {
@@ -99,8 +94,7 @@ class Admin implements AdminContract
     /**
      * Export agent stats.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function agentStatsExport(array $options): string
     {
@@ -110,8 +104,7 @@ class Admin implements AdminContract
     /**
      * Get user group status.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function userGroupStatus(array $options): string
     {
@@ -121,8 +114,7 @@ class Admin implements AdminContract
     /**
      * Get in-group status.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function inGroupStatus(array $options): string
     {
@@ -132,8 +124,7 @@ class Admin implements AdminContract
     /**
      * Get agent status.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function agentStatus(array $options): string
     {
@@ -143,8 +134,7 @@ class Admin implements AdminContract
     /**
      * Get call ID information.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function callIdInfo(array $options): string
     {
@@ -154,8 +144,7 @@ class Admin implements AdminContract
     /**
      * Get lead field information.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function leadFieldInfo(array $options): string
     {
@@ -165,8 +154,7 @@ class Admin implements AdminContract
     /**
      * Search lead status.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function leadStatusSearch(array $options): string
     {
@@ -176,8 +164,7 @@ class Admin implements AdminContract
     /**
      * Get CCC lead information.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function cccLeadInfo(array $options): string
     {
@@ -187,8 +174,7 @@ class Admin implements AdminContract
     /**
      * Get lead callback information.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function leadCallbackInfo(array $options): string
     {
@@ -198,8 +184,7 @@ class Admin implements AdminContract
     /**
      * Update log entry.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function updateLogEntry(array $options): string
     {
@@ -209,8 +194,7 @@ class Admin implements AdminContract
     /**
      * Add lead.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function addLead(array $options): string
     {
@@ -220,8 +204,7 @@ class Admin implements AdminContract
     /**
      * Update lead.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function updateLead(array $options): string
     {
@@ -231,8 +214,7 @@ class Admin implements AdminContract
     /**
      * Add user.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function addUser(array $options): string
     {
@@ -242,8 +224,7 @@ class Admin implements AdminContract
     /**
      * Update user.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function updateUser(array $options): string
     {
@@ -253,8 +234,7 @@ class Admin implements AdminContract
     /**
      * Add group alias.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function addGroupAlias(array $options): string
     {
@@ -264,8 +244,7 @@ class Admin implements AdminContract
     /**
      * Add DNC phone.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function addDncPhone(array $options): string
     {
@@ -275,8 +254,7 @@ class Admin implements AdminContract
     /**
      * Add FPG phone.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function addFpgPhone(array $options): string
     {
@@ -286,8 +264,7 @@ class Admin implements AdminContract
     /**
      * Add phone.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function addPhone(array $options): string
     {
@@ -297,8 +274,7 @@ class Admin implements AdminContract
     /**
      * Update phone.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function updatePhone(array $options): string
     {
@@ -308,8 +284,7 @@ class Admin implements AdminContract
     /**
      * Add phone alias.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function addPhoneAlias(array $options): string
     {
@@ -319,8 +294,7 @@ class Admin implements AdminContract
     /**
      * Update phone alias.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function updatePhoneAlias(array $options): string
     {
@@ -330,8 +304,7 @@ class Admin implements AdminContract
     /**
      * Refresh server.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function serverRefresh(array $options): string
     {
@@ -341,8 +314,7 @@ class Admin implements AdminContract
     /**
      * Add list.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function addList(array $options): string
     {
@@ -352,8 +324,7 @@ class Admin implements AdminContract
     /**
      * Update list.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function updateList(array $options): string
     {
@@ -363,8 +334,7 @@ class Admin implements AdminContract
     /**
      * Get list information.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function listInfo(array $options): string
     {
@@ -374,8 +344,7 @@ class Admin implements AdminContract
     /**
      * Get list custom fields.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function listCustomFields(array $options): string
     {
@@ -385,8 +354,7 @@ class Admin implements AdminContract
     /**
      * Check phone number.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function checkPhoneNumber(array $options): string
     {
@@ -396,8 +364,7 @@ class Admin implements AdminContract
     /**
      * Get logged-in agents.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function loggedInAgents(array $options): string
     {
@@ -407,8 +374,7 @@ class Admin implements AdminContract
     /**
      * Get call status stats.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function callStatusStats(array $options): string
     {
@@ -418,8 +384,7 @@ class Admin implements AdminContract
     /**
      * Get call disposition report.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function callDispoReport(array $options): string
     {
@@ -429,8 +394,7 @@ class Admin implements AdminContract
     /**
      * Update campaign.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function updateCampaign(array $options): string
     {
@@ -440,8 +404,7 @@ class Admin implements AdminContract
     /**
      * Add DID.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function addDid(array $options): string
     {
@@ -451,8 +414,7 @@ class Admin implements AdminContract
     /**
      * Update DID.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function updateDid(array $options): string
     {
@@ -462,8 +424,7 @@ class Admin implements AdminContract
     /**
      * Update CID group entry.
      *
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     public function updateCidGroupEntry(array $options): string
     {
@@ -478,15 +439,13 @@ class Admin implements AdminContract
     /**
      * Helper method to make the actual API request.
      *
-     * @param string $function
-     * @param array<string, string> $options
-     * @return string
+     * @param  array<string, string>  $options
      */
     private function makeApiRequest(string $function, array $options): string
     {
         $options = array_merge($options, [
-                'function' => $function,
-            ]);
+            'function' => $function,
+        ]);
 
         $payload = Payload::retrieveWithParameters(self::ADMIN_URL, $options);
 

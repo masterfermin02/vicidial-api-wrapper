@@ -7,14 +7,14 @@ use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use Http\Discovery\Psr18Client;
 use Http\Discovery\Psr18ClientDiscovery;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use VicidialApi\Transporters\HttpTransporter;
 use VicidialApi\ValueObjects\ApiKey;
 use VicidialApi\ValueObjects\Transporter\BaseUri;
 use VicidialApi\ValueObjects\Transporter\Headers;
 use VicidialApi\ValueObjects\Transporter\QueryParams;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 final class Factory
 {

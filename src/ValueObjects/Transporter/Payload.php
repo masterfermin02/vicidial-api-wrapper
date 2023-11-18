@@ -6,11 +6,11 @@ namespace VicidialApi\ValueObjects\Transporter;
 
 use Http\Discovery\Psr17Factory;
 use Http\Message\MultipartStream\MultipartStreamBuilder;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
 use VicidialApi\Enums\Transporter\ContentType;
 use VicidialApi\Enums\Transporter\Method;
 use VicidialApi\ValueObjects\ResourceUri;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
 
 /**
  * @internal

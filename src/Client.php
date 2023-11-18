@@ -3,8 +3,8 @@
 namespace VicidialApi;
 
 use VicidialApi\Contracts\TransporterContract;
-use VicidialApi\Resources\Agent;
 use VicidialApi\Resources\Admin;
+use VicidialApi\Resources\Agent;
 
 final class Client
 {
