@@ -10,6 +10,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use VicidialApi\Enums\Transporter\ContentType;
 use VicidialApi\Enums\Transporter\Method;
+use VicidialApi\ValueObjects\Parameter;
 use VicidialApi\ValueObjects\ResourceUri;
 
 /**
@@ -146,7 +147,7 @@ final class Payload
 
         if ($this->method === Method::GET && ! empty($this->parameters)) {
             foreach ($this->parameters as $key => $value) {
-                $queryParams = $queryParams->withParam($key, $value);
+                $queryParams = $queryParams->withParam($key, Parameter::from($value)->toString());
             }
         }
 
