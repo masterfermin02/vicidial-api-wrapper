@@ -19,6 +19,21 @@ final class VicidialApi
             ->make();
     }
 
+    public function createWithBasicAuth(
+        string $baseUri,
+        string $apiUser,
+        string $apiPassword,
+        string $username,
+        string $password
+    ): Client {
+        return self::factory()
+            ->withBaseUri($baseUri)
+            ->withApiUser($apiUser)
+            ->withApiPass($apiPassword)
+            ->withBasicAuth($username, $password)
+            ->make();
+    }
+
     /**
      * Creates a new factory instance to configure a custom Open AI Client
      */

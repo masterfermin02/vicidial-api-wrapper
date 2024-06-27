@@ -27,7 +27,7 @@ class Parameter implements StringableContract
 
     public static function fromObject(object $value): self
     {
-        return new self(json_encode($value) ?: '');
+        return new self(json_encode($value, JSON_THROW_ON_ERROR) ?: '');
     }
 
     public function toString(): string
@@ -37,11 +37,11 @@ class Parameter implements StringableContract
         }
 
         if (is_object($this->value)) {
-            return $this->fromObject($this->value)->toString();
+            return static::fromObject($this->value)->toString();
         }
 
         if (is_array($this->value)) {
-            return $this->fromArray($this->value)->toString();
+            return static::fromArray($this->value)->toString();
         }
 
         throw new \InvalidArgumentException('Parameter value must be scalar or null');

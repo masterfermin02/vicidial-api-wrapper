@@ -6,6 +6,7 @@ namespace VicidialApi\ValueObjects\Transporter;
 
 use VicidialApi\Enums\Transporter\ContentType;
 use VicidialApi\ValueObjects\ApiKey;
+use VicidialApi\ValueObjects\BasicAuth;
 
 /**
  * @internal
@@ -37,6 +38,13 @@ final class Headers
     {
         return new self([
             'Authorization' => "Bearer {$apiKey->toString()}",
+        ]);
+    }
+
+    public static function withBasicAuthorization(BasicAuth $basicAuth): self
+    {
+        return new self([
+            'Authorization' => "Basic {$basicAuth->encode()}",
         ]);
     }
 

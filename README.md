@@ -136,6 +136,42 @@ Url encode
     }
 ```
 
+Login remote agent
+
+```php
+    <?php
+    
+    require_once 'vendor/autoload.php';
+    
+    try {
+        $remoteAgent = VicidialApi::create(
+            getenv('YOUR_VICIDIAL_IP'),
+            getenv('YOUR_VICIDIAL_API_USER'),
+            getenv('YOUR_VICIDIAL_API_PASSWORD'),
+            getenv('YOUR_VICIDIAL_REMOTE_AGENT'),
+            getenv('YOUR_VICIDIAL_REMOTE_PASSWORD'),
+        )->remoteAgent();
+        $remoteAgent->active(
+            getenv('agentId'),
+            getenv('confExten'),
+        );
+        $remoteAgent->hangUp(
+            "gabriel",
+            [
+            'status' => 'SALE',
+            ]
+]
+        );
+        $remoteAgent->inActive(
+            getenv('agentId'),
+            getenv('confExten'),
+        );
+    } catch (Exception $e) {
+        echo 'Exception: ',  $e->getMessage(), "\n";
+    }
+```
+
+
 ### Docs:
 - [Agent](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/agent.md)
 - [Admin](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/admin.md)

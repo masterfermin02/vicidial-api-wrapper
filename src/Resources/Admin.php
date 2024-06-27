@@ -5,11 +5,11 @@ namespace VicidialApi\Resources;
 use VicidialApi\Contracts\AdminContract;
 use VicidialApi\ValueObjects\Transporter\Payload;
 
-class Admin implements AdminContract
+final class Admin implements AdminContract
 {
     use Concerns\Transportable;
 
-    const ADMIN_URL = '/vicidial/non_agent_api.php';
+    public const ADMIN_URL = '/vicidial/non_agent_api.php';
 
     public function version(): string
     {

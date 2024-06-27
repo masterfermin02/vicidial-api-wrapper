@@ -12,6 +12,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use VicidialApi\Transporters\HttpTransporter;
 use VicidialApi\ValueObjects\ApiKey;
+use VicidialApi\ValueObjects\BasicAuth;
 use VicidialApi\ValueObjects\Transporter\BaseUri;
 use VicidialApi\ValueObjects\Transporter\Headers;
 use VicidialApi\ValueObjects\Transporter\QueryParams;
@@ -54,6 +55,8 @@ final class Factory
     private array $queryParams = [];
 
     private ?Closure $streamHandler = null;
+
+    private ?BasicAuth $basicAuth = null;
 
     /**
      * Sets the API key for the requests.
@@ -139,6 +142,16 @@ final class Factory
     }
 
     /**
+     * Adds a basic auth to the request.
+     */
+    public function withBasicAuth(string $user, string $pass): self
+    {
+        $this->basicAuth = new BasicAuth($user, $pass);
+
+        return $this;
+    }
+
+    /**
      * Creates a new Open AI Client.
      */
     public function make(): Client
@@ -147,6 +160,10 @@ final class Factory
 
         if ($this->apiKey !== null) {
             $headers = Headers::withAuthorization(ApiKey::from($this->apiKey));
+        }
+
+        if ($this->basicAuth !== null) {
+            $headers = $headers->withBasicAuthorization($this->basicAuth);
         }
 
         foreach ($this->headers as $name => $value) {

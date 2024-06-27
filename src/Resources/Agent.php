@@ -6,11 +6,11 @@ use Exception;
 use VicidialApi\Contracts\AgentContract;
 use VicidialApi\ValueObjects\Transporter\Payload;
 
-class Agent implements AgentContract
+final class Agent implements AgentContract
 {
     use Concerns\Transportable;
 
-    const AGENT_URL = '/agc/api.php';
+    public const AGENT_URL = '/agc/api.php';
 
     /**
      * Creates the URL for  the external_hangup method and calls 'call_api_url' to execute it
