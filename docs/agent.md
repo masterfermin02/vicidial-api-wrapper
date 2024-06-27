@@ -816,18 +816,12 @@ DESCRIPTION:
 Allows for remote agent call control: hangup/transfer calls being handled by remote agents, also options for recording a disposition and call length
 
 VALUES:
-value -
- REQUIRED, The call ID of the call as received as CallerIDname field or a special SIP-header, i.e. Y0315201639000402027
-agent_user -
- REQUIRED, alphanumeric string for remote agent user
-stage - 
- REQUIRED, one of these choices: 'HANGUP','EXTENSIONTRANSFER','INGROUPTRANSFER'
-ingroup_choices - 
- OPTIONAL, only required if INGROUPTRANSFER stage is used, must be a single active in-group, reserved option of "DEFAULTINGROUP" can be used to send the call to the default in-group for the in-group or campaign that originated the call to the remote agent
-phone_number -
- OPTIONAL, only required if EXTENSIONTRANSFER stage is used, must be a full number when dialed that will dial through the default context
-status -
- OPTIONAL, status of the call, maximum of 6 characters, if not set, status will be RAXFER
+- value - REQUIRED, The call ID of the call as received as CallerIDname field or a special SIP-header, i.e. Y0315201639000402027
+- agent_user - REQUIRED, alphanumeric string for remote agent user
+- stage - REQUIRED, one of these choices: 'HANGUP','EXTENSIONTRANSFER','INGROUPTRANSFER'
+- ingroup_choices - OPTIONAL, only required if INGROUPTRANSFER stage is used, must be a single active in-group, reserved option of "DEFAULTINGROUP" can be used to send the call to the default in-group for the in-group or campaign that originated the call to the remote agent
+- phone_number - OPTIONAL, only required if EXTENSIONTRANSFER stage is used, must be a full number when dialed that will dial through the default context
+- status - OPTIONAL, status of the call, maximum of 6 characters, if not set, status will be RAXFER
 
 ```
 RESPONSES:

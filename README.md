@@ -144,7 +144,7 @@ Login remote agent
     require_once 'vendor/autoload.php';
     
     try {
-        $remoteAgent = VicidialApi::create(
+        $remoteAgent = VicidialApi::createWithBasicAuth(
             getenv('YOUR_VICIDIAL_IP'),
             getenv('YOUR_VICIDIAL_API_USER'),
             getenv('YOUR_VICIDIAL_API_PASSWORD'),
