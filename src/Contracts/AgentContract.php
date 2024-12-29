@@ -23,7 +23,7 @@ interface AgentContract
     /**
      * Creates the URL for  the pause_code method and calls 'call_api_url' to execute it
      */
-    public function pauseCode(string $agentUser, int $code): string;
+    public function pauseCode(string $agentUser, string $code): string;
 
     /**
      * Creates the URL for the webserver method and calls 'call_api_url' to execute it
