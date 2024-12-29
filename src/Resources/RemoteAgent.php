@@ -10,6 +10,7 @@ use VicidialApi\ValueObjects\Transporter\Payload;
 final class RemoteAgent
 {
     public const REMOTE_AGENT_END_POINT = '/vicidial/vdremote.php';
+
     public const ACTION = 41111;
 
     protected Agent $agent;
@@ -28,8 +29,7 @@ final class RemoteAgent
         string $remoteAgentId,
         string $confExten,
         int $numberOfLines = 1,
-    ): string
-    {
+    ): string {
         $payload = Payload::retrieveWithParameters(self::REMOTE_AGENT_END_POINT, [
             'status' => 'ACTIVE',
             'ADD' => self::ACTION,
@@ -49,8 +49,7 @@ final class RemoteAgent
         string $remoteAgentId,
         string $confExten,
         int $numberOfLines = 1,
-    ): string
-    {
+    ): string {
         $payload = Payload::retrieveWithParameters(self::REMOTE_AGENT_END_POINT, [
             'status' => 'INACTIVE',
             'ADD' => self::ACTION,

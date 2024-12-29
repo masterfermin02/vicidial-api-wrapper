@@ -68,7 +68,7 @@ final class Agent implements AgentContract
      *
      * @throws Exception
      */
-    public function pauseCode(string $agentUser, int $code): string
+    public function pauseCode(string $agentUser, string $code): string
     {
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
             'agent_user' => urlencode(trim($agentUser)),
