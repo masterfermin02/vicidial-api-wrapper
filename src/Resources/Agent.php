@@ -4,10 +4,12 @@ namespace VicidialApi\Resources;
 
 use Exception;
 use VicidialApi\Contracts\AgentContract;
+use VicidialApi\Responses\VicidialResponse;
 use VicidialApi\ValueObjects\Transporter\Payload;
 
 final class Agent implements AgentContract
 {
+    use Concerns\HasResponseHelpers;
     use Concerns\Transportable;
 
     public const AGENT_URL = '/agc/api.php';
@@ -29,6 +31,22 @@ final class Agent implements AgentContract
     }
 
     /**
+     * Hangup with VicidialResponse DTO
+     *
+     * @throws Exception
+     */
+    public function hangupResponse(string $agentUser): VicidialResponse
+    {
+        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
+            'agent_user' => urlencode(trim($agentUser)),
+            'function' => 'external_hangup',
+            'value' => '1',
+        ]);
+
+        return $this->transporter->requestResponse($payload);
+    }
+
+    /**
      * Creates the URL for  the external_status method and calls 'call_api_url' to execute it
      *
      * @param  array<string, string>  $options
@@ -37,7 +55,7 @@ final class Agent implements AgentContract
      */
     public function dispo(string $agentUser, array $options): string
     {
-        $options = $options + [
+        $options += [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'external_status',
         ];
@@ -45,6 +63,23 @@ final class Agent implements AgentContract
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
 
         return $this->transporter->requestContent($payload);
+    }
+
+    /**
+     * Dispo with VicidialResponse DTO
+     *
+     * @param  array<string, string>  $options
+     *
+     * @throws Exception
+     */
+    public function dispoResponse(string $agentUser, array $options): VicidialResponse
+    {
+        $options += [
+            'agent_user' => urlencode(trim($agentUser)),
+            'function' => 'external_status',
+        ];
+
+        return $this->requestResponse(self::AGENT_URL, $options);
     }
 
     /**
@@ -61,6 +96,20 @@ final class Agent implements AgentContract
         ]);
 
         return $this->transporter->requestContent($payload);
+    }
+
+    /**
+     * Pause with VicidialResponse DTO
+     *
+     * @throws Exception
+     */
+    public function pauseResponse(string $agentUser, string $status): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, [
+            'agent_user' => urlencode(trim($agentUser)),
+            'function' => 'external_pause',
+            'value' => urlencode(trim($status)),
+        ]);
     }
 
     /**
@@ -136,7 +185,7 @@ final class Agent implements AgentContract
             throw new Exception('Please provide a valid phone number');
         }
 
-        $options = $options + [
+        $options += [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'external_dial',
             'value' => urlencode(trim($options['phone_number'])),
@@ -149,6 +198,32 @@ final class Agent implements AgentContract
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
 
         return $this->transporter->requestContent($payload);
+    }
+
+    /**
+     * Dial with VicidialResponse DTO
+     *
+     * @param  array<string, string>  $options
+     *
+     * @throws Exception
+     */
+    public function dialResponse(string $agentUser, array $options): VicidialResponse
+    {
+        if (! isset($options['phone_number'])) {
+            throw new Exception('Please provide a valid phone number');
+        }
+
+        $options += [
+            'agent_user' => urlencode(trim($agentUser)),
+            'function' => 'external_dial',
+            'value' => urlencode(trim($options['phone_number'])),
+            'phone_code' => urlencode(trim($options['phone_code'] ?? '')),
+            'search' => 'YES',
+            'preview' => 'NO',
+            'focus' => 'YES',
+        ];
+
+        return $this->requestResponse(self::AGENT_URL, $options);
     }
 
     /**
@@ -178,7 +253,7 @@ final class Agent implements AgentContract
      */
     public function addLead(string $agentUser, array $options): string
     {
-        $options = $options + [
+        $options += [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'external_add_lead',
         ];
@@ -203,7 +278,7 @@ final class Agent implements AgentContract
     public function changeInGroups(string $agentUser, array $options): string
     {
 
-        $options = $options + [
+        $options += [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'change_ingroups',
         ];
@@ -230,7 +305,7 @@ final class Agent implements AgentContract
         ];
 
         // Validate that every single field to update us valid
-        foreach ($fieldsToUpdate as $key => $value) {
+        foreach (array_keys($fieldsToUpdate) as $key) {
             if (! in_array($key, $allowedFields)) {
                 throw new Exception("$key is not a valid field");
             }
@@ -247,6 +322,37 @@ final class Agent implements AgentContract
     }
 
     /**
+     * Update fields with VicidialResponse DTO
+     *
+     * @param  array<string, string>  $fieldsToUpdate
+     *
+     * @throws Exception
+     */
+    public function updateFieldsResponse(string $agentUser, array $fieldsToUpdate): VicidialResponse
+    {
+        // According to the API documentation only these fields are allowed to update using this method
+        $allowedFields = ['address1', 'address2', 'address3', 'rank', 'owner', 'vendor_lead_code',
+            'alt_phone', 'city', 'comments', 'country_code', 'date_of_birth', 'email', 'first_name',
+            'gender', 'gmt_offset_now', 'last_name', 'middle_initial', 'phone_number', 'phone_code',
+            'postal_code', 'province', 'security_phrase', 'source_id', 'state', 'title',
+        ];
+
+        // Validate that every single field to update us valid
+        foreach (array_keys($fieldsToUpdate) as $key) {
+            if (! in_array($key, $allowedFields)) {
+                throw new Exception("$key is not a valid field");
+            }
+        }
+
+        $options = $fieldsToUpdate + [
+            'agent_user' => urlencode(trim($agentUser)),
+            'function' => 'update_fields',
+        ];
+
+        return $this->requestResponse(self::AGENT_URL, $options);
+    }
+
+    /**
      * Updates the fields that are specified with the values. This will update the data
      * that is on the agent's screen in the customer information section.
      *
@@ -256,7 +362,7 @@ final class Agent implements AgentContract
      */
     public function setTimerAction(string $agentUser, array $options): string
     {
-        $options = $options + [
+        $options += [
             'agent_user' => urlencode(trim($agentUser)),
             'function' => 'set_timer_action',
         ];
@@ -276,7 +382,7 @@ final class Agent implements AgentContract
      */
     public function stLoginLog(array $options): string
     {
-        $options = $options + [
+        $options += [
             'function' => 'st_login_log',
         ];
 
@@ -295,7 +401,7 @@ final class Agent implements AgentContract
      */
     public function stGetAgentActiveLead(array $options): string
     {
-        $options = $options + [
+        $options += [
             'function' => 'st_get_agent_active_lead',
         ];
 
@@ -312,7 +418,7 @@ final class Agent implements AgentContract
     public function raCallControl(string $agent, array $options): string
     {
         $options['agent_user'] = $agent;
-        $options = $options + [
+        $options += [
             'function' => 'ra_call_control',
         ];
 
@@ -328,7 +434,7 @@ final class Agent implements AgentContract
      */
     public function sendDtmf(array $options): string
     {
-        $options = $options + [
+        $options += [
             'function' => 'send_dtmf',
         ];
 
@@ -345,7 +451,7 @@ final class Agent implements AgentContract
     public function transferConference(string $agent, array $options): string
     {
         $options['agent_user'] = $agent;
-        $options = $options + [
+        $options += [
             'function' => 'transfer_conference',
         ];
 
@@ -362,7 +468,7 @@ final class Agent implements AgentContract
     public function parkCall(string $agent, array $options): string
     {
         $options['agent_user'] = $agent;
-        $options = $options + [
+        $options += [
             'function' => 'park_call',
         ];
 
@@ -395,7 +501,7 @@ final class Agent implements AgentContract
     public function recording(string $agent, array $options): string
     {
         $options['agent_user'] = $agent;
-        $options = $options + [
+        $options += [
             'function' => 'recording',
         ];
 
@@ -426,7 +532,7 @@ final class Agent implements AgentContract
     public function audioPlayBack(string $agentUser, array $options): string
     {
         $options['agent_user'] = $agentUser;
-        $options = $options + [
+        $options += [
             'function' => 'audio_playback',
         ];
 
@@ -463,7 +569,7 @@ final class Agent implements AgentContract
     public function vmMessage(string $agentUser, array $options): string
     {
         $options['agent_user'] = $agentUser;
-        $options = $options + [
+        $options += [
             'function' => 'vm_message',
         ];
 

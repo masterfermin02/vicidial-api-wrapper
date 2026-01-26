@@ -139,19 +139,19 @@ final class Payload
      */
     public function toRequest(BaseUri $baseUri, Headers $headers, QueryParams $queryParams): RequestInterface
     {
-        $psr17Factory = new Psr17Factory();
+        $psr17Factory = new Psr17Factory;
 
         $body = null;
 
         $uri = $baseUri->toString().$this->uri->toString();
 
-        if ($this->method === Method::GET && ! empty($this->parameters)) {
+        if ($this->method === Method::GET && $this->parameters !== []) {
             foreach ($this->parameters as $key => $value) {
                 $queryParams = $queryParams->withParam($key, Parameter::from($value)->toString());
             }
         }
 
-        if (! empty($queryParams->toArray())) {
+        if ($queryParams->toArray() !== []) {
             $uri .= '?'.http_build_query($queryParams->toArray());
         }
 

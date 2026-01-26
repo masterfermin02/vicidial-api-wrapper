@@ -62,6 +62,10 @@ final class RemoteAgent
     }
 
     /**
+     * Hangup a call for the remote agent.
+     *
+     * @param  array<string, string>  $options
+     *
      * @throws \Exception
      */
     public function hangUp(string $agent, array $options): string
@@ -72,6 +76,11 @@ final class RemoteAgent
         );
     }
 
+    /**
+     * @param  array<string, string>  $options
+     *
+     * @throws \Exception
+     */
     public function transfer(string $agent, array $options): string
     {
         return $this->agent->raCallControl(
@@ -80,6 +89,11 @@ final class RemoteAgent
         );
     }
 
+    /**
+     * @param  array<string, string>  $options
+     *
+     * @throws \Exception
+     */
     public function ingroupTransfer(string $agent, array $options): string
     {
         return $this->agent->raCallControl(

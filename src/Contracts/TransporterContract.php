@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use VicidialApi\Exceptions\ErrorException;
 use VicidialApi\Exceptions\TransporterException;
 use VicidialApi\Exceptions\UnserializableResponse;
+use VicidialApi\Responses\VicidialResponse;
 use VicidialApi\ValueObjects\Transporter\Payload;
 use VicidialApi\ValueObjects\Transporter\Response;
 
@@ -28,6 +29,13 @@ interface TransporterContract
      * @throws ErrorException|TransporterException
      */
     public function requestContent(Payload $payload): string;
+
+    /**
+     * Sends a request and returns a VicidialResponse DTO.
+     *
+     * @throws ErrorException|TransporterException
+     */
+    public function requestResponse(Payload $payload): VicidialResponse;
 
     /**
      * Sends a stream request to a server.

@@ -18,7 +18,7 @@ trait ArrayAccessible
      */
     public function offsetExists(mixed $offset): bool
     {
-        return array_key_exists($offset, $this->toArray());
+        return array_key_exists($offset, $this->parsed());
     }
 
     /**
@@ -26,7 +26,7 @@ trait ArrayAccessible
      */
     public function offsetGet(mixed $offset): mixed
     {
-        return $this->toArray()[$offset];
+        return $this->parsed()[$offset];
     }
 
     /**

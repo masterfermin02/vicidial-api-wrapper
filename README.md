@@ -14,7 +14,7 @@ Vicidial has an AGENT API and NON AGENT API, this classes are intended to make i
 - http://vicidial.org/docs/AGENT_API.txt
 
 ## Install
-Requires PHP 8.1
+Requires PHP 8.2
 
 `composer require masterfermin02/vicidial-api-wrapper`
 
@@ -22,8 +22,316 @@ Requires PHP 8.1
 
 `composer require masterfermin02/vicidial-api-wrapper:1.0.3`
 
+## What's New in v2.0 🎉
+
+Version 2.0 introduces major improvements for a better developer experience:
+
+### Configuration System
+- **`VicidialConfig`**: A clean configuration object with named parameters
+- **`VicidialClient`**: The new recommended client entrypoint
+- **Full configuration control**: Set protocol (HTTP/HTTPS), timeout, TLS verification, custom user agent, and more
+- **Better validation**: Built-in validation for configuration values
+- **Backward compatible**: Legacy factory methods still work (but are deprecated)
+
+### Response DTOs ✨ NEW
+- **Structured responses**: No more regex or manual string parsing
+- **Helper methods**: `ok()`, `failed()`, `asArray()`, `asText()`, `toJson()`
+- **Type-safe**: Full IDE autocomplete and type checking
+- **Auto-parsing**: Handles JSON, key-value, pipe-delimited, and other formats automatically
+- **Request tracking**: Optional request ID for debugging
+- **Opt-in**: Original methods still work, upgrade at your own pace
+
+See the [Response DTO Guide](RESPONSE_DTO.md) for details.
+
+### Consistent Method Naming
+- **camelCase everywhere**: All methods use standard PHP camelCase convention
+- **Predictable patterns**: `addLead()`, `updateFields()`, `mohList()`, `pauseCode()`
+- **No snake_case**: Legacy Vicidial API's `external_dial` becomes `dial()`, `pause_code` becomes `pauseCode()`
+
+See the [Method Naming Conventions](METHOD_NAMING_CONVENTIONS.md) for the complete guide.
+
+### Reliability Features 🛡️ NEW
+- **Configurable timeouts**: Separate connect timeout and request timeout
+- **Automatic retries**: Exponential backoff with jitter for transient failures (5xx, network errors, rate limits)
+- **PSR-3 logging**: Pluggable logger for observability and debugging
+- **Sensitive data protection**: Automatic redaction of passwords and API keys in logs
+- **Production-ready defaults**: Sensible timeout and retry configurations out of the box
+
+See the [Reliability Features Guide](RELIABILITY_FEATURES.md) for complete documentation.
+
+```php
+// New way (v2.0+)
+$config = VicidialConfig::create(
+    host: 'vicidial.example.com',
+    user: 'api_user',
+    pass: 'api_password',
+    protocol: 'https',
+    timeout: 60
+);
+$client = VicidialClient::make($config);
+```
+
+See the [Migration Guide](MIGRATION.md) for upgrade instructions.
+
+## Authentication
+
+This wrapper supports two authentication modes and provides both a modern configuration-based approach and legacy factory methods.
+
+### Recommended: Using VicidialConfig (v2.0+)
+
+The recommended way to create a client is using the `VicidialConfig` object, which provides a clean, explicit way to configure all client options:
+
+#### Standard Authentication
+```php
+use VicidialApi\VicidialConfig;
+use VicidialApi\VicidialClient;
+
+$config = VicidialConfig::create(
+    host: getenv('YOUR_VICIDIAL_IP'),
+    user: getenv('YOUR_VICIDIAL_USER'),
+    pass: getenv('YOUR_VICIDIAL_PASSWORD'),
+    protocol: 'https',           // Optional: 'http' or 'https' (default: 'http')
+    verifyTls: true,             // Optional: Verify TLS certificates (default: true)
+    timeout: 30,                 // Optional: Request timeout in seconds (default: 30)
+    urlEncodeDefault: false,     // Optional: URL encode by default (default: false)
+    userAgent: 'MyApp/1.0',      // Optional: Custom user agent
+    source: 'myapp'              // Optional: Source identifier (default: 'test')
+);
+
+$client = VicidialClient::make($config);
+// or
+$client = VicidialApi::client($config);
+```
+
+#### Basic Authentication (Remote Agent)
+```php
+use VicidialApi\VicidialConfig;
+use VicidialApi\VicidialClient;
+
+$config = VicidialConfig::createWithBasicAuth(
+    host: getenv('YOUR_VICIDIAL_IP'),
+    user: getenv('YOUR_VICIDIAL_USER'),
+    pass: getenv('YOUR_VICIDIAL_PASSWORD'),
+    basicAuthUser: getenv('YOUR_VICIDIAL_API_USER'),      // HTTP Basic Auth user
+    basicAuthPass: getenv('YOUR_VICIDIAL_API_PASSWORD'),  // HTTP Basic Auth password
+    protocol: 'https',
+    timeout: 60
+);
+
+$client = VicidialClient::make($config);
+```
+
+### Response DTOs (New in v2.0)
+
+All API methods now have Response DTO variants that return structured response objects instead of raw strings:
+
+```php
+// New Response DTO methods (add "Response" suffix to any method)
+$response = $client->agent()->updateFieldsResponse("gabriel", [
+    'first_name' => 'John',
+    'last_name' => 'Doe'
+]);
+
+// Built-in success checking - no regex needed!
+if ($response->ok()) {
+    echo "Success!";
+    
+    // Direct data access
+    $leadId = $response->get('lead_id');
+    
+    // Multiple output formats
+    $array = $response->asArray();
+    $json = $response->toJson();
+    $text = $response->asText();
+}
+
+// Original methods still work for backward compatibility
+$rawString = $client->agent()->updateFields("gabriel", $fields);
+```
+
+See the [Response DTO Guide](RESPONSE_DTO.md) for complete documentation.
+
+### Legacy: Factory Methods (Deprecated)
+
+The original factory methods are still supported for backward compatibility but are deprecated in favor of the configuration object.
+
+#### Standard Authentication (API User/Pass)
+Use `VicidialApi::create()` for standard API authentication with user credentials. This is the most common method for Agent and Admin API operations.
+
+```php
+$api = VicidialApi::create(
+    getenv('YOUR_VICIDIAL_IP'),
+    getenv('YOUR_VICIDIAL_USER'),
+    getenv('YOUR_VICIDIAL_PASSWORD')
+);
+```
+
+#### Basic Authentication (Remote Agent)
+Use `VicidialApi::createWithBasicAuth()` for remote agent operations that require HTTP Basic Authentication along with agent credentials.
+
+```php
+$api = VicidialApi::createWithBasicAuth(
+    getenv('YOUR_VICIDIAL_IP'),
+    getenv('YOUR_VICIDIAL_API_USER'),      // HTTP Basic Auth user
+    getenv('YOUR_VICIDIAL_API_PASSWORD'),   // HTTP Basic Auth password
+    getenv('YOUR_VICIDIAL_REMOTE_AGENT'),   // Agent username
+    getenv('YOUR_VICIDIAL_REMOTE_PASSWORD') // Agent password
+);
+```
+
 ## How to use it
-Example 1: Update fields on agent screen
+
+> 💡 **Tip**: See [example/using_config.php](example/using_config.php) for a comprehensive demonstration of all configuration options.
+> 
+> 📖 **Migrating from v1.x?** Check out the [Migration Guide](MIGRATION.md) for step-by-step instructions.
+
+### Recommended Examples (Using VicidialConfig)
+
+#### Example: Complete workflow with configuration object
+```php
+<?php
+
+require_once 'vendor/autoload.php';
+
+use VicidialApi\VicidialConfig;
+use VicidialApi\VicidialClient;
+
+// Create configuration
+$config = VicidialConfig::create(
+    host: getenv('YOUR_VICIDIAL_IP'),
+    user: getenv('YOUR_VICIDIAL_USER'),
+    pass: getenv('YOUR_VICIDIAL_PASSWORD'),
+    protocol: 'https',
+    timeout: 30
+);
+
+// Create client
+$client = VicidialClient::make($config);
+
+try {
+    // Update fields on agent screen
+    $fields = [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'address1' => '123 Fake St'
+    ];
+    echo $client->agent()->updateFields("gabriel", $fields);
+    
+    // Make an external dial
+    echo $client->agent()->dial("gabriel", [
+        'phone_number' => '1234567890',
+        'phone_code' => '1'
+    ]);
+    
+    // Use admin API
+    echo $client->admin()->mohList([
+        'format' => 'selectframe'
+    ]);
+    
+} catch (Exception $e) {
+    echo 'Exception: ', $e->getMessage(), "\n";
+}
+```
+
+#### Example: Production setup with reliability features
+```php
+<?php
+
+require_once 'vendor/autoload.php';
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use VicidialApi\VicidialConfig;
+use VicidialApi\VicidialClient;
+use VicidialApi\ValueObjects\RetryConfig;
+
+// Setup logging
+$logger = new Logger('vicidial-api');
+$logger->pushHandler(new StreamHandler('logs/vicidial.log', Logger::DEBUG));
+
+// Production configuration with all reliability features
+$config = VicidialConfig::create(
+    host: getenv('YOUR_VICIDIAL_IP'),
+    user: getenv('YOUR_VICIDIAL_USER'),
+    pass: getenv('YOUR_VICIDIAL_PASSWORD'),
+    protocol: 'https',
+    timeout: 60,              // Request timeout
+    connectTimeout: 10,       // Connection timeout
+    retryConfig: RetryConfig::default(), // Enable automatic retries
+    logger: $logger,          // Enable request logging
+);
+
+$client = VicidialClient::make($config);
+
+try {
+    // All requests are automatically:
+    // - Logged with sanitized parameters
+    // - Retried on transient failures (5xx, network errors)
+    // - Timed out if they take too long
+    $response = $client->agent()->updateFieldsResponse("gabriel", [
+        'first_name' => 'John',
+        'phone_number' => '5551234567'
+    ]);
+    
+    if ($response->ok()) {
+        echo "✓ Success! Lead ID: " . $response->get('lead_id');
+    }
+} catch (Exception $e) {
+    // Error is already logged, handle appropriately
+    echo 'Failed after retries: ', $e->getMessage(), "\n";
+}
+```
+
+See [example/reliability_features.php](example/reliability_features.php) for more examples.
+```
+
+#### Example: Remote agent with Basic Authentication
+```php
+<?php
+
+require_once 'vendor/autoload.php';
+
+use VicidialApi\VicidialConfig;
+use VicidialApi\VicidialClient;
+
+$config = VicidialConfig::createWithBasicAuth(
+    host: getenv('YOUR_VICIDIAL_IP'),
+    user: getenv('YOUR_VICIDIAL_USER'),
+    pass: getenv('YOUR_VICIDIAL_PASSWORD'),
+    basicAuthUser: getenv('YOUR_VICIDIAL_API_USER'),
+    basicAuthPass: getenv('YOUR_VICIDIAL_API_PASSWORD')
+);
+
+$client = VicidialClient::make($config);
+
+try {
+    $remoteAgent = $client->remoteAgent();
+    
+    $remoteAgent->active(
+        getenv('agentId'),
+        getenv('confExten')
+    );
+    
+    $remoteAgent->hangUp("gabriel", [
+        'status' => 'SALE'
+    ]);
+    
+    $remoteAgent->inActive(
+        getenv('agentId'),
+        getenv('confExten')
+    );
+} catch (Exception $e) {
+    echo 'Exception: ', $e->getMessage(), "\n";
+}
+```
+
+---
+
+### Legacy Examples (Deprecated)
+
+> **Note**: The following examples use the legacy factory methods. While still supported, we recommend using `VicidialConfig` and `VicidialClient` as shown above.
+
+### Example 1: Update fields on agent screen
 ```php
 
 <?php
@@ -45,7 +353,7 @@ try {
 
 ```
 
-Example 2:  Hangup Call, Dispo it and Pause Agent
+### Example 2: Hangup Call, Dispo it and Pause Agent
 ```php
 
 <?php
@@ -66,28 +374,30 @@ try {
 
 ```
 
-Example 3: Update fields on agent screen
+### Example 3: Make an external dial call
 ```php
-    <?php
-    
-    $fields['first_name'] = "John";
-    $fields['last_name'] = "Doe";
-    $fields['address1'] = "123 Fake St";
-    
-    try {
-         $agentApi = VicidialApi::create(
-             getenv('YOUR_VICIDIAL_IP'),
-             getenv('YOUR_VICIDIAL_USER'),
-             getenv('YOUR_VICIDIAL_PASSWORD')
-         )->agent();
-         echo $agentApi->updateFields("gabriel", $fields);
-    } catch (Exception $e) {
-         echo 'Exception: ',  $e->getMessage(), "\n";
-    }
+<?php
+
+try {
+     $agentApi = VicidialApi::create(
+         getenv('YOUR_VICIDIAL_IP'),
+         getenv('YOUR_VICIDIAL_USER'),
+         getenv('YOUR_VICIDIAL_PASSWORD')
+     )->agent();
+     echo $agentApi->dial("gabriel", [
+         'phone_number' => '1234567890',
+         'phone_code' => '1',
+         'search' => 'YES',
+         'preview' => 'NO',
+         'focus' => 'YES'
+     ]);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
 
 ```
 
-### Vicidial admin or No agent api
+### Example 4: Using the Admin API (Non-Agent API)
 ```php
     <?php
     
@@ -109,7 +419,7 @@ Example 3: Update fields on agent screen
     }
 ```
 
-Url encode
+### Example 5: Using URL encode for special characters
 ```php
     <?php
     
@@ -136,7 +446,7 @@ Url encode
     }
 ```
 
-Login remote agent
+### Example 6: Remote agent login with Basic Authentication
 
 ```php
     <?php
@@ -151,21 +461,19 @@ Login remote agent
             getenv('YOUR_VICIDIAL_REMOTE_AGENT'),
             getenv('YOUR_VICIDIAL_REMOTE_PASSWORD'),
         )->remoteAgent();
-        $remoteAgent->active(
-            getenv('agentId'),
-            getenv('confExten'),
-        );
-        $remoteAgent->hangUp(
-            "gabriel",
-            [
-            'status' => 'SALE',
-            ]
-]
-        );
-        $remoteAgent->inActive(
-            getenv('agentId'),
-            getenv('confExten'),
-        );
+    $remoteAgent->active(
+        getenv('agentId'),
+        getenv('confExten')
+    );
+    
+    $remoteAgent->hangup("gabriel", [
+        'status' => 'SALE'
+    ]);
+    
+    $remoteAgent->inactive(
+        getenv('agentId'),
+        getenv('confExten')
+    );
     } catch (Exception $e) {
         echo 'Exception: ',  $e->getMessage(), "\n";
     }
@@ -175,3 +483,6 @@ Login remote agent
 ### Docs:
 - [Agent](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/agent.md)
 - [Admin](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/admin.md)
+- [Response DTO Guide](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/RESPONSE_DTO.md)
+- [Method Naming Conventions](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/METHOD_NAMING_CONVENTIONS.md)
+- [Reliability Features](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/RELIABILITY_FEATURES.md) 🛡️ **NEW**
