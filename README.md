@@ -41,7 +41,7 @@ Version 2.0 introduces major improvements for a better developer experience:
 - **Request tracking**: Optional request ID for debugging
 - **Opt-in**: Original methods still work, upgrade at your own pace
 
-See the [Response DTO Guide](RESPONSE_DTO.md) for details.
+See the [Response DTO Guide](docs/RESPONSE_DTO.md) for details.
 
 ### Consistent Method Naming
 - **camelCase everywhere**: All methods use standard PHP camelCase convention
