@@ -24,7 +24,7 @@ Requires PHP 8.2
 
 ## What's New in v2.0 🎉
 
-Version 2.0 introduces major improvements for a better developer experience:
+Version 4.0 introduces major improvements for a better developer experience:
 
 ### Configuration System
 - **`VicidialConfig`**: A clean configuration object with named parameters
@@ -60,7 +60,7 @@ See the [Method Naming Conventions](METHOD_NAMING_CONVENTIONS.md) for the comple
 See the [Reliability Features Guide](RELIABILITY_FEATURES.md) for complete documentation.
 
 ```php
-// New way (v2.0+)
+// New way (v4.0+)
 $config = VicidialConfig::create(
     host: 'vicidial.example.com',
     user: 'api_user',
@@ -77,7 +77,7 @@ See the [Migration Guide](MIGRATION.md) for upgrade instructions.
 
 This wrapper supports two authentication modes and provides both a modern configuration-based approach and legacy factory methods.
 
-### Recommended: Using VicidialConfig (v2.0+)
+### Recommended: Using VicidialConfig (v4.0+)
 
 The recommended way to create a client is using the `VicidialConfig` object, which provides a clean, explicit way to configure all client options:
 
