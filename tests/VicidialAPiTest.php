@@ -2,13 +2,13 @@
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Test\TestCase;
-use VicidialAPi\Client;
+use Tests\TestCase;
+use VicidialApi\Client;
 use VicidialApi\Factory;
 
 class VicidialAPiTest extends TestCase
 {
-    public function testCreateClientCorrectly(): void
+    public function test_create_client_correctly(): void
     {
         $client = VicidialApi::create(
             'localhost',
@@ -19,14 +19,14 @@ class VicidialAPiTest extends TestCase
         $this->assertInstanceOf(Client::class, $client);
     }
 
-    public function testCreateFactoryCorrectly(): void
+    public function test_create_factory_correctly(): void
     {
         $client = VicidialApi::factory();
 
         $this->assertInstanceOf(Factory::class, $client);
     }
 
-    public function testFactoryWithCustomUrl(): void
+    public function test_factory_with_custom_url(): void
     {
         $client = VicidialApi::factory()
             ->withBaseUri('http://localhost')
@@ -37,25 +37,25 @@ class VicidialAPiTest extends TestCase
         $this->assertInstanceOf(Client::class, $client);
     }
 
-    public function testFactoryWithCustomUrlAndCustomClient(): void
+    public function test_factory_with_custom_url_and_custom_client(): void
     {
         $client = VicidialApi::factory()
             ->withBaseUri('http://localhost')
             ->withApiUser('testUser')
             ->withApiPass('testPassword')
-            ->withHttpClient(new \GuzzleHttp\Client())
+            ->withHttpClient(new \GuzzleHttp\Client)
             ->make();
 
         $this->assertInstanceOf(Client::class, $client);
     }
 
-    public function testCustomStreamViaFactory(): void
+    public function test_custom_stream_via_factory(): void
     {
         $vicidialApi = VicidialApi::factory()
             ->withBaseUri('http://localhost')
             ->withApiUser('testUser')
             ->withApiPass('testPassword')
-            ->withHttpClient($client = new \GuzzleHttp\Client())
+            ->withHttpClient($client = new \GuzzleHttp\Client)
             ->withStreamHandler(fn (RequestInterface $request): ResponseInterface => $client->send($request, ['stream' => true]))
             ->make();
 

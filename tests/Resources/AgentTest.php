@@ -1,13 +1,13 @@
 <?php
 
-namespace Resources;
+namespace Tests\Resources;
 
-use Fakers\FakeHttpTransporter;
+use Tests\Fakers\FakeHttpTransporter;
 use VicidialApi\Resources\Agent;
 
 class AgentTest extends \PHPUnit\Framework\TestCase
 {
-    public function testAgentPauseCode(): void
+    public function test_agent_pause_code(): void
     {
         $agent = new Agent(
             new FakeHttpTransporter('PAUSE')

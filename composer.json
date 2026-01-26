@@ -16,7 +16,7 @@
       }
     ],
     "require": {
-      "php": "^8.1",
+      "php": "^8.2",
       "graham-campbell/guzzle-factory": "^5.0",
       "ext-json": "*",
       "php-http/discovery": "^1.19",
@@ -35,7 +35,7 @@
         "laravel/pint": "^1.13",
         "nunomaduro/collision": "^7.10",
         "phpstan/phpstan": "^1.10",
-        "rector/rector": "^0.18.8",
+        "rector/rector": "^1.0",
         "symfony/var-dumper": "^6.3"
     },
     "extra": {
@@ -53,12 +53,12 @@
     },
     "autoload-dev": {
       "psr-4": {
-        "Test\\": "tests/"
+        "Tests\\": "tests/"
       }
     },
     "scripts": {
       "lint": "pint -v",
-      "refactor": "rector --debug",
+      "refactor": "rector",
       "test:lint": "pint --test -v",
       "test:refactor": "rector --dry-run",
       "test:types": "phpstan analyse --ansi",

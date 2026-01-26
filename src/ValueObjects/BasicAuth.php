@@ -7,8 +7,7 @@ final class BasicAuth
     public function __construct(
         public readonly string $username,
         public readonly string $password,
-    ) {
-    }
+    ) {}
 
     public static function from(string $username, string $password): self
     {

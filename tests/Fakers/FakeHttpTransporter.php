@@ -1,11 +1,12 @@
 <?php
 
-namespace Fakers;
+namespace Tests\Fakers;
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
 use VicidialApi\Contracts\TransporterContract;
+use VicidialApi\Responses\VicidialResponse;
 use VicidialApi\ValueObjects\Transporter\Payload;
 use VicidialApi\ValueObjects\Transporter\Response;
 
@@ -13,8 +14,7 @@ class FakeHttpTransporter implements TransporterContract
 {
     public function __construct(
         public readonly string|array $content = ''
-    ) {
-    }
+    ) {}
 
     public function requestObject(Payload $payload): Response
     {
@@ -24,6 +24,11 @@ class FakeHttpTransporter implements TransporterContract
     public function requestContent(Payload $payload): string
     {
         return $this->contentToString();
+    }
+
+    public function requestResponse(Payload $payload): VicidialResponse
+    {
+        return VicidialResponse::from($this->contentToString());
     }
 
     public function requestStream(Payload $payload): ResponseInterface

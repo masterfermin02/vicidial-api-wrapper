@@ -3,10 +3,12 @@
 namespace VicidialApi\Resources;
 
 use VicidialApi\Contracts\AdminContract;
+use VicidialApi\Responses\VicidialResponse;
 use VicidialApi\ValueObjects\Transporter\Payload;
 
 final class Admin implements AdminContract
 {
+    use Concerns\HasResponseHelpers;
     use Concerns\Transportable;
 
     public const ADMIN_URL = '/vicidial/non_agent_api.php';
@@ -16,29 +18,99 @@ final class Admin implements AdminContract
         return $this->makeApiRequest('version', []);
     }
 
+    public function versionResponse(): VicidialResponse
+    {
+        return $this->requestResponse(self::ADMIN_URL, ['function' => 'version']);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
     public function mohList(array $options): string
     {
         return $this->makeApiRequest('moh_list', $options);
     }
 
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function mohListResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'moh_list';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
     public function vmList(array $options): string
     {
         return $this->makeApiRequest('vm_list', $options);
     }
 
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function vmListResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'vm_list';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
     public function blindMonitor(array $options): string
     {
         return $this->makeApiRequest('blind_monitor', $options);
     }
 
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function blindMonitorResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'blind_monitor';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
     public function agentInGroupInfo(array $options): string
     {
         return $this->makeApiRequest('agent_ingroup_info', $options);
     }
 
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function agentInGroupInfoResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'agent_ingroup_info';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
     public function agentCampaigns(array $options): string
     {
         return $this->makeApiRequest('agent_campaigns', $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function agentCampaignsResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'agent_campaigns';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
     }
 
     /**
@@ -52,6 +124,16 @@ final class Admin implements AdminContract
     }
 
     /**
+     * @param  array<string, string>  $options
+     */
+    public function campaignsListResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'campaigns_list';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
      * Get the hopper list.
      *
      * @param  array<string, string>  $options
@@ -59,6 +141,16 @@ final class Admin implements AdminContract
     public function hopperList(array $options): string
     {
         return $this->makeApiRequest('hopper_list', $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function hopperListResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'hopper_list';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
     }
 
     /**
@@ -72,6 +164,16 @@ final class Admin implements AdminContract
     }
 
     /**
+     * @param  array<string, string>  $options
+     */
+    public function recordingLookupResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'recording_lookup';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
      * Export DID log.
      *
      * @param  array<string, string>  $options
@@ -79,6 +181,16 @@ final class Admin implements AdminContract
     public function didLogExport(array $options): string
     {
         return $this->makeApiRequest('did_log_export', $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function didLogExportResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'did_log_export';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
     }
 
     /**
@@ -92,6 +204,16 @@ final class Admin implements AdminContract
     }
 
     /**
+     * @param  array<string, string>  $options
+     */
+    public function phoneNumberLogResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'phone_number_log';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
      * Export agent stats.
      *
      * @param  array<string, string>  $options
@@ -99,6 +221,16 @@ final class Admin implements AdminContract
     public function agentStatsExport(array $options): string
     {
         return $this->makeApiRequest('agent_stats_export', $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function agentStatsExportResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'agent_stats_export';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
     }
 
     /**
@@ -112,6 +244,16 @@ final class Admin implements AdminContract
     }
 
     /**
+     * @param  array<string, string>  $options
+     */
+    public function userGroupStatusResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'user_group_status';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
      * Get in-group status.
      *
      * @param  array<string, string>  $options
@@ -119,6 +261,16 @@ final class Admin implements AdminContract
     public function inGroupStatus(array $options): string
     {
         return $this->makeApiRequest('in_group_status', $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function inGroupStatusResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'in_group_status';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
     }
 
     /**
@@ -132,6 +284,16 @@ final class Admin implements AdminContract
     }
 
     /**
+     * @param  array<string, string>  $options
+     */
+    public function agentStatusResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'agent_status';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
      * Get call ID information.
      *
      * @param  array<string, string>  $options
@@ -139,6 +301,16 @@ final class Admin implements AdminContract
     public function callIdInfo(array $options): string
     {
         return $this->makeApiRequest('callid_info', $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function callIdInfoResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'callid_info';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
     }
 
     /**
@@ -152,6 +324,16 @@ final class Admin implements AdminContract
     }
 
     /**
+     * @param  array<string, string>  $options
+     */
+    public function leadFieldInfoResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'lead_field_info';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
      * Search lead status.
      *
      * @param  array<string, string>  $options
@@ -159,6 +341,16 @@ final class Admin implements AdminContract
     public function leadStatusSearch(array $options): string
     {
         return $this->makeApiRequest('lead_status_search', $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function leadStatusSearchResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'lead_status_search';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
     }
 
     /**
@@ -172,6 +364,16 @@ final class Admin implements AdminContract
     }
 
     /**
+     * @param  array<string, string>  $options
+     */
+    public function cccLeadInfoResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'ccc_lead_info';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
      * Get lead callback information.
      *
      * @param  array<string, string>  $options
@@ -179,6 +381,16 @@ final class Admin implements AdminContract
     public function leadCallbackInfo(array $options): string
     {
         return $this->makeApiRequest('lead_callback_info', $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function leadCallbackInfoResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'lead_callback_info';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
     }
 
     /**
@@ -192,6 +404,16 @@ final class Admin implements AdminContract
     }
 
     /**
+     * @param  array<string, string>  $options
+     */
+    public function updateLogEntryResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'update_log_entry';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
      * Add lead.
      *
      * @param  array<string, string>  $options
@@ -202,6 +424,16 @@ final class Admin implements AdminContract
     }
 
     /**
+     * @param  array<string, string>  $options
+     */
+    public function addLeadResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'add_lead';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
      * Update lead.
      *
      * @param  array<string, string>  $options
@@ -209,6 +441,16 @@ final class Admin implements AdminContract
     public function updateLead(array $options): string
     {
         return $this->makeApiRequest('update_lead', $options);
+    }
+
+    /**
+     * @param  array<string, string>  $options
+     */
+    public function updateLeadResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'update_lead';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
     }
 
     /**
@@ -431,6 +673,9 @@ final class Admin implements AdminContract
         return $this->makeApiRequest('update_cid_group_entry', $options);
     }
 
+    /**
+     * @param  array<string, string>  $options
+     */
     public function copyUser(array $options): string
     {
         return $this->makeApiRequest('copy_user', $options);

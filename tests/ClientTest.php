@@ -1,12 +1,12 @@
 <?php
 
-use Test\TestCase;
+use Tests\TestCase;
 use VicidialApi\Resources\Admin;
 use VicidialApi\Resources\Agent;
 
 class ClientTest extends TestCase
 {
-    public function testHasAgent(): void
+    public function test_has_agent(): void
     {
         $client = VicidialApi::create(
             'localhost',
@@ -17,7 +17,7 @@ class ClientTest extends TestCase
         $this->assertInstanceOf(Agent::class, $client->agent());
     }
 
-    public function testHasAdmin(): void
+    public function test_has_admin(): void
     {
         $client = VicidialApi::create(
             'localhost',

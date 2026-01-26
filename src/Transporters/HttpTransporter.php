@@ -15,6 +15,7 @@ use VicidialApi\Enums\Transporter\ContentType;
 use VicidialApi\Exceptions\ErrorException;
 use VicidialApi\Exceptions\TransporterException;
 use VicidialApi\Exceptions\UnserializableResponse;
+use VicidialApi\Responses\VicidialResponse;
 use VicidialApi\ValueObjects\Transporter\BaseUri;
 use VicidialApi\ValueObjects\Transporter\Headers;
 use VicidialApi\ValueObjects\Transporter\Payload;
@@ -73,6 +74,27 @@ final class HttpTransporter implements TransporterContract
         $this->throwIfJsonError($response, $contents);
 
         return $contents;
+    }
+
+    /**
+     * Request and return a VicidialResponse DTO.
+     */
+    public function requestResponse(Payload $payload): VicidialResponse
+    {
+        $request = $payload->toRequest($this->baseUri, $this->headers, $this->queryParams);
+        $response = $this->sendRequest(fn (): \Psr\Http\Message\ResponseInterface => $this->client->sendRequest($request));
+
+        $contents = $response->getBody()->getContents();
+
+        $this->throwIfJsonError($response, $contents);
+
+        // Extract headers
+        $headers = [];
+        foreach ($response->getHeaders() as $name => $values) {
+            $headers[$name] = $values[0] ?? '';
+        }
+
+        return VicidialResponse::from($contents, $headers);
     }
 
     /**

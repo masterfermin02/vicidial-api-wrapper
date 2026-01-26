@@ -1,6 +1,6 @@
 <?php
 
-namespace Vicidial\Api\Tests\Fakers;
+namespace Tests\Fakers;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
