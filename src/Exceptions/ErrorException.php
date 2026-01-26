@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace VicidialApi\Exceptions;
 
-use Exception;
-
-final class ErrorException extends Exception
+/**
+ * Generic error exception.
+ *
+ * @deprecated Use ApiErrorException instead. Will be removed in v3.0.
+ */
+final class ErrorException extends VicidialException
 {
     /**
      * Creates a new Exception instance.

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace VicidialApi\ValueObjects;
 
+use VicidialApi\Exceptions\ConfigurationException;
+
 /**
  * Configuration for retry behavior.
  */
@@ -20,19 +22,19 @@ final class RetryConfig
         private readonly bool $retryOn429 = true,
     ) {
         if ($maxAttempts < 1) {
-            throw new \InvalidArgumentException('maxAttempts must be at least 1');
+            throw new ConfigurationException('maxAttempts must be at least 1');
         }
 
         if ($initialDelayMs < 0) {
-            throw new \InvalidArgumentException('initialDelayMs must be non-negative');
+            throw new ConfigurationException('initialDelayMs must be non-negative');
         }
 
         if ($maxDelayMs < $initialDelayMs) {
-            throw new \InvalidArgumentException('maxDelayMs must be greater than or equal to initialDelayMs');
+            throw new ConfigurationException('maxDelayMs must be greater than or equal to initialDelayMs');
         }
 
         if ($multiplier < 1.0) {
-            throw new \InvalidArgumentException('multiplier must be at least 1.0');
+            throw new ConfigurationException('multiplier must be at least 1.0');
         }
     }
 

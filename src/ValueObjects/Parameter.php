@@ -3,6 +3,7 @@
 namespace VicidialApi\ValueObjects;
 
 use VicidialApi\Contracts\StringableContract;
+use VicidialApi\Exceptions\ConfigurationException;
 
 class Parameter implements StringableContract
 {
@@ -44,6 +45,6 @@ class Parameter implements StringableContract
             return static::fromArray($this->value)->toString();
         }
 
-        throw new \InvalidArgumentException('Parameter value must be scalar or null');
+        throw new ConfigurationException('Parameter value must be scalar or null');
     }
 }

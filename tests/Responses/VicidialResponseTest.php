@@ -1,6 +1,6 @@
 <?php
 
-namespace Responses;
+namespace Tests\Responses;
 
 use PHPUnit\Framework\TestCase;
 use VicidialApi\Responses\VicidialResponse;

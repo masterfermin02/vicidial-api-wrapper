@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace VicidialApi;
 
 use Psr\Log\LoggerInterface;
+use VicidialApi\Exceptions\ConfigurationException;
 use VicidialApi\Logger\NullLogger;
 use VicidialApi\ValueObjects\RetryConfig;
 
@@ -27,19 +28,19 @@ final class VicidialConfig
         private readonly ?LoggerInterface $logger = null,
     ) {
         if (! in_array($protocol, ['http', 'https'])) {
-            throw new \InvalidArgumentException('Protocol must be either "http" or "https"');
+            throw new ConfigurationException('Protocol must be either "http" or "https"');
         }
 
         if ($timeout <= 0) {
-            throw new \InvalidArgumentException('Timeout must be greater than 0');
+            throw new ConfigurationException('Timeout must be greater than 0');
         }
 
         if ($connectTimeout <= 0) {
-            throw new \InvalidArgumentException('Connect timeout must be greater than 0');
+            throw new ConfigurationException('Connect timeout must be greater than 0');
         }
 
         if ($connectTimeout > $timeout) {
-            throw new \InvalidArgumentException('Connect timeout cannot be greater than request timeout');
+            throw new ConfigurationException('Connect timeout cannot be greater than request timeout');
         }
     }
 
@@ -155,7 +156,7 @@ final class VicidialConfig
     public function getBasicAuthUser(): string
     {
         if ($this->basicAuthUser === null) {
-            throw new \RuntimeException('Basic auth user is not set');
+            throw new ConfigurationException('Basic auth user is not set');
         }
 
         return $this->basicAuthUser;
@@ -164,7 +165,7 @@ final class VicidialConfig
     public function getBasicAuthPass(): string
     {
         if ($this->basicAuthPass === null) {
-            throw new \RuntimeException('Basic auth password is not set');
+            throw new ConfigurationException('Basic auth password is not set');
         }
 
         return $this->basicAuthPass;

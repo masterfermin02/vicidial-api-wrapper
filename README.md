@@ -485,4 +485,5 @@ try {
 - [Admin](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/admin.md)
 - [Response DTO Guide](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/RESPONSE_DTO.md)
 - [Method Naming Conventions](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/METHOD_NAMING_CONVENTIONS.md)
+- [Error Handling Guide](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/ERROR_HANDLING.md) 🎯 **NEW**
 - [Reliability Features](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/RELIABILITY_FEATURES.md) 🛡️ **NEW**

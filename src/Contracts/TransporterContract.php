@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace VicidialApi\Contracts;
 
 use Psr\Http\Message\ResponseInterface;
-use VicidialApi\Exceptions\ErrorException;
-use VicidialApi\Exceptions\TransporterException;
-use VicidialApi\Exceptions\UnserializableResponse;
+use VicidialApi\Exceptions\VicidialException;
 use VicidialApi\Responses\VicidialResponse;
 use VicidialApi\ValueObjects\Transporter\Payload;
 use VicidialApi\ValueObjects\Transporter\Response;
@@ -19,28 +17,28 @@ interface TransporterContract
      *
      * @return Response<array<array-key, mixed>|string>
      *
-     * @throws ErrorException|UnserializableResponse|TransporterException
+     * @throws VicidialException
      */
     public function requestObject(Payload $payload): Response;
 
     /**
      * Sends a content request to a server.
      *
-     * @throws ErrorException|TransporterException
+     * @throws VicidialException
      */
     public function requestContent(Payload $payload): string;
 
     /**
      * Sends a request and returns a VicidialResponse DTO.
      *
-     * @throws ErrorException|TransporterException
+     * @throws VicidialException
      */
     public function requestResponse(Payload $payload): VicidialResponse;
 
     /**
      * Sends a stream request to a server.
-     **
-     * @throws ErrorException
+     *
+     * @throws VicidialException
      */
     public function requestStream(Payload $payload): ResponseInterface;
 }

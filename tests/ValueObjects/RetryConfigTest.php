@@ -2,8 +2,8 @@
 
 namespace Tests\ValueObjects;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use VicidialApi\Exceptions\ConfigurationException;
 use VicidialApi\ValueObjects\RetryConfig;
 
 class RetryConfigTest extends TestCase
@@ -87,7 +87,7 @@ class RetryConfigTest extends TestCase
 
     public function test_invalid_max_attempts(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage('maxAttempts must be at least 1');
 
         RetryConfig::custom(maxAttempts: 0);
@@ -95,7 +95,7 @@ class RetryConfigTest extends TestCase
 
     public function test_invalid_initial_delay(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage('initialDelayMs must be non-negative');
 
         RetryConfig::custom(initialDelayMs: -100);
@@ -103,7 +103,7 @@ class RetryConfigTest extends TestCase
 
     public function test_invalid_max_delay(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage('maxDelayMs must be greater than or equal to initialDelayMs');
 
         RetryConfig::custom(
@@ -114,7 +114,7 @@ class RetryConfigTest extends TestCase
 
     public function test_invalid_multiplier(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage('multiplier must be at least 1.0');
 
         RetryConfig::custom(multiplier: 0.5);

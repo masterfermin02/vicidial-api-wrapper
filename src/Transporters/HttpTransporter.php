@@ -14,9 +14,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use VicidialApi\Contracts\TransporterContract;
 use VicidialApi\Enums\Transporter\ContentType;
-use VicidialApi\Exceptions\ErrorException;
-use VicidialApi\Exceptions\TransporterException;
-use VicidialApi\Exceptions\UnserializableResponse;
+use VicidialApi\Exceptions\RetryException;
+use VicidialApi\Exceptions\TransportException;
+use VicidialApi\Exceptions\VicidialException;
 use VicidialApi\Logger\NullLogger;
 use VicidialApi\Responses\VicidialResponse;
 use VicidialApi\ValueObjects\RetryConfig;
@@ -64,7 +64,7 @@ final class HttpTransporter implements TransporterContract
             /** @var array{error?: array{message: string, type: string, code: string}} $data */
             $data = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $jsonException) {
-            throw new UnserializableResponse($jsonException);
+            throw new VicidialException($jsonException->getMessage(), 0, $jsonException);
         }
 
         return Response::from($data);
@@ -269,11 +269,11 @@ final class HttpTransporter implements TransporterContract
                 }
 
                 // If we get here and haven't retried, throw the exception
-                throw new TransporterException($clientException);
+                throw new TransportException($clientException);
             }
         }
 
-        // If we exhausted all retries, throw the last exception
+        // If we exhausted all retries, throw RetryException with attempt count
         $this->logger->error('Vicidial API request failed after all retries', [
             'attempts' => $attempt,
             'error' => $lastException?->getMessage(),
@@ -281,10 +281,18 @@ final class HttpTransporter implements TransporterContract
 
         // This should never happen, but if no exception was caught, throw a generic one
         if (! $lastException instanceof \Psr\Http\Client\ClientExceptionInterface) {
-            throw new \RuntimeException('Request failed after all retries with no exception captured');
+            throw new RetryException(
+                'Request failed after all retries with no exception captured',
+                $attempt
+            );
         }
 
-        throw new TransporterException($lastException);
+        throw new RetryException(
+            sprintf('Request failed after %d attempts: %s', $attempt, $lastException->getMessage()),
+            $attempt,
+            0,
+            new TransportException($lastException)
+        );
     }
 
     /**
@@ -320,14 +328,22 @@ final class HttpTransporter implements TransporterContract
         }
 
         try {
-            /** @var array{error?: array{message: string|array<int, string>, type: string, code: string}} $response */
+            /** @var array{error?: array{message: string|array<int, string>, type: ?string, code: string|int|null}} $response */
             $response = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
 
             if (isset($response['error'])) {
-                throw new ErrorException($response['error']);
+                $message = $response['error']['message'];
+                if (is_array($message)) {
+                    $message = implode("\n", $message);
+                }
+
+                throw new VicidialException(
+                    $message,
+                    (int) ($response['error']['code'] ?? 0)
+                );
             }
         } catch (JsonException $jsonException) {
-            throw new UnserializableResponse($jsonException);
+            throw new VicidialException($jsonException->getMessage(), 0, $jsonException);
         }
     }
 }

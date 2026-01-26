@@ -3,8 +3,7 @@
 namespace VicidialApi\Resources;
 
 use VicidialApi\Contracts\TransporterContract;
-use VicidialApi\Exceptions\ErrorException;
-use VicidialApi\Exceptions\TransporterException;
+use VicidialApi\Exceptions\VicidialException;
 use VicidialApi\ValueObjects\Transporter\Payload;
 
 final class RemoteAgent
@@ -22,8 +21,7 @@ final class RemoteAgent
     }
 
     /**
-     * @throws ErrorException
-     * @throws TransporterException
+     * @throws VicidialException
      */
     public function active(
         string $remoteAgentId,
@@ -42,8 +40,7 @@ final class RemoteAgent
     }
 
     /**
-     * @throws ErrorException
-     * @throws TransporterException
+     * @throws VicidialException
      */
     public function inactive(
         string $remoteAgentId,

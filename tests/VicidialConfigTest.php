@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use VicidialApi\Exceptions\ConfigurationException;
 use VicidialApi\VicidialClient;
 use VicidialApi\VicidialConfig;
 
@@ -68,7 +69,7 @@ class VicidialConfigTest extends TestCase
 
     public function test_invalid_protocol_throws_exception(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage('Protocol must be either "http" or "https"');
 
         VicidialConfig::create(
@@ -81,7 +82,7 @@ class VicidialConfigTest extends TestCase
 
     public function test_invalid_timeout_throws_exception(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage('Timeout must be greater than 0');
 
         VicidialConfig::create(

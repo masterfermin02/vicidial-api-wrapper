@@ -3,13 +3,13 @@
 namespace VicidialApi;
 
 use Closure;
-use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use Http\Discovery\Psr18Client;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use VicidialApi\Exceptions\ConfigurationException;
 use VicidialApi\Transporters\HttpTransporter;
 use VicidialApi\ValueObjects\ApiKey;
 use VicidialApi\ValueObjects\BasicAuth;
@@ -211,7 +211,7 @@ final class Factory
         }
 
         return function (RequestInterface $_): never {
-            throw new Exception('To use stream requests you must provide an stream handler closure via the OpenAI factory.');
+            throw new ConfigurationException('To use stream requests you must provide a stream handler closure via the factory.');
         };
     }
 }
