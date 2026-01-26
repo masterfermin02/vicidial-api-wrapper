@@ -43,6 +43,22 @@ Version 2.0 introduces major improvements for a better developer experience:
 
 See the [Response DTO Guide](RESPONSE_DTO.md) for details.
 
+### Consistent Method Naming
+- **camelCase everywhere**: All methods use standard PHP camelCase convention
+- **Predictable patterns**: `addLead()`, `updateFields()`, `mohList()`, `pauseCode()`
+- **No snake_case**: Legacy Vicidial API's `external_dial` becomes `dial()`, `pause_code` becomes `pauseCode()`
+
+See the [Method Naming Conventions](METHOD_NAMING_CONVENTIONS.md) for the complete guide.
+
+### Reliability Features 🛡️ NEW
+- **Configurable timeouts**: Separate connect timeout and request timeout
+- **Automatic retries**: Exponential backoff with jitter for transient failures (5xx, network errors, rate limits)
+- **PSR-3 logging**: Pluggable logger for observability and debugging
+- **Sensitive data protection**: Automatic redaction of passwords and API keys in logs
+- **Production-ready defaults**: Sensible timeout and retry configurations out of the box
+
+See the [Reliability Features Guide](RELIABILITY_FEATURES.md) for complete documentation.
+
 ```php
 // New way (v2.0+)
 $config = VicidialConfig::create(
@@ -215,6 +231,58 @@ try {
 } catch (Exception $e) {
     echo 'Exception: ', $e->getMessage(), "\n";
 }
+```
+
+#### Example: Production setup with reliability features
+```php
+<?php
+
+require_once 'vendor/autoload.php';
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use VicidialApi\VicidialConfig;
+use VicidialApi\VicidialClient;
+use VicidialApi\ValueObjects\RetryConfig;
+
+// Setup logging
+$logger = new Logger('vicidial-api');
+$logger->pushHandler(new StreamHandler('logs/vicidial.log', Logger::DEBUG));
+
+// Production configuration with all reliability features
+$config = VicidialConfig::create(
+    host: getenv('YOUR_VICIDIAL_IP'),
+    user: getenv('YOUR_VICIDIAL_USER'),
+    pass: getenv('YOUR_VICIDIAL_PASSWORD'),
+    protocol: 'https',
+    timeout: 60,              // Request timeout
+    connectTimeout: 10,       // Connection timeout
+    retryConfig: RetryConfig::default(), // Enable automatic retries
+    logger: $logger,          // Enable request logging
+);
+
+$client = VicidialClient::make($config);
+
+try {
+    // All requests are automatically:
+    // - Logged with sanitized parameters
+    // - Retried on transient failures (5xx, network errors)
+    // - Timed out if they take too long
+    $response = $client->agent()->updateFieldsResponse("gabriel", [
+        'first_name' => 'John',
+        'phone_number' => '5551234567'
+    ]);
+    
+    if ($response->ok()) {
+        echo "✓ Success! Lead ID: " . $response->get('lead_id');
+    }
+} catch (Exception $e) {
+    // Error is already logged, handle appropriately
+    echo 'Failed after retries: ', $e->getMessage(), "\n";
+}
+```
+
+See [example/reliability_features.php](example/reliability_features.php) for more examples.
 ```
 
 #### Example: Remote agent with Basic Authentication
@@ -393,20 +461,19 @@ try {
             getenv('YOUR_VICIDIAL_REMOTE_AGENT'),
             getenv('YOUR_VICIDIAL_REMOTE_PASSWORD'),
         )->remoteAgent();
-        $remoteAgent->active(
-            getenv('agentId'),
-            getenv('confExten'),
-        );
-        $remoteAgent->hangUp(
-            "gabriel",
-            [
-                'status' => 'SALE',
-            ]
-        );
-        $remoteAgent->inActive(
-            getenv('agentId'),
-            getenv('confExten'),
-        );
+    $remoteAgent->active(
+        getenv('agentId'),
+        getenv('confExten')
+    );
+    
+    $remoteAgent->hangup("gabriel", [
+        'status' => 'SALE'
+    ]);
+    
+    $remoteAgent->inactive(
+        getenv('agentId'),
+        getenv('confExten')
+    );
     } catch (Exception $e) {
         echo 'Exception: ',  $e->getMessage(), "\n";
     }
@@ -416,3 +483,6 @@ try {
 ### Docs:
 - [Agent](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/agent.md)
 - [Admin](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/admin.md)
+- [Response DTO Guide](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/RESPONSE_DTO.md)
+- [Method Naming Conventions](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/METHOD_NAMING_CONVENTIONS.md)
+- [Reliability Features](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/RELIABILITY_FEATURES.md) 🛡️ **NEW**

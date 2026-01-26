@@ -62,6 +62,8 @@ final class RemoteAgent
     }
 
     /**
+     * Hangup a call for the remote agent.
+     *
      * @param  array<string, string>  $options
      *
      * @throws \Exception

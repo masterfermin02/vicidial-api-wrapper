@@ -66,6 +66,7 @@ final class VicidialClient
         if (! $httpClient instanceof \Psr\Http\Client\ClientInterface) {
             $httpClient = new GuzzleClient([
                 'timeout' => $config->getTimeout(),
+                'connect_timeout' => $config->getConnectTimeout(),
                 'verify' => $config->isVerifyTls(),
             ]);
         }
@@ -75,7 +76,15 @@ final class VicidialClient
                 ? $httpClient->send($request, ['stream' => true])
                 : $httpClient->sendRequest($request);
 
-        $transporter = new HttpTransporter($httpClient, $baseUri, $headers, $queryParams, $streamHandler);
+        $transporter = new HttpTransporter(
+            $httpClient,
+            $baseUri,
+            $headers,
+            $queryParams,
+            $streamHandler,
+            $config->getRetryConfig(),
+            $config->getLogger()
+        );
 
         return new Client($transporter);
     }
