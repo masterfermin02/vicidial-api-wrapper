@@ -265,6 +265,10 @@ My suggested first integration is small: take one qualified lead from your appli
 
 Once that works reliably, add click-to-call, recording access, or reporting around the same identifiers.
 
-The [library is free and open source](https://github.com/masterfermin02/vicidial-api-wrapper). You can use it in your own application, contribute improvements, and share the workflows you build. If you need help implementing an integration or want to sponsor an improvement to the library, [contact me](mailto:masterfermin02@gmail.com).
+The [library is free and open source](https://github.com/masterfermin02/vicidial-api-wrapper). You can use it in your own application, contribute improvements, and share the workflows you build.
+
+I maintain it independently and am working toward making open-source maintenance my full-time work. If your company uses the library, you can support ongoing maintenance, sponsor a feature, or hire me for integration support. Sponsored improvements remain open source.
+
+**[Discuss sponsorship or support](mailto:masterfermin02@gmail.com)**
 
 *This is an independent project and is not affiliated with the VICIdial Group.*

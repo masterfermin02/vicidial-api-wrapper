@@ -47,6 +47,14 @@ user_level 7+ and API access. Not sure the server, credentials or permissions ar
 [How the VICIdial API works](docs/VICIDIAL_API_GUIDE.md); Laravel users get a service provider,
 a `Vicidial` facade and `php artisan vicidial:ping`, see [Laravel integration](docs/LARAVEL.md).
 
+## Support this project
+
+This library is free and open source. I maintain it independently and am working toward making open-source maintenance my full-time work.
+
+If your company uses this library, you can support ongoing maintenance, sponsor a feature, or hire me for integration support. Sponsored improvements remain open source.
+
+**[Discuss sponsorship or support](mailto:masterfermin02@gmail.com)**
+
 ## Install
 Requires PHP 8.2
 
