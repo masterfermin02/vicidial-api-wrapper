@@ -197,7 +197,7 @@ final class VicidialConfig
 
     public function hasLogger(): bool
     {
-        return $this->logger instanceof \Psr\Log\LoggerInterface;
+        return $this->logger instanceof LoggerInterface;
     }
 
     public function getBaseUri(): string

@@ -2,6 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 use VicidialApi\Exceptions\ConfigurationException;
+use VicidialApi\Resources\Admin;
+use VicidialApi\Resources\Agent;
+use VicidialApi\Resources\RemoteAgent;
 use VicidialApi\VicidialClient;
 use VicidialApi\VicidialConfig;
 
@@ -116,8 +119,8 @@ class VicidialConfigTest extends TestCase
 
         $client = VicidialClient::make($config);
 
-        $this->assertInstanceOf(\VicidialApi\Resources\Agent::class, $client->agent());
-        $this->assertInstanceOf(\VicidialApi\Resources\Admin::class, $client->admin());
-        $this->assertInstanceOf(\VicidialApi\Resources\RemoteAgent::class, $client->remoteAgent());
+        $this->assertInstanceOf(Agent::class, $client->agent());
+        $this->assertInstanceOf(Admin::class, $client->admin());
+        $this->assertInstanceOf(RemoteAgent::class, $client->remoteAgent());
     }
 }

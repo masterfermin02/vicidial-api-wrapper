@@ -162,7 +162,7 @@ final class Factory
             $headers = Headers::withAuthorization(ApiKey::from($this->apiKey));
         }
 
-        if ($this->basicAuth instanceof \VicidialApi\ValueObjects\BasicAuth) {
+        if ($this->basicAuth instanceof BasicAuth) {
             $headers = $headers->withBasicAuthorization($this->basicAuth);
         }
 

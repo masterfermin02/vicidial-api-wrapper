@@ -43,7 +43,7 @@ class VicidialAPiTest extends TestCase
             ->withBaseUri('http://localhost')
             ->withApiUser('testUser')
             ->withApiPass('testPassword')
-            ->withHttpClient(new \GuzzleHttp\Client)
+            ->withHttpClient(new GuzzleHttp\Client)
             ->make();
 
         $this->assertInstanceOf(Client::class, $client);
@@ -55,7 +55,7 @@ class VicidialAPiTest extends TestCase
             ->withBaseUri('http://localhost')
             ->withApiUser('testUser')
             ->withApiPass('testPassword')
-            ->withHttpClient($client = new \GuzzleHttp\Client)
+            ->withHttpClient($client = new GuzzleHttp\Client)
             ->withStreamHandler(fn (RequestInterface $request): ResponseInterface => $client->send($request, ['stream' => true]))
             ->make();
 

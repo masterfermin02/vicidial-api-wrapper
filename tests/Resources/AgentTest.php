@@ -2,10 +2,11 @@
 
 namespace Tests\Resources;
 
+use PHPUnit\Framework\TestCase;
 use Tests\Fakers\FakeHttpTransporter;
 use VicidialApi\Resources\Agent;
 
-class AgentTest extends \PHPUnit\Framework\TestCase
+class AgentTest extends TestCase
 {
     public function test_agent_pause_code(): void
     {

@@ -14,6 +14,7 @@ use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use VicidialApi\Exceptions\TransporterException;
 use VicidialApi\ValueObjects\RetryConfig;
 use VicidialApi\VicidialClient;
 use VicidialApi\VicidialConfig;
@@ -103,7 +104,7 @@ try {
     echo "\n📝 Check logs for detailed request information:\n";
     echo '   '.__DIR__."/../logs/vicidial.log\n";
 
-} catch (VicidialApi\Exceptions\TransporterException $e) {
+} catch (TransporterException $e) {
     echo "❌ Network/Transport Error (after retries):\n";
     echo '   '.$e->getMessage()."\n";
     echo "\n📝 Check error logs:\n";

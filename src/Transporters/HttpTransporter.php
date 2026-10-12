@@ -10,6 +10,7 @@ use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Client\NetworkExceptionInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use VicidialApi\Contracts\TransporterContract;
@@ -50,7 +51,7 @@ final class HttpTransporter implements TransporterContract
         // Log the request
         $this->logRequest($request);
 
-        $response = $this->sendRequest(fn (): \Psr\Http\Message\ResponseInterface => $this->client->sendRequest($request));
+        $response = $this->sendRequest(fn (): ResponseInterface => $this->client->sendRequest($request));
 
         $contents = $response->getBody()->getContents();
 
@@ -80,7 +81,7 @@ final class HttpTransporter implements TransporterContract
         // Log the request
         $this->logRequest($request);
 
-        $response = $this->sendRequest(fn (): \Psr\Http\Message\ResponseInterface => $this->client->sendRequest($request));
+        $response = $this->sendRequest(fn (): ResponseInterface => $this->client->sendRequest($request));
 
         $contents = $response->getBody()->getContents();
 
@@ -99,7 +100,7 @@ final class HttpTransporter implements TransporterContract
         // Log the request
         $this->logRequest($request);
 
-        $response = $this->sendRequest(fn (): \Psr\Http\Message\ResponseInterface => $this->client->sendRequest($request));
+        $response = $this->sendRequest(fn (): ResponseInterface => $this->client->sendRequest($request));
 
         $contents = $response->getBody()->getContents();
 
@@ -134,7 +135,7 @@ final class HttpTransporter implements TransporterContract
     /**
      * Log the outgoing request with sanitized parameters.
      */
-    private function logRequest(\Psr\Http\Message\RequestInterface $request): void
+    private function logRequest(RequestInterface $request): void
     {
         $uri = $request->getUri();
         $queryString = $uri->getQuery();
@@ -280,7 +281,7 @@ final class HttpTransporter implements TransporterContract
         ]);
 
         // This should never happen, but if no exception was caught, throw a generic one
-        if (! $lastException instanceof \Psr\Http\Client\ClientExceptionInterface) {
+        if (! $lastException instanceof ClientExceptionInterface) {
             throw new RetryException(
                 'Request failed after all retries with no exception captured',
                 $attempt

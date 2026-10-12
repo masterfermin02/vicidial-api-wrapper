@@ -6,6 +6,8 @@ namespace VicidialApi;
 
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use VicidialApi\Transporters\HttpTransporter;
 use VicidialApi\ValueObjects\BasicAuth;
 use VicidialApi\ValueObjects\Transporter\BaseUri;
@@ -63,7 +65,7 @@ final class VicidialClient
             ->withParam('pass', $config->getPass());
 
         // Create HTTP client with timeout and TLS verification settings
-        if (! $httpClient instanceof \Psr\Http\Client\ClientInterface) {
+        if (! $httpClient instanceof ClientInterface) {
             $httpClient = new GuzzleClient([
                 'timeout' => $config->getTimeout(),
                 'connect_timeout' => $config->getConnectTimeout(),
@@ -72,7 +74,7 @@ final class VicidialClient
         }
 
         // Create stream handler
-        $streamHandler = fn (\Psr\Http\Message\RequestInterface $request): \Psr\Http\Message\ResponseInterface => $httpClient instanceof GuzzleClient
+        $streamHandler = fn (RequestInterface $request): ResponseInterface => $httpClient instanceof GuzzleClient
                 ? $httpClient->send($request, ['stream' => true])
                 : $httpClient->sendRequest($request);
 

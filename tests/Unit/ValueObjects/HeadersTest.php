@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\ValueObjects;
 
 use PHPUnit\Framework\TestCase;
+use VicidialApi\Enums\Transporter\ContentType;
 use VicidialApi\ValueObjects\ApiKey;
 use VicidialApi\ValueObjects\BasicAuth;
 use VicidialApi\ValueObjects\Transporter\Headers;
@@ -71,7 +72,7 @@ final class HeadersTest extends TestCase
     public function test_adds_content_type_header(): void
     {
         $headers = Headers::create()
-            ->withContentType(\VicidialApi\Enums\Transporter\ContentType::JSON);
+            ->withContentType(ContentType::JSON);
 
         $expected = [
             'Content-Type' => 'application/json',
@@ -84,7 +85,7 @@ final class HeadersTest extends TestCase
     {
         $headers = Headers::create()
             ->withContentType(
-                \VicidialApi\Enums\Transporter\ContentType::MULTIPART,
+                ContentType::MULTIPART,
                 '; boundary=----WebKitFormBoundary'
             );
 
@@ -111,7 +112,7 @@ final class HeadersTest extends TestCase
     {
         $apiKey = ApiKey::from('test_key');
         $headers = Headers::withAuthorization($apiKey)
-            ->withContentType(\VicidialApi\Enums\Transporter\ContentType::JSON)
+            ->withContentType(ContentType::JSON)
             ->withCustomHeader('X-Custom-Header', 'custom-value');
 
         $expected = [
