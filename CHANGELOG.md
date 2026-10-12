@@ -15,8 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `VicidialResponse::fields()` (positional values without the message text), `message()`, `rows()` and `columns()` (multi-line pipe / CSV / tab reports, keyed by header when `header=YES` was sent or a header line is detected), `statusCode()`, `headers()` and `header()` (raw HTTP layer). `from()` takes the HTTP status code and a header hint; `HttpTransporter` passes both.
 - `stage=json` bodies are decoded (objects via `get()`, lists via `rows()`); previously they fell into the `key: value` branch.
 - `Payload::parameter()` accessor.
+- `tests/Contract/RetryStatusCodeTest` covering status-code retries for throwing and non-throwing clients; `MockPsrClient` accepts queued `Throwable`s.
+- Idempotency guidance for retries (`RetryConfig` docblock, `docs/RELIABILITY_FEATURES.md`, quick reference, README): VICIdial has no idempotency keys, so network-error retries of `add_lead` can insert duplicates.
 - GitHub Actions CI (`.github/workflows/ci.yml`) running pint, rector, phpstan and phpunit on PHP 8.2, 8.3 and 8.4.
 - `docs/README.md` documentation index.
+
+### Fixed
+- **5xx responses were never retried.** `HttpTransporter` only inspected Guzzle's `ClientException` (4xx); a 5xx arrives as `ServerException` and was thrown as `TransportException` on the first attempt. It now inspects `BadResponseException` (both), and a PSR-18 client that returns an error response without throwing is retried on the status code too.
+- `RetryException` is now thrown when retries are exhausted (the code path was unreachable: the last attempt always threw `TransportException`). A failure on the first attempt that is not retryable still throws `TransportException`.
 
 ### Changed
 - `VicidialResponse` reports `error` (so `ok()` is false) for an empty body, an HTML body (`text/html` content type or `<!DOCTYPE` / `<html` start) and for HTTP status 400+ without a `SUCCESS:` prefix. These are proxy / web-server answers, never VICIdial output, and used to read as success.

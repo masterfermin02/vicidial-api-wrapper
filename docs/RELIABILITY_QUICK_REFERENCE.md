@@ -135,6 +135,19 @@ $config = VicidialConfig::create(
 );
 ```
 
+### Write Operations (no duplicate inserts)
+VICIdial has no idempotency keys: retrying `add_lead` after a timeout can insert the lead twice.
+Retry only when the server definitely rejected the request:
+```php
+$config = VicidialConfig::create(
+    retryConfig: RetryConfig::custom(
+        retryOn5xx: true,
+        retryOn429: true,
+        retryOnNetworkErrors: false,   // timeout = outcome unknown, do not repeat writes
+    ),
+);
+```
+
 ### Network Errors Only
 ```php
 $config = VicidialConfig::create(

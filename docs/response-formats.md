@@ -189,6 +189,16 @@ reported as `error` even though the body has no `ERROR:` prefix:
 
 `statusCode()`, `headers()` and `header('x-served-by')` expose the HTTP layer for debugging.
 
+## Response Status Detection
+
+`status()` is one of:
+
+- `success`: body starts with `SUCCESS:`, or a raw data payload (version, lists, reports) without `ERROR` in it
+- `error`: body starts with `ERROR:`, contains `ERROR`, is empty, is HTML, or came with HTTP status 400+
+- `notice`: body starts with `NOTICE:`
+
+`ok()` is true only for `success`; `failed()` is its inverse.
+
 ## Common Response Examples
 
 ### Agent API

@@ -275,7 +275,8 @@ $client = VicidialClient::make($config);
 try {
     // All requests are automatically:
     // - Logged with sanitized parameters
-    // - Retried on transient failures (5xx, network errors)
+    // - Retried on transient failures (5xx, 429, network errors)
+    //   (VICIdial has no idempotency keys: keep network-error retries off for clients that add leads)
     // - Timed out if they take too long
     $response = $client->agent()->updateFieldsResponse("gabriel", [
         'first_name' => 'John',

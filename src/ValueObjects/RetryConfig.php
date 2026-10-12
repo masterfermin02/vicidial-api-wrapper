@@ -8,6 +8,11 @@ use VicidialApi\Exceptions\ConfigurationException;
 
 /**
  * Configuration for retry behavior.
+ *
+ * Retries apply to every function, including writes. VICIdial has no idempotency
+ * keys: if `add_lead` times out after the server inserted the row, the retry inserts
+ * it again. Keep `retryOnNetworkErrors` off for clients that create records, or
+ * pass `duplicate_check` to `add_lead` and let VICIdial reject the duplicate.
  */
 final class RetryConfig
 {

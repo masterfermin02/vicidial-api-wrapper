@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace VicidialApi\Transporters;
 
 use Closure;
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\BadResponseException;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -182,121 +182,145 @@ final class HttpTransporter implements TransporterContract
         return $sanitized;
     }
 
+    /**
+     * Send the request, retrying according to the RetryConfig.
+     *
+     * Retries happen on three signals: an HTTP error status returned without an
+     * exception (plain PSR-18 clients), an HTTP error status delivered as an
+     * exception carrying the response (Guzzle's ClientException for 4xx and
+     * ServerException for 5xx), and network errors. When the last attempt still
+     * fails with an exception a RetryException (attempts > 1) or TransportException
+     * (single attempt) is thrown; when a non-throwing client keeps answering with an
+     * error status the last response is returned so the caller can inspect it.
+     */
     private function sendRequest(Closure $callable): ResponseInterface
     {
-        $attempt = 0;
         $maxAttempts = $this->retryConfig->isEnabled() ? $this->retryConfig->getMaxAttempts() : 1;
-        $lastException = null;
+        $attempt = 0;
 
-        while ($attempt < $maxAttempts) {
+        while (true) {
             $attempt++;
             $startTime = microtime(true);
 
+            $this->logger->debug('Vicidial API request', [
+                'attempt' => $attempt,
+                'max_attempts' => $maxAttempts,
+            ]);
+
             try {
-                $this->logger->debug('Vicidial API request', [
-                    'attempt' => $attempt,
-                    'max_attempts' => $maxAttempts,
-                ]);
-
                 $response = $callable();
-                $duration = (microtime(true) - $startTime) * 1000; // Convert to milliseconds
-
-                $this->logger->info('Vicidial API request successful', [
-                    'attempt' => $attempt,
-                    'status_code' => $response->getStatusCode(),
-                    'duration_ms' => round($duration, 2),
-                ]);
-
-                return $response;
-
             } catch (ClientExceptionInterface $clientException) {
-                $duration = (microtime(true) - $startTime) * 1000;
-                $lastException = $clientException;
+                $duration = round((microtime(true) - $startTime) * 1000, 2);
 
-                // Check if it's a ClientException (4xx/5xx HTTP error)
-                if ($clientException instanceof ClientException) {
-                    $statusCode = $clientException->getResponse()->getStatusCode();
+                // HTTP error status delivered as an exception (Guzzle: 4xx ClientException, 5xx ServerException)
+                if ($clientException instanceof BadResponseException) {
+                    $errorResponse = $clientException->getResponse();
+                    $statusCode = $errorResponse->getStatusCode();
 
                     $this->logger->warning('Vicidial API request failed with HTTP error', [
                         'attempt' => $attempt,
                         'status_code' => $statusCode,
-                        'duration_ms' => round($duration, 2),
+                        'duration_ms' => $duration,
                         'message' => $clientException->getMessage(),
                     ]);
 
-                    // Check if we should retry based on status code
-                    $shouldRetry = $this->shouldRetryStatusCode($statusCode, $attempt, $maxAttempts);
-
-                    if (! $shouldRetry) {
-                        $this->throwIfJsonError($clientException->getResponse(), $clientException->getResponse()->getBody()->getContents());
-                    }
-
-                    if ($attempt < $maxAttempts) {
-                        $delay = $this->retryConfig->calculateDelay($attempt);
-                        $this->logger->info('Retrying Vicidial API request', [
-                            'attempt' => $attempt,
-                            'next_attempt' => $attempt + 1,
-                            'delay_ms' => $delay,
-                            'reason' => "HTTP $statusCode",
-                        ]);
-                        usleep($delay * 1000); // Convert ms to microseconds
+                    if ($this->shouldRetryStatusCode($statusCode, $attempt, $maxAttempts)) {
+                        $this->waitBeforeRetry($attempt, "HTTP $statusCode");
 
                         continue;
                     }
 
-                    $this->throwIfJsonError($clientException->getResponse(), $clientException->getResponse()->getBody()->getContents());
+                    $this->throwIfJsonError($errorResponse, $errorResponse->getBody()->getContents());
+                    $this->throwFinal($clientException, $attempt);
                 }
 
-                // Check if it's a network exception (connection error, timeout, etc.)
                 if ($clientException instanceof NetworkExceptionInterface) {
                     $this->logger->error('Vicidial API request failed with network error', [
                         'attempt' => $attempt,
-                        'duration_ms' => round($duration, 2),
+                        'duration_ms' => $duration,
                         'error' => $clientException->getMessage(),
                     ]);
 
-                    $shouldRetry = $this->retryConfig->isEnabled()
-                        && $this->retryConfig->shouldRetryOnNetworkErrors()
-                        && $attempt < $maxAttempts;
-
-                    if ($shouldRetry) {
-                        $delay = $this->retryConfig->calculateDelay($attempt);
-                        $this->logger->info('Retrying Vicidial API request after network error', [
-                            'attempt' => $attempt,
-                            'next_attempt' => $attempt + 1,
-                            'delay_ms' => $delay,
-                        ]);
-                        usleep($delay * 1000);
+                    if ($this->retryConfig->isEnabled() && $this->retryConfig->shouldRetryOnNetworkErrors() && $attempt < $maxAttempts) {
+                        $this->waitBeforeRetry($attempt, 'network error');
 
                         continue;
                     }
+
+                    $this->throwFinal($clientException, $attempt);
                 }
 
-                // If we get here and haven't retried, throw the exception
-                throw new TransportException($clientException);
-            }
-        }
+                $this->logger->error('Vicidial API request failed', [
+                    'attempt' => $attempt,
+                    'duration_ms' => $duration,
+                    'error' => $clientException->getMessage(),
+                ]);
 
-        // If we exhausted all retries, throw RetryException with attempt count
-        $this->logger->error('Vicidial API request failed after all retries', [
-            'attempts' => $attempt,
-            'error' => $lastException?->getMessage(),
+                $this->throwFinal($clientException, $attempt);
+            }
+
+            $duration = round((microtime(true) - $startTime) * 1000, 2);
+            $statusCode = $response->getStatusCode();
+
+            // HTTP error status returned without an exception (plain PSR-18 clients)
+            if ($this->shouldRetryStatusCode($statusCode, $attempt, $maxAttempts)) {
+                $this->logger->warning('Vicidial API request failed with HTTP error', [
+                    'attempt' => $attempt,
+                    'status_code' => $statusCode,
+                    'duration_ms' => $duration,
+                ]);
+
+                $this->waitBeforeRetry($attempt, "HTTP $statusCode");
+
+                continue;
+            }
+
+            $this->logger->info($statusCode < 400 ? 'Vicidial API request successful' : 'Vicidial API request completed with HTTP error status', [
+                'attempt' => $attempt,
+                'status_code' => $statusCode,
+                'duration_ms' => $duration,
+            ]);
+
+            return $response;
+        }
+    }
+
+    private function waitBeforeRetry(int $attempt, string $reason): void
+    {
+        $delay = $this->retryConfig->calculateDelay($attempt);
+
+        $this->logger->info('Retrying Vicidial API request', [
+            'attempt' => $attempt,
+            'next_attempt' => $attempt + 1,
+            'delay_ms' => $delay,
+            'reason' => $reason,
         ]);
 
-        // This should never happen, but if no exception was caught, throw a generic one
-        if (! $lastException instanceof ClientExceptionInterface) {
+        if ($delay > 0) {
+            usleep($delay * 1000);
+        }
+    }
+
+    /**
+     * Give up: RetryException when retries were made, TransportException otherwise.
+     */
+    private function throwFinal(ClientExceptionInterface $clientException, int $attempt): never
+    {
+        if ($attempt > 1) {
+            $this->logger->error('Vicidial API request failed after all retries', [
+                'attempts' => $attempt,
+                'error' => $clientException->getMessage(),
+            ]);
+
             throw new RetryException(
-                'Request failed after all retries with no exception captured',
-                $attempt
+                sprintf('Request failed after %d attempts: %s', $attempt, $clientException->getMessage()),
+                $attempt,
+                0,
+                new TransportException($clientException)
             );
         }
 
-        throw new RetryException(
-            sprintf('Request failed after %d attempts: %s', $attempt, $lastException->getMessage()),
-            $attempt,
-            0,
-            new TransportException($lastException)
-        );
+        throw new TransportException($clientException);
     }
 
     /**

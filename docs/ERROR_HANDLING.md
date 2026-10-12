@@ -162,9 +162,11 @@ try {
 ### RetryException
 **Retry attempts exhausted.**
 
-Thrown when all retry attempts have been exhausted and the request still failed. This happens when automatic retries are enabled and all attempts fail.
+Thrown when all retry attempts have been exhausted and the request still failed. This happens when automatic retries are enabled, at least one retry was made, and the last attempt still raised an exception (network error, or an HTTP error delivered as an exception by Guzzle). A failure on the very first attempt that is not retryable throws `TransportException` instead.
 
-Provides the number of attempts made via `getAttemptsMade()`.
+Provides the number of attempts made via `getAttemptsMade()`; `getPrevious()` is the `TransportException` wrapping the last client exception.
+
+A plain PSR-18 client that *returns* error responses instead of throwing never produces this exception: after the last attempt the error response is returned and `VicidialResponse::failed()` is true, with `statusCode()` set.
 
 ```php
 use VicidialApi\Exceptions\RetryException;

@@ -18,7 +18,7 @@ final class MockPsrClient implements ClientInterface
     private array $requests = [];
 
     /**
-     * @param  array<ResponseInterface>  $responses
+     * @param  array<ResponseInterface|\Throwable>  $responses  queued answers; a Throwable entry is thrown in its turn
      */
     public function __construct(
         private array $responses = [],
@@ -37,7 +37,13 @@ final class MockPsrClient implements ClientInterface
             return new Response(200, ['Content-Type' => 'text/plain'], 'SUCCESS');
         }
 
-        return array_shift($this->responses);
+        $next = array_shift($this->responses);
+
+        if ($next instanceof \Throwable) {
+            throw $next;
+        }
+
+        return $next;
     }
 
     public function addResponse(ResponseInterface $response): self

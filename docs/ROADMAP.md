@@ -36,10 +36,10 @@ what was fixed, and what is still worth doing. It is meant to be edited: delete 
 - ~~`stage=csv|tab|json` reports not parsed~~ resolved: multi-line pipe / CSV / tab output becomes `rows()` (keyed by `columns()` when `header=YES` was sent or a header line is detected); `stage=json` is decoded. JSON is tried before the `key: value` branch, which used to swallow it.
 - ~~Document `data_N` / `field_N` or expose `fields()`~~ resolved: `fields()` returns the clean positional values, `message()` the text; `data_N` keeps its historical shape for compatibility. Documented in `docs/RESPONSE_DTO.md` and `docs/response-formats.md`.
 
-### 4. Transport
-- `HttpTransporter::sendRequest()` catches `ClientExceptionInterface` but only Guzzle's `ClientException` carries a response; a PSR-18 client that returns 5xx **without throwing** is never retried. Retry on the response status code, not only on exceptions.
-- Add an `Idempotency` note: VICIdial has no idempotency keys, so retrying `add_lead` after a timeout can create duplicates. Default `RetryConfig` should retry only read-only functions, or the docs must say so loudly.
-- Expose the raw PSR-7 response (status, headers) on `VicidialResponse` for debugging proxies and load balancers (`webserver` function exists for that reason).
+### 4. Transport: done in 4.2.0
+- ~~5xx without an exception never retried; Guzzle 5xx (`ServerException`) never retried either~~ resolved: the transporter retries on the response status code for non-throwing PSR-18 clients, and inspects `BadResponseException` (both `ClientException` and `ServerException`) for Guzzle. `RetryException` is now actually thrown after exhausted retries (it was unreachable before).
+- ~~Idempotency note~~ resolved: `RetryConfig` docblock, `docs/RELIABILITY_FEATURES.md` ("Retries are not idempotent"), the quick reference and the README warn that `add_lead` retries can duplicate and show the split read/write client setup.
+- ~~Expose raw PSR-7 status and headers~~ resolved: `VicidialResponse::statusCode()`, `headers()`, `header()`.
 
 ### 5. Developer experience
 - Laravel service provider + facade + `config/vicidial.php` (the author's other projects are Laravel; this is the most requested integration for PHP dialer tooling).

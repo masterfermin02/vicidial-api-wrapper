@@ -167,6 +167,11 @@ By default, the wrapper retries:
    - DNS resolution failures
    - SSL/TLS handshake failures
 
+Status-code retries work with any PSR-18 client: Guzzle delivers 4xx/5xx as `ClientException` /
+`ServerException` and the wrapper reads the status from the exception; a client that returns the error
+response without throwing is retried on the response status (4.2.0+; before that only Guzzle 4xx were inspected,
+so 5xx were never retried).
+
 ### What Doesn't Get Retried?
 
 - **4xx Client Errors** (except 429)
@@ -174,6 +179,24 @@ By default, the wrapper retries:
   - 401 Unauthorized
   - 404 Not Found
   - These indicate programming errors, not transient issues
+- **VICIdial `ERROR:` bodies**: they come with HTTP 200 and are not transient (wrong password, missing permission, invalid lead).
+
+### Retries are not idempotent: duplicates are possible
+
+VICIdial has **no idempotency keys**. If `add_lead` (or `update_lead` with `insert_if_not_found=Y`,
+`add_user`, `add_list`, ...) times out *after* the server inserted the row, the retry inserts it again.
+Reads (`version`, `*_list`, `*_status`, `*_info`, `lead_search`, reports) are safe to retry; writes are not.
+
+Options, pick one per client:
+
+- enable retries only on clients used for reads, and create a second client with `RetryConfig::disabled()` for writes;
+- keep `retryOn5xx` / `retryOn429` (the server rejected the request, nothing was written) but set `retryOnNetworkErrors: false` (a timeout leaves the outcome unknown);
+- pass `duplicate_check` to `add_lead` (for example `DUPSYS`) so VICIdial rejects the repeat.
+
+```php
+$reads  = VicidialClient::make(VicidialConfig::create(host: $h, user: $u, pass: $p, retryConfig: RetryConfig::default()));
+$writes = VicidialClient::make(VicidialConfig::create(host: $h, user: $u, pass: $p, retryConfig: RetryConfig::custom(retryOnNetworkErrors: false)));
+```
 
 ### Exponential Backoff with Jitter
 
