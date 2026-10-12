@@ -112,7 +112,7 @@ final class Factory
 
     /**
      * Sets the base URI for the requests.
-     * If no URI is provided the factory will use the default OpenAI API URI.
+     * If no URI is provided the factory will default to "localhost".
      */
     public function withBaseUri(string $baseUri): self
     {
@@ -152,7 +152,7 @@ final class Factory
     }
 
     /**
-     * Creates a new Open AI Client.
+     * Creates a new Vicidial Client.
      */
     public function make(): Client
     {

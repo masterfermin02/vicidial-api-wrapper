@@ -156,4 +156,25 @@ interface AgentContract
     public function forceFronterLeave3way(string $agentUser, string $status): string;
 
     public function forceFronterAudioStop(string $agentUser, string $status): string;
+
+    /**
+     * Sends a stereo recording BEGIN/END signal or asks for the STATUS of agent-controlled stereo recording.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function stereoRecording(string $agentUser, array $options): string;
+
+    /**
+     * Sends a text alert and/or confetti effect to one or more active agent screens.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function sendNotification(array $options): string;
+
+    /**
+     * Refreshes one or more panels on the agent screen.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function refreshPanel(string $agentUser, array $options): string;
 }

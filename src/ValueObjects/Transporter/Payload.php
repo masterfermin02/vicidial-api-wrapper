@@ -143,7 +143,7 @@ final class Payload
 
         $body = null;
 
-        $uri = $baseUri->toString().$this->uri->toString();
+        $uri = rtrim($baseUri->toString(), '/').'/'.ltrim($this->uri->toString(), '/');
 
         if ($this->method === Method::GET && $this->parameters !== []) {
             foreach ($this->parameters as $key => $value) {

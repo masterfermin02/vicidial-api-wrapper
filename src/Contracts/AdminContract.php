@@ -325,4 +325,109 @@ interface AdminContract
      * @param  array<string, string>  $options
      */
     public function copyUser(array $options): string;
+
+    /**
+     * Output a list of audio files from the audio store.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function soundsList(array $options): string;
+
+    /**
+     * Update multiple leads in vicidial_list with a single set of field values.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function batchUpdateLead(array $options): string;
+
+    /**
+     * Show the count of agents available to take calls in the selected in-groups.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function agentInGroupAvailability(array $options): string;
+
+    /**
+     * Output all lead data for a lead, optionally including custom fields.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function leadAllInfo(array $options): string;
+
+    /**
+     * Search for leads in vicidial_list by one or more phone numbers.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function leadSearch(array $options): string;
+
+    /**
+     * Add new inbound DID entries copied from an existing DID.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function copyDid(array $options): string;
+
+    /**
+     * Remove a phone number from a DNC list.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function deleteDncPhone(array $options): string;
+
+    /**
+     * Remove a phone number from a Filter Phone Group.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function deleteFpgPhone(array $options): string;
+
+    /**
+     * Add a group of lead_ids (up to 1000) to the vicidial_hopper table.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function hopperBulkInsert(array $options): string;
+
+    /**
+     * Update, add or list alternate dispo call URL entries for a campaign.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function updateAltUrl(array $options): string;
+
+    /**
+     * Update, add, list or delete campaign preset entries.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function updatePresets(array $options): string;
+
+    /**
+     * Move a lead from the archive back to the active leads table.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function leadDearchive(array $options): string;
+
+    /**
+     * Update a remote agent entry.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function updateRemoteAgent(array $options): string;
+
+    /**
+     * Display information about one user.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function userDetails(array $options): string;
+
+    /**
+     * Copy an existing phone to a new extension.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function copyPhone(array $options): string;
 }

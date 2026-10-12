@@ -22,7 +22,7 @@ final class Agent implements AgentContract
     public function hangup(string $agentUser): string
     {
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'external_hangup',
             'value' => '1',
         ]);
@@ -38,7 +38,7 @@ final class Agent implements AgentContract
     public function hangupResponse(string $agentUser): VicidialResponse
     {
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'external_hangup',
             'value' => '1',
         ]);
@@ -56,7 +56,7 @@ final class Agent implements AgentContract
     public function dispo(string $agentUser, array $options): string
     {
         $options += [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'external_status',
         ];
 
@@ -75,7 +75,7 @@ final class Agent implements AgentContract
     public function dispoResponse(string $agentUser, array $options): VicidialResponse
     {
         $options += [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'external_status',
         ];
 
@@ -90,9 +90,9 @@ final class Agent implements AgentContract
     public function pause(string $agentUser, string $status): string
     {
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'external_pause',
-            'value' => urlencode(trim($status)),
+            'value' => trim($status),
         ]);
 
         return $this->transporter->requestContent($payload);
@@ -106,9 +106,9 @@ final class Agent implements AgentContract
     public function pauseResponse(string $agentUser, string $status): VicidialResponse
     {
         return $this->requestResponse(self::AGENT_URL, [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'external_pause',
-            'value' => urlencode(trim($status)),
+            'value' => trim($status),
         ]);
     }
 
@@ -120,7 +120,7 @@ final class Agent implements AgentContract
     public function pauseCode(string $agentUser, string $code): string
     {
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'pause_code',
             'value' => $code,
         ]);
@@ -164,7 +164,7 @@ final class Agent implements AgentContract
     public function logout(string $agentUser): string
     {
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'logout',
             'value' => 'LOGOUT',
         ]);
@@ -186,10 +186,10 @@ final class Agent implements AgentContract
         }
 
         $options += [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'external_dial',
-            'value' => urlencode(trim($options['phone_number'])),
-            'phone_code' => urlencode(trim($options['phone_code'] ?? '')),
+            'value' => trim($options['phone_number']),
+            'phone_code' => trim($options['phone_code'] ?? ''),
             'search' => 'YES',
             'preview' => 'NO',
             'focus' => 'YES',
@@ -214,10 +214,10 @@ final class Agent implements AgentContract
         }
 
         $options += [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'external_dial',
-            'value' => urlencode(trim($options['phone_number'])),
-            'phone_code' => urlencode(trim($options['phone_code'] ?? '')),
+            'value' => trim($options['phone_number']),
+            'phone_code' => trim($options['phone_code'] ?? ''),
             'search' => 'YES',
             'preview' => 'NO',
             'focus' => 'YES',
@@ -234,9 +234,9 @@ final class Agent implements AgentContract
     public function previewDial(string $agentUser, string $value): string
     {
         $options = [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'preview_dial_action',
-            'value' => urlencode(trim($value)),
+            'value' => trim($value),
         ];
 
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
@@ -254,7 +254,7 @@ final class Agent implements AgentContract
     public function addLead(string $agentUser, array $options): string
     {
         $options += [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'external_add_lead',
         ];
 
@@ -279,7 +279,7 @@ final class Agent implements AgentContract
     {
 
         $options += [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'change_ingroups',
         ];
 
@@ -312,7 +312,7 @@ final class Agent implements AgentContract
         }
 
         $options = $fieldsToUpdate + [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'update_fields',
         ];
 
@@ -345,7 +345,7 @@ final class Agent implements AgentContract
         }
 
         $options = $fieldsToUpdate + [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'update_fields',
         ];
 
@@ -363,7 +363,7 @@ final class Agent implements AgentContract
     public function setTimerAction(string $agentUser, array $options): string
     {
         $options += [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'set_timer_action',
         ];
 
@@ -484,7 +484,7 @@ final class Agent implements AgentContract
     {
         $options = [
             'function' => 'call_agent',
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'value' => $value,
         ];
 
@@ -516,9 +516,9 @@ final class Agent implements AgentContract
     public function webPhoneUrl(string $agentUser, string $value): string
     {
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'webphone_url',
-            'value' => urlencode(trim($value)),
+            'value' => trim($value),
         ]);
 
         return $this->transporter->requestContent($payload);
@@ -548,10 +548,11 @@ final class Agent implements AgentContract
      */
     public function switchLead(string $agentUser, string $leadId): string
     {
+        // The Agent API reads `lead_id` (or `vendor_lead_code`), not `value`.
         $options = [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'switch_lead',
-            'value' => urlencode(trim($leadId)),
+            'lead_id' => trim($leadId),
         ];
 
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
@@ -586,9 +587,9 @@ final class Agent implements AgentContract
     public function callsInQueueCount(string $agentUser, string $status): string
     {
         $options = [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'calls_in_queue_count',
-            'value' => urlencode(trim($status)),
+            'value' => trim($status),
         ];
 
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
@@ -602,9 +603,9 @@ final class Agent implements AgentContract
     public function forceFronterLeave3way(string $agentUser, string $status): string
     {
         $options = [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'force_fronter_leave_3way',
-            'value' => urlencode(trim($status)),
+            'value' => trim($status),
         ];
 
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
@@ -618,13 +619,116 @@ final class Agent implements AgentContract
     public function forceFronterAudioStop(string $agentUser, string $status): string
     {
         $options = [
-            'agent_user' => urlencode(trim($agentUser)),
+            'agent_user' => trim($agentUser),
             'function' => 'force_fronter_audio_stop',
-            'value' => urlencode(trim($status)),
+            'value' => trim($status),
         ];
 
         $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
 
         return $this->transporter->requestContent($payload);
+    }
+
+    /**
+     * Sends a stereo recording BEGIN/END signal or asks for the STATUS of agent-controlled stereo recording.
+     *
+     * @param  array<string, string>  $options  value (BEGIN, END, STATUS), optional stage (filename suffix, max 14 chars)
+     *
+     * @throws Exception
+     */
+    public function stereoRecording(string $agentUser, array $options): string
+    {
+        $options += [
+            'agent_user' => trim($agentUser),
+            'function' => 'stereo_recording',
+        ];
+
+        return $this->requestContent(self::AGENT_URL, $options);
+    }
+
+    /**
+     * Stereo recording with VicidialResponse DTO
+     *
+     * @param  array<string, string>  $options
+     *
+     * @throws Exception
+     */
+    public function stereoRecordingResponse(string $agentUser, array $options): VicidialResponse
+    {
+        $options += [
+            'agent_user' => trim($agentUser),
+            'function' => 'stereo_recording',
+        ];
+
+        return $this->requestResponse(self::AGENT_URL, $options);
+    }
+
+    /**
+     * Sends a customizable text alert and/or confetti effect to one or more active agent screens.
+     * Requires "Agent API Notifications" to be enabled on the Vicidial system.
+     *
+     * @param  array<string, string>  $options  recipient_type (USER, USER_GROUP, CAMPAIGN), recipient, notification_text,
+     *                                          notification_date, text_size, text_font, text_weight, text_color,
+     *                                          show_confetti (Y/N), duration, maxParticleCount, particleSpeed
+     *
+     * @throws Exception
+     */
+    public function sendNotification(array $options): string
+    {
+        $options += [
+            'function' => 'send_notification',
+        ];
+
+        return $this->requestContent(self::AGENT_URL, $options);
+    }
+
+    /**
+     * Send notification with VicidialResponse DTO
+     *
+     * @param  array<string, string>  $options
+     *
+     * @throws Exception
+     */
+    public function sendNotificationResponse(array $options): VicidialResponse
+    {
+        $options += [
+            'function' => 'send_notification',
+        ];
+
+        return $this->requestResponse(self::AGENT_URL, $options);
+    }
+
+    /**
+     * Refreshes one or more panels on the agent screen (script, script2, callbacks, form, email, chat).
+     *
+     * @param  array<string, string>  $options  any of formreload, scriptreload, script2reload, emailreload, chatreload, callbacksreload set to '1'
+     *
+     * @throws Exception
+     */
+    public function refreshPanel(string $agentUser, array $options): string
+    {
+        $options += [
+            'agent_user' => trim($agentUser),
+            'function' => 'refresh_panel',
+        ];
+
+        return $this->requestContent(self::AGENT_URL, $options);
+    }
+
+    /**
+     * Refresh panel with VicidialResponse DTO
+     *
+     * @param  array<string, string>  $options
+     *
+     * @throws Exception
+     */
+    public function refreshPanelResponse(string $agentUser, array $options): VicidialResponse
+    {
+        $options += [
+            'agent_user' => trim($agentUser),
+            'function' => 'refresh_panel',
+        ];
+
+        return $this->requestResponse(self::AGENT_URL, $options);
     }
 }

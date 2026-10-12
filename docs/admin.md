@@ -63,6 +63,21 @@ API functions:
 - add_fpg_phone - adds a phone number to a Filter Phone Group
 - campaigns_list - displays information about all campaigns in the system
 - hopper_list - displays information about leads in the hopper for a campaign
+- sounds_list - outputs a list of audio files from the audio store
+- batch_update_lead - updates multiple leads in vicidial_list with single set of field values (limited field options)
+- agent_ingroup_availability - shows a total count of agents available to take calls in selected ingroups
+- lead_all_info - outputs all lead data for a lead(optionally including custom fields)
+- lead_search - searches for leads in the vicidial_list table by phone numbers
+- copy_did - adds new Inbound DID entries to the system, copied from an existing DID entry
+- delete_dnc_phone - removes a phone number from one of the DNC lists
+- delete_fpg_phone - removes a phone number from a Filter Phone Group
+- hopper_bulk_insert - adds group of lead_ids to the vicidial_hopper table
+- update_alt_url - updates/adds/displays alternate dispo call url entries for a campaign
+- update_presets - updates/adds/displays/deletes campaign preset entries
+- lead_dearchive - moves a lead from the archive to active leads table
+- update_remote_agent - updates some remote agent settings in the system
+- user_details - display information about one user
+- copy_phone - copies a phone in the system
 
 
 New scripts:
@@ -2104,3 +2119,855 @@ SUCCESS: update_cid_group_entry CID GROUP ENTRIES HAVE BEEN UPDATED - 6666|1101|
 
 
 ERROR: NO FUNCTION SPECIFIED
+
+
+
+
+--------------------------------------------------------------------------------
+sounds_list - outputs a list of audio files from the audio store
+
+NOTE: api user for this function must have user_level set to 7 or higher
+
+OPTIONAL FIELDS-
+format -		format of the output(tab, link, selectframe)
+stage -			how to sort the output(date, size, name)
+comments -		name of the field to populate
+
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=sounds_list&format=selectframe&comments=fieldname&stage=date
+
+Example responses:
+<success is inferred by output of audio files list>
+
+ERROR: sounds_list USER DOES NOT HAVE PERMISSION TO VIEW SOUNDS LIST
+ERROR: audio store web directory does not exist: |6666|sounds_list|/srv/www/htdocs/1234|
+ERROR: sounds_list CENTRAL SOUND CONTROL IS NOT ACTIVE
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->soundsList(['format' => 'selectframe', 'stage' => 'date']);
+
+     // Or get a structured response:
+     $response = $adminApi->soundsListResponse(['format' => 'selectframe', 'stage' => 'date']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+batch_update_lead - updates multiple leads in vicidial_list with single set of field values (limited field options)
+
+NOTE: api user for this function must have modify_leads set to 1 and user_level must be set to 8 or higher
+NOTE: This function will first find which leads exist and then update them all at once. As such, there will not be admin log entries associated with each individual lead modified
+
+REQUIRED FIELDS-
+lead_ids -		must be all numbers and commas, 1-9 digit numbers separate by a comma
+source -		description of what originated the API call (maximum 20 characters)
+
+SETTINGS FIELDS-
+list_exists_check -	Y or N, default is N. If the list_id_field is not a defined list in the system, it will ERROR and not update the leads.
+reset_lead -		Y or N, Setting this to Y will reset the called-since-last-reset flag of the lead, default is N.
+records -		maximum number of records to update (defaults to '100'[most recently created leads])
+archived_lead -		Y or N, Setting this to Y will query only the vicidial_list_archive leads for the leads search, updates and details, default is N.
+
+EDITABLE FIELDS-
+user_field -		1-20 characters, this updates the 'user' field in the vicidial_list table
+list_id_field -		3-12 digits, this updates the 'list_id' field in the vicidial_list table
+status -		1-6 characters, not punctuation or spaces
+vendor_lead_code -	1-20 characters
+source_id  -		1-50 characters
+gmt_offset_now -	overridden by auto-lookup of phone_code and area_code portion of phone number if applicable
+title -			1-4 characters
+first_name -		1-30 characters
+middle_initial -	1 character
+last_name -		1-30 characters
+address1 -		1-100 characters
+address2 -		1-100 characters
+address3 -		1-100 characters
+city -			1-50 characters
+state -			2 characters
+province -		1-50 characters
+postal_code -		1-10 characters
+country_code -		3 characters
+gender -		U, M, F (Undefined, Male, Female) - defaults to 'U'
+date_of_birth -		YYYY-MM-DD
+alt_phone -		1-12 characters
+email -			1-70 characters
+security_phrase -	1-100 characters
+comments -		1-255 characters
+rank -			1-5 digits
+owner -			1-20 characters (user ID, Territory or user group)
+called_count -		digits only, the number of attempts dialing the lead
+phone_code -		digits only, can be 1-4 digits
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=batch_update_lead&lead_ids=2345,2346&list_id_field=138
+
+Example responses:
+SUCCESS: batch_update_lead LEADS HAVE BEEN UPDATED - 6666|2|2345,2346
+ERROR: batch_update_lead USER DOES NOT HAVE PERMISSION TO UPDATE LEADS IN THE SYSTEM - 6666|0|
+ERROR: batch_update_lead NO LEADS DEFINED - 6666|
+ERROR: batch_update_lead NOT AN ALLOWED LIST ID - 6666|138
+ERROR: batch_update_lead NOT A DEFINED LIST ID, LIST EXISTS CHECK ENABLED - 6666|138
+ERROR: batch_update_lead NO LEADS FOUND - 6666|0|2345,2346
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->batchUpdateLead(['lead_ids' => '193715,1677922', 'status' => 'NEW', 'reset_lead' => 'Y']);
+
+     // Or get a structured response:
+     $response = $adminApi->batchUpdateLeadResponse(['lead_ids' => '193715,1677922', 'status' => 'NEW', 'reset_lead' => 'Y']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+agent_ingroup_availability - shows a total count of agents available to take calls in selected ingroups,
+    and also a per-ingroup count of the agents currently available to take calls
+
+NOTE: api user for this function must have user_level set to 8 or higher and "View Reports" enabled
+
+REQUIRED FIELDS-
+source -		description of what originated the API call (maximum 20 characters)
+in_groups -		comma-delimited list of ingroups to return counts on
+queue_groups -		comma-delimited list of queue_groups to query for ingroups to return counts on
+			* Either in_groups or queue_groups are required.  Both can be used, but only one of the two is required
+
+OPTIONAL FIELDS-
+display_field -		By default the ingroup breakdown will use the group_id from the vicidial_inbound_groups table as the key values
+			If you set "display_field" to another column in the vicidial_inbound_groups table, the value from that column will
+			be used instead, if there is a value.  If there is no value (or the column doesn't exist) the group_id will be used by default.
+stage -			Set to "json" to return data in JSON format, otherwise the results will be comma-delimited
+summary_name -		When returning results in JSON format, you can set this value to define a key name for the value of total agents available.  Default is "availableCount"
+ingroup_set_name -	When returning results in JSON format, you can set this value to define a key name for the array containing the ingroup count breakdown.  Default is "states"
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?user=6666&pass=1234&source=test&function=agent_ingroup_availability&in_groups=INGROUP1,INGROUP2,INGROUP3
+http://server/vicidial/non_agent_api.php?user=6666&pass=1234&source=test&function=agent_ingroup_availability&queue_groups=QUEUEGRP1,QUEUEGRP2&display_field=custom_five&stage=JSON&ingroup_set_name=INGROUPS
+
+
+Example responses:
+ERROR: agent_ingroup_availability USER DOES NOT HAVE PERMISSION TO GET AGENT INFO - 6666|0
+ERROR: NO INGROUPS DEFINED
+ERROR: NO INGROUPS FOUND
+
+Successful responses:
+
+Successful CSV response:
+GROUP,AVAILABLE COUNT
+AGENTS,5
+INGROUP1,5
+INGROUP2,2
+INGROUP3,0
+
+Successful JSON response, using "INGROUPS" as the ingroup_set_name:
+{"availableCount": 5,
+"INGROUPS": {
+"INGROUP1": 5,
+"INGROUP2": 3,
+"INGROUP3": 1
+}
+}
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->agentInGroupAvailability(['in_groups' => 'INGROUP1,INGROUP2', 'stage' => 'json']);
+
+     // Or get a structured response:
+     $response = $adminApi->agentInGroupAvailabilityResponse(['in_groups' => 'INGROUP1,INGROUP2', 'stage' => 'json']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+lead_all_info - outputs all lead data for a lead(optionally including custom fields)
+
+NOTE: api user for this function must have user_level set to 7 or higher and "view reports" enabled and modify_leads set to 1-5
+
+REQUIRED FIELDS-
+source -		description of what originated the API call (maximum 20 characters)
+lead_id -		1-10 digits
+
+OPTIONAL FIELDS-
+phone_number -		6-19 digits, can be used in place of a lead_id(may return multiple records, up to 1000, most recently added lead first)
+custom_fields -		Y or N, default is N. If the field you want to pull is a custom field or not
+force_entry_list_id -	3-12 digits, will override the lead's assigned entry_list_id to look for custom fields data for this lead from a different list
+archived_lead -		Y or N, Setting this to Y will query only the vicidial_list_archive leads for the leads details, default is N.
+
+SETTINGS FIELDS-
+stage -			the format of the exported data: csv, tab, newline, json, pipe(default)
+header -		include a header(YES) or not(NO). This is optional, default is not to include a header
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=lead_all_info&lead_id=1079425
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=lead_all_info&phone_number=3125551212
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=lead_all_info&lead_id=1079425&header=YES&custom_fields=Y
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=lead_all_info&lead_id=1079425&header=YES&custom_fields=Y&force_entry_list_id=999880
+
+Example responses:
+ERROR: lead_all_info USER DOES NOT HAVE PERMISSION TO GET LEAD INFO - 6666|0
+ERROR: lead_all_info LIST NOT FOUND - 6666|||
+ERROR: lead_all_info LEAD NOT FOUND - 6666|||
+
+A SUCCESS response will not show "SUCCESS", but instead will just print the results in the following format:
+status|user|vendor_lead_code|source_id|list_id|gmt_offset_now|phone_code|phone_number|title|first_name|middle_initial|last_name|address1|address2|address3|city|state|province|postal_code|country_code|gender|date_of_birth|alt_phone|email|security_phrase|comments|called_count|last_local_call_time|rank|owner|entry_list_id|lead_id
+TD|6666|554443||501|-4.00|1|9998887112|Mr|Billy'Oj|U|O'Reillyo|ad1|ad2|ad3|city next|FL|U|33777||U|0000-00-00|bobo'brien|test@test.com||2017-06-01 18:38:41|79|2017-06-09 14:53:27|0|4646|0|98234789
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->leadAllInfo(['lead_id' => '1079425', 'custom_fields' => 'Y', 'header' => 'YES']);
+
+     // Or get a structured response:
+     $response = $adminApi->leadAllInfoResponse(['lead_id' => '1079425', 'custom_fields' => 'Y', 'header' => 'YES']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+lead_search - searches for leads in the vicidial_list table by phone numbers
+
+NOTE: api user for this function must have user_level set to 7 or higher and "view reports" enabled and modify_leads set to 1-5
+
+REQUIRED FIELDS-
+phone_number -		6-19 digits(multiple separated by a comma ',', for example: 3125551212,9055551212,4075551212)
+source -		description of what originated the API call (maximum 20 characters)
+
+SETTINGS FIELDS-
+records -		number of records to display in results if more than 1 found (defaults to '1000'[most recently inserted leads displayed first])
+archived_lead -		Y or N, Setting this to Y will query only the vicidial_list_archive leads for the leads search and details, default is N.
+
+SETTINGS FIELDS-
+header -		include a header(YES) or not(NO). This is optional, default is not to include a header
+
+NOTES-
+- If no results are found for any of the searched phone numbers, then an error will be displayed
+- If there are any matches found, every phone number searched for will have one line in the output, detailed below
+- If more than 1 matching lead is found for a phone number, then the matching lead_ids will be separated by a dash '-'
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=lead_search&phone_number=9998885112,9998887112,9998886112,4075551212
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=lead_search&phone_number=9998885112,9055551212,9998886112,4075551212&header=YES
+
+Example responses:
+ERROR: lead_search USER DOES NOT HAVE PERMISSION TO SEARCH FOR LEADS - 6666|0
+ERROR: lead_search NO VALID SEARCH METHOD - ||||
+ERROR: lead_search NO MATCHES FOUND IN THE SYSTEM - ||||
+
+A SUCCESS response will not show "SUCCESS", but instead will just print the results in the following format:
+search_key|records_found|lead_ids
+9998885112|4|1949076-1946517-1943958-1941399
+9998887112|8|1946941-1946940-1946939-1946875-1946805-1946656-1946655-1944382
+9998886112|1|1946891
+4075551212|0|
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->leadSearch(['phone_number' => '9998885112,9998887112', 'header' => 'YES']);
+
+     // Or get a structured response:
+     $response = $adminApi->leadSearchResponse(['phone_number' => '9998885112,9998887112', 'header' => 'YES']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+copy_did - adds new Inbound DID entries to the system, copied from an existing DID entry
+
+NOTE: api user for this function must have user_level set to 8 or higher and "Modify DIDs" enabled
+
+REQUIRED FIELDS-
+source_did_pattern -	2-50 characters, must be a valid DID in the system
+			   NOTE: special characters in the source_did_pattern need to be URL encoded, for example the plus sign '+' must be sent as '%2B'
+new_dids -		2-2000 characters, for multiple DIDs separate with a comma
+			   NOTE: special characters in the new_dids need to be URL encoded, for example the plus sign '+' must be sent as '%2B'
+source -		description of what originated the API call (maximum 20 characters)
+
+OPTIONAL FIELDS-
+did_description -	6-50 characters, if left blank, the source DID description will be used
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=copy_did&source_did_pattern=%2B1727555112&did_description=Updated+test+API+DID&new_dids=%2B1727555119
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=copy_did&source_did_pattern=7275551114&new_dids=7275553338,7275553337,7275553336
+
+Example responses:
+ERROR: copy_did USER DOES NOT HAVE PERMISSION TO ADD DIDS - 6666
+ERROR: copy_did YOU MUST USE ALL REQUIRED FIELDS - 6666|1|1
+ERROR: copy_did NOT AN ALLOWED DID - 98762
+ERROR: copy_did DID DESCRIPTION MUST BE EITHER BLANK OR FROM 6 TO 50 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|012
+NOTICE: copy_did DID ALREADY EXISTS - 6666|1000
+NOTICE: copy_did DID HAS BEEN ADDED - 6666|1000|1001|12|1
+ERROR: copy_did NO DIDS ADDED - 6666|1000|0|1
+SUCCESS: copy_did DIDS HAVE BEEN ADDED - 6666|1000|1|0
+
+NOTE: If DIDs are attempted to be copied, there will be output for each attempted DID as well as a SUCCESS message if any were successfully copied or an ERROR if none were
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->copyDid(['source_did_pattern' => '7275551114', 'new_dids' => '7275553338,7275553337']);
+
+     // Or get a structured response:
+     $response = $adminApi->copyDidResponse(['source_did_pattern' => '7275551114', 'new_dids' => '7275553338,7275553337']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+delete_dnc_phone - removes phone number from a DNC list in the system
+
+NOTE: api user for this function must have user_level set to 8 or higher and "modify lists" enabled and "Delete From DNC Lists" enabled
+
+REQUIRED FIELDS-
+phone_number -	6-20 characters
+campaign_id -	2-30 characters, should be a valid campaign ID or "SYSTEM_INTERNAL" for the internal DNC list
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&function=delete_dnc_phone&user=6666&pass=1234&phone_number=7275551212&campaign_id=TESTCAMP
+http://server/vicidial/non_agent_api.php?source=test&function=delete_dnc_phone&user=6666&pass=1234&phone_number=7275551212&campaign_id=SYSTEM_INTERNAL
+
+Example responses:
+ERROR: delete_dnc_phone USER DOES NOT HAVE PERMISSION TO DELETE DNC NUMBERS - 6666|0
+ERROR: delete_dnc_phone YOU MUST USE ALL REQUIRED FIELDS - 6666|||1000
+ERROR: delete_dnc_phone DNC NUMBER DOES NOT EXIST - 6666|7275551212
+SUCCESS: delete_dnc_phone DNC NUMBER HAS BEEN DELETED - 6666|7275551212|TESTCAMP
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->deleteDncPhone(['phone_number' => '7275551212', 'campaign_id' => 'SYSTEM_INTERNAL']);
+
+     // Or get a structured response:
+     $response = $adminApi->deleteDncPhoneResponse(['phone_number' => '7275551212', 'campaign_id' => 'SYSTEM_INTERNAL']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+delete_fpg_phone - removes phone number from a Filter Phone Group in the system
+
+NOTE: api user for this function must have user_level set to 8 or higher and "modify lists" enabled
+
+REQUIRED FIELDS-
+phone_number -	6-20 characters
+group -		2-30 characters, should be a valid Filter Phone Group ID in the system
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&function=delete_fpg_phone&user=6666&pass=1234&phone_number=7275551212&group=TEST_IN_FILTER
+
+Example responses:
+ERROR: delete_fpg_phone USER DOES NOT HAVE PERMISSION TO DELETE FILTER PHONE GROUP NUMBERS - 6666|0
+ERROR: delete_fpg_phone YOU MUST USE ALL REQUIRED FIELDS - 6666|||1000
+ERROR: delete_fpg_phone FILTER PHONE GROUP DOES NOT EXIST - 6666|TEST_IN_FILTER2
+ERROR: delete_fpg_phone FILTER PHONE GROUP NUMBER DOES NOT EXIST - 6666|7275551212|TEST_IN_FILTER
+SUCCESS: delete_fpg_phone FILTER PHONE GROUP NUMBER HAS BEEN DELETED - 6666|7275551212|TEST_IN_FILTER
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->deleteFpgPhone(['phone_number' => '7275551212', 'group' => 'TEST_IN_FILTER']);
+
+     // Or get a structured response:
+     $response = $adminApi->deleteFpgPhoneResponse(['phone_number' => '7275551212', 'group' => 'TEST_IN_FILTER']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+hopper_bulk_insert - adds group of lead_ids to the vicidial_hopper table
+
+NOTE: api user for this function must have modify_campaigns set to 1 and user_level
+      must be set to 8 or higher
+
+REQUIRED FIELDS-
+lead_ids -		must be all numbers and commas, 1-9 digit numbers separate by a comma, limit of 1000 lead_ids
+source -		description of what originated the API call (maximum 20 characters)
+
+SETTINGS FIELDS-
+hopper_priority -	99 to -99, the higher number the higher the dial priority, default is 0
+hopper_local_call_time_check - Y or N, default is N. Validate the local call time and/or state call time before inserting lead in the hopper
+
+NOTE-
+This function will insert leads into the hopper of the campaign that is tied to the list_id that each lead belongs to.
+
+
+Example URL strings for API calls:
+
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=hopper_bulk_insert&lead_ids=193715,1677922&hopper_priority=97&hopper_local_call_time_check=Y
+
+Example responses:
+NOTICE: hopper_bulk_insert LEAD ADDED TO HOPPER - 7275551111|193715|1677922|6666
+NOTICE: hopper_bulk_insert NOT ADDED TO HOPPER, OUTSIDE OF LOCAL TIME - 7275551111|193715|-5|NY|0
+NOTICE: hopper_bulk_insert NOT ADDED TO HOPPER, CAMPAIGN DOES NOT EXIST - 101|193715
+NOTICE: hopper_bulk_insert NOT ADDED TO HOPPER, LEAD NOT FOUND - 193715
+NOTICE: hopper_bulk_insert NOT ADDED TO HOPPER, LEAD IS ALREADY IN THE HOPPER - 193715
+NOTICE: hopper_bulk_insert NOT ADDED TO HOPPER, LEAD HOPPER INSERT ERROR - 193715
+
+SUCCESS: hopper_bulk_insert LEADS HAVE BEEN INSERTED INTO THE HOPPER - 2|0|8432948|6666
+
+ERROR: hopper_bulk_insert NO LEADS HAVE BEEN INSERTED INTO THE HOPPER - 1|0|6666
+ERROR: hopper_bulk_insert USER DOES NOT HAVE PERMISSION TO ADD LEADS TO THE HOPPER - 6666|0
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->hopperBulkInsert(['lead_ids' => '193715,1677922', 'hopper_priority' => '97', 'hopper_local_call_time_check' => 'Y']);
+
+     // Or get a structured response:
+     $response = $adminApi->hopperBulkInsertResponse(['lead_ids' => '193715,1677922', 'hopper_priority' => '97', 'hopper_local_call_time_check' => 'Y']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+update_alt_url - updates/adds/displays alternate dispo call url entries for a campaign
+
+NOTE: api user for this function must have user_level set to 8 or higher and "modify campaigns" enabled
+
+REQUIRED FIELDS-
+campaign_id -		2-8 characters
+source -		description of what originated the API call (maximum 20 characters)
+entry_type -		One of these: 'campaign'
+url_type -		One of these: 'dispo','start','addlead','noagent'
+alt_url_id -		Digits only, 'NEW' or 'LIST'. Must be a valid alt URL ID for this campaign, or set to 'NEW' to add a new ALT URL
+			   NOTE: If only one Alt URL exists for this campaign and type, then this field can be left blank
+			   NOTE: 'stage'(csv, tab, json, pipe[default]) and 'header'(YES, NO) options are available for an alt_url_id of 'LIST'
+
+EDITABLE FIELDS-
+active -		One of these: 'Y','N', default is 'N'
+url_rank -		Digits only
+url_statuses -		FOR DISPO URLs ONLY! List of dispo statuses this URL is active for, separated by spaces, i.e.: "SALE1 SALE2" or can be set to "---ALL---"
+url_description -	Text description of the alt URL
+url_lists -		Lists that the URL is active for, separated by spaces, i.e.: "101 102" or can be set to blank "" for all lists
+url_call_length -	Digits only. Only calls that are this minimum length in seconds and higher, default is 0
+url_address -		URL for the Alt URL(If using a full non-local URL must include 'http://' or 'https://') Must be URL-encoded if sending request as a URL
+	EXAMPLE URL-ENCODED URL: "http://vicidial.org/query.php?var1=X&var2=y" = "http%3A%2F%2Fvicidial.org%2Fquery.php%3Fvar1%3DX%26var2%3Dy"
+NOTES:
+ - Please use no special characters like apostrophes, quotes or amphersands
+ - A value of '--BLANK--' can be used on the url_description and url_lists options above to set their values to empty
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_alt_url&campaign_id=ALTTEST&entry_type=campaign&url_type=dispo&alt_url_id=3&active=N
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_alt_url&campaign_id=ALTTEST&entry_type=campaign&url_type=dispo&alt_url_id=3&url_rank=2
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_alt_url&campaign_id=ALTTEST&entry_type=campaign&url_type=dispo&alt_url_id=3&url_statuses=SALE+PSALE
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_alt_url&campaign_id=ALTTEST&entry_type=campaign&url_type=dispo&alt_url_id=3&url_description=Updated+SALE+URL
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_alt_url&campaign_id=ALTTEST&entry_type=campaign&url_type=dispo&alt_url_id=3&url_lists=101+102
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_alt_url&campaign_id=ALTTEST&entry_type=campaign&url_type=dispo&alt_url_id=3&url_call_length=2
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_alt_url&campaign_id=ALTTEST&entry_type=campaign&url_type=dispo&alt_url_id=3&url_address=http%3A%2F%2Fvicidial.org%2Fquery.php%3Fvar1%3DX%26var2%3Dy
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_alt_url&campaign_id=ALTTEST&entry_type=campaign&url_type=dispo&alt_url_id=LIST
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_alt_url&campaign_id=ALTTEST&entry_type=campaign&url_type=dispo&alt_url_id=NEW&url_statuses=PRQUAL&url_description=Testing&url_address=http%3A%2F%2Fvicidial.org%2Fquery.php%3Fvar1%3DX%26var2%3Dy
+
+
+Example responses:
+ERROR: update_alt_url USER DOES NOT HAVE PERMISSION TO UPDATE CAMPAIGNS - 6666
+ERROR: update_alt_url YOU MUST USE ALL REQUIRED FIELDS - 6666|1
+ERROR: update_alt_url NOT AN ALLOWED CAMPAIGN ID - 98762
+ERROR: update_alt_url CAMPAIGN DOES NOT EXIST - 6666|1000
+ERROR: update_alt_url NO VALID URL TYPE DEFINED: - 6666|||
+ERROR: update_alt_url NO ENTRY TYPE DEFINED - 6666||
+ERROR: update_alt_url CAMPAIGNS dispo URL IS NOT SET TO ALT - 6666|dispo|campaign|TESTCAMP
+ERROR: update_alt_url ALT URL ID DOES NOT EXIST - 6666|2|dispo|campaign|TESTCAMP|2
+ERROR: update_alt_url ACTIVE MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|U
+ERROR: update_alt_url URL ADDRESS IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|
+ERROR: update_alt_url URL RANK IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|999999
+ERROR: update_alt_url URL CAL LENGTH IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|999999
+ERROR: update_alt_url URL STATUSES IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|
+ERROR: update_alt_url URL DESCRIPTION IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|
+ERROR: update_alt_url URL LISTS IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|
+NOTICE: update_campaign NO UPDATES DEFINED - 6666|
+SUCCESS: update_alt_url ALT URL HAS BEEN UPDATED - 6666|1|dispo|campaign|TESTCAMP
+SUCCESS: update_alt_url ALT URL HAS BEEN ADDED - 6666|NEW URL ID: 2|dispo|campaign|TESTCAMP
+NOTICE: update_alt_url LIST, No Records Found - 6666|dispo|campaign|TESTCAMP|0
+
+A LIST response will not show "SUCCESS", but instead will just print the results in the following format:
+url_id|campaign_id|entry_type|active|url_type|url_rank|url_statuses|url_description|url_lists|url_call_length|url_address
+3|ALTTEST|campaign|Y|dispo|2|SALE PSALE|Updated SALE URL||2|http://vicidial.org/query.php?var1=X&var2=y
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->updateAltUrl(['campaign_id' => 'ALTTEST', 'entry_type' => 'campaign', 'url_type' => 'dispo', 'alt_url_id' => 'LIST']);
+
+     // Or get a structured response:
+     $response = $adminApi->updateAltUrlResponse(['campaign_id' => 'ALTTEST', 'entry_type' => 'campaign', 'url_type' => 'dispo', 'alt_url_id' => 'LIST']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+update_presets - updates/adds/displays/deletes campaign preset entries
+
+NOTE: api user for this function must have user_level set to 8 or higher and "modify campaigns" enabled
+
+REQUIRED FIELDS-
+campaign_id -		2-8 characters
+source -		description of what originated the API call (maximum 20 characters)
+preset_name -		name of the preset in the system
+			   NOTE: If only one preset exists for this campaign, then this field can be left blank
+action -		'UPDATE', 'NEW', 'DELETE' or 'LIST' (default is 'UPDATE')
+			   NOTE: 'stage'(csv, tab, json, pipe[default]) and 'header'(YES, NO) options are available for an action of 'LIST'
+
+EDITABLE FIELDS-
+preset_hide_number -	One of these: 'Y','N', default is 'N'
+preset_number -		Digits only (must be from 1 to 50 digits in length)
+preset_dtmf -		Digits and certain characters only ('0123456789PSQ' [P = #-pound, S = *-star, Q = half-second-quiet])
+
+NOTES:
+ - Please use no special characters like apostrophes, quotes or amphersands
+ - A value of '--BLANK--' can be used on the preset_dtmf option above to set its value to empty
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_presets&campaign_id=ALTTEST&preset_name=SALES&preset_number=3125551212&preset_hide_number=N&action=NEW
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_presets&campaign_id=ALTTEST&preset_number=3125551213&preset_hide_number=N&preset_dtmf=1234
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_presets&campaign_id=ALTTEST&action=LIST
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_presets&campaign_id=ALTTEST&preset_name=SUPPORT+LINE&preset_number=3125551214&preset_hide_number=Y&preset_dtmf=1&action=NEW
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=update_presets&campaign_id=ALTTEST&preset_name=SUPPORT+LINE&action=DELETE
+
+
+Example responses:
+ERROR: update_presets USER DOES NOT HAVE PERMISSION TO UPDATE CAMPAIGNS - 6666
+ERROR: update_presets YOU MUST USE ALL REQUIRED FIELDS - 6666|1
+ERROR: update_presets NOT AN ALLOWED CAMPAIGN ID - 98762
+ERROR: update_presets CAMPAIGN DOES NOT EXIST - 6666|1000
+ERROR: update_presets PRESET NAME DOES NOT EXIST - 6666|2|dispo|campaign|TESTCAMP|2
+ERROR: update_presets PRESET HIDE NUMBER MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|U
+ERROR: update_presets PRESET DTMF IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|
+NOTICE: update_campaign NO UPDATES DEFINED - 6666|
+SUCCESS: update_presets PRESET HAS BEEN UPDATED - 6666|1|campaign|TESTCAMP
+SUCCESS: update_presets PRESET HAS BEEN ADDED - 6666|NEW PRESET: SUPPORT LINE|TESTCAMP
+SUCCESS: update_presets PRESET HAS BEEN DELETED - 6666|SUPPORT LINE|TESTCAMP
+NOTICE: update_presets LIST, No Records Found - 6666|TESTCAMP|0
+
+A LIST response will not show "SUCCESS", but instead will just print the results in the following format:
+preset_name|campaign_id|preset_number|preset_hide_number|preset_dtmf
+SALES|ALTTEST|3125551213|N|1234
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->updatePresets(['campaign_id' => 'ALTTEST', 'preset_name' => 'SALES', 'preset_number' => '3125551212', 'action' => 'NEW']);
+
+     // Or get a structured response:
+     $response = $adminApi->updatePresetsResponse(['campaign_id' => 'ALTTEST', 'preset_name' => 'SALES', 'preset_number' => '3125551212', 'action' => 'NEW']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+lead_dearchive - moves a lead from the archive to active leads table
+
+NOTE: api user for this function must have user_level set to 8 or higher and "modify leads" enabled
+
+REQUIRED FIELDS-
+source -		description of what originated the API call (maximum 20 characters)
+lead_id -		16-40 characters
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=lead_dearchive&lead_id=274071
+
+Example responses:
+ERROR: lead_dearchive USER DOES NOT HAVE PERMISSION TO MODIFY LEAD INFO - 6666|0
+ERROR: lead_dearchive INVALID SEARCH PARAMETERS - 6666||
+ERROR: lead_dearchive LEAD INSERT FAILED - 6666||
+ERROR: lead_dearchive NON-ARCHIVED LEAD FOUND - 6666||
+ERROR: lead_dearchive ARCHIVED LEAD NOT FOUND - 6666||
+SUCCESS: lead_dearchive LEAD DE-ARCHIVED - 6666|274071|1|1
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->leadDearchive(['lead_id' => '274071']);
+
+     // Or get a structured response:
+     $response = $adminApi->leadDearchiveResponse(['lead_id' => '274071']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+update_remote_agent - updates remote agent entry in the system
+
+NOTE: api user for this function must have user_level set to 8 or higher and "modify remote agents" enabled
+
+REQUIRED FIELDS-
+agent_user -		2-20 characters
+
+OPTIONAL FIELDS-
+status -		'ACTIVE' or 'INACTIVE' only
+campaign_id -		1-8 characters, must be a valid Campaign ID
+number_of_lines -	1-20 digits
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&function=update_remote_agent&user=6666&pass=1234&agent_user=2424&number_of_lines=1&campaign_id=TESTCAMP
+http://server/vicidial/non_agent_api.php?source=test&function=update_remote_agent&user=6666&pass=1234&agent_user=2424&status=INACTIVE
+
+Example responses:
+ERROR: update_remote_agent USER DOES NOT HAVE PERMISSION TO UPDATE REMOTE AGENTS - 6666|0
+ERROR: update_remote_agent YOU MUST USE ALL REQUIRED FIELDS - 6666||
+ERROR: update_remote_agent REMOTE AGENT DOES NOT EXIST - 6666|78789
+ERROR: update_remote_agent USER DOES NOT HAVE PERMISSION TO UPDATE THIS REMOTE AGENT - 6666
+ERROR: update_remote_agent YOU MUST USE A VALID NUMBER OF LINES, THIS IS AN OPTIONAL FIELD - 6666|0
+ERROR: update_remote_agent YOU MUST USE A VALID CAMPAIGN ID, THIS IS AN OPTIONAL FIELD - 6666|TEST|0
+ERROR: update_remote_agent STATUS MUST BE ACTIVE OR INACTIVE, THIS IS AN OPTIONAL FIELD - 6666|Y
+ERROR: update_remote_agent NO UPDATES DEFINED - 6666|0
+NOTICE: update_remote_agent REMOTE AGENT IS ALREADY ACTIVE - 6666|7878
+NOTICE: update_remote_agent REMOTE AGENT IS ALREADY INACTIVE - 6666|7878
+SUCCESS: update_remote_agent USER HAS BEEN UPDATED - 6666|7878
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->updateRemoteAgent(['agent_user' => '2424', 'status' => 'INACTIVE']);
+
+     // Or get a structured response:
+     $response = $adminApi->updateRemoteAgentResponse(['agent_user' => '2424', 'status' => 'INACTIVE']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+user_details - display information about one user
+
+NOTE: api user for this function must have user_level set to 7 or higher and "view reports" enabled
+
+REQUIRED FIELDS-
+source -		description of what originated the API call (maximum 20 characters)
+agent_user -		2-20 characters, use only for one user
+
+SETTINGS FIELDS-
+stage -			the format of the exported data: csv, tab, json, pipe(default)
+header -		include a header(YES) or not(NO). This is optional, default is not to include a header
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=user_details&agent_user=1234&stage=csv&header=YES
+
+Example responses:
+ERROR: user_details USER DOES NOT HAVE PERMISSION TO GET USER DETAILS - 6666|0
+ERROR: user_details INVALID SEARCH PARAMETERS - 6666||
+ERROR: user_details USER NOT FOUND - 6666||
+
+A SUCCESS response will not show "SUCCESS", but instead will just print the results in the following format:
+user,full_name,user_group,user_level,active
+11111,test user,ADMIN,6,Y
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->userDetails(['agent_user' => '1234', 'stage' => 'csv', 'header' => 'YES']);
+
+     // Or get a structured response:
+     $response = $adminApi->userDetailsResponse(['agent_user' => '1234', 'stage' => 'csv', 'header' => 'YES']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+copy_phone - copies a phone in the system
+
+NOTE: api user for this function must have user_level set to 8 or higher and "AGC Admin Access" enabled
+
+REQUIRED FIELDS-
+extension -		2-100 characters
+dialplan_number -	1-20 digits
+voicemail_id -		1-10 digits
+phone_login -		1-20 characters
+server_ip -		7-15 characters, must be a valid server_ip
+phone_full_name -	1-50 characters
+outbound_cid -		1-20 digits
+source_extension -	Must be an existing phone extension-server_ip combination in the system
+source_server_ip -	Must be an existing phone extension-server_ip combination in the system
+
+OPTIONAL FIELDS-
+phone_pass -		1-100 characters (if not populated, then default system phone pass is used)
+registration_password -	1-100 characters (if not populated, then default system registration pass is used)
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&function=copy_phone&user=6666&pass=1234&extension=55000&dialplan_number=55000&voicemail_id=55000&phone_login=55000&phone_pass=test&server_ip=192.168.198.5&registration_password=test&phone_full_name=Extension+55000&outbound_cid=7275551212&source_extension=cc100&source_server_ip=10.0.9.8
+http://server/vicidial/non_agent_api.php?source=test&function=copy_phone&user=6666&pass=1234&extension=55000&dialplan_number=55000&voicemail_id=55000&phone_login=55000&server_ip=192.168.198.5&phone_full_name=Extension+55000&outbound_cid=7275551212&source_extension=cc100&source_server_ip=10.0.9.8
+
+Example responses:
+ERROR: copy_phone USER DOES NOT HAVE PERMISSION TO COPY PHONES - 6666|0
+ERROR: copy_phone YOU MUST USE ALL REQUIRED FIELDS - 6666|1000|||||||||||
+ERROR: copy_phone SOURCE SERVER DOES NOT EXIST - 6666|10.0.9.8
+ERROR: copy_phone SOURCE PHONE DOES NOT EXIST ON THIS SERVER - 6666|10.0.9.8|cc100
+ERROR: copy_phone SERVER DOES NOT EXIST - 6666|10.0.9.9
+ERROR: copy_phone PHONE ALREADY EXISTS ON THIS SERVER - 6666|10.0.9.8|cc101
+ERROR: copy_phone PHONE LOGIN ALREADY EXISTS - 6666|cc100
+SUCCESS: copy_phone PHONE HAS BEEN COPIED - 6666|cc100|10.0.9.8|SIP|100
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->copyPhone(['extension' => '55000', 'dialplan_number' => '55000', 'voicemail_id' => '55000', 'phone_login' => '55000', 'server_ip' => '192.168.198.5', 'phone_full_name' => 'Extension 55000', 'outbound_cid' => '7275551212', 'source_extension' => 'cc100', 'source_server_ip' => '10.0.9.8']);
+
+     // Or get a structured response:
+     $response = $adminApi->copyPhoneResponse(['extension' => '55000', 'dialplan_number' => '55000', 'voicemail_id' => '55000', 'phone_login' => '55000', 'server_ip' => '192.168.198.5', 'phone_full_name' => 'Extension 55000', 'outbound_cid' => '7275551212', 'source_extension' => 'cc100', 'source_server_ip' => '10.0.9.8']);
+     if ($response->ok()) {
+         print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```

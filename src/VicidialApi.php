@@ -39,7 +39,7 @@ final class VicidialApi
      *
      * @deprecated Use VicidialApi::client() with VicidialConfig::createWithBasicAuth() instead
      */
-    public function createWithBasicAuth(
+    public static function createWithBasicAuth(
         string $baseUri,
         string $apiUser,
         string $apiPassword,
@@ -55,7 +55,7 @@ final class VicidialApi
     }
 
     /**
-     * Creates a new factory instance to configure a custom Open AI Client
+     * Creates a new factory instance to configure a custom Vicidial client
      */
     public static function factory(): Factory
     {

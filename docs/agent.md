@@ -27,6 +27,9 @@
 - [force_fronter_leave_3way](#force_fronter_leave_3way) - will send a command to fronter agent to leave-3way call that executing agent is on
 - [force_fronter_audio_stop](#force_fronter_audio_stop)- will send a command to fronter agent session to stop any audio_playback playing on it
 - [vm_message](#vm_message) - set a custom voicemail message to be played when agent clicks the VM button on the agent screen
+- [stereo_recording](#stereo_recording) - send a start or stop stereo agent recording signal to agent screen
+- [send_notification](#send_notification) - will send text alerts and/or confetti effects to agent interface
+- [refresh_panel](#refresh_panel) - refresh one of the panels on the agent script: script, script2, callbacks, etc...
 
 
 ### Required variables for all API calls:
@@ -1525,6 +1528,187 @@ try {
      $agent_user = '1000';
      $vicidialAPI->forceFronterAudioStop($agent_user,'LOCAL_ONLY');
      $vicidialAPI->forceFronterAudioStop($agent_user,'LOCAL_AND_CCC');
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+--------------------------------------------------------------------------------
+[↑ Top](#agent-api-functions)
+
+stereo_recording
+---
+
+
+DESCRIPTION:
+sends a stereo_recording start/stop signal or status of agent-controlled stereo recording
+
+VALUES:
+ value -
+  REQUIRED, choices are below
+   BEGIN - sends a "start stereo_recording" signal to the agent screen
+            (you cannot have multiple agent-controlled stereo_recordings going at the same time)
+   END - sends a "stop stereo_recording" signal to the agent screen
+            (this will stop all active agent-controlled stereo_recordings on the agent screen)
+   STATUS - displays results of active stereo_recording and agent session information (Only AGENT-CONTROLLED recordings)
+            (returns: user|recording_id|filename|server|start_time|agent_server|session|agent_status)
+  stage -
+    OPTIONAL, value to append to the stereo_recording filename, limited to 14 characters, if more it will truncate. Only works with BEGIN value
+
+EXAMPLE URLS:
+http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=stereo_recording&value=BEGIN
+http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=stereo_recording&value=END
+http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=stereo_recording&value=STATUS
+http://server/agc/api.php?source=test&user=6666&pass=1234&agent_user=1000&function=stereo_recording&value=BEGIN&stage=_MIDCALL
+
+RESPONSES:
+ERROR: no user found - 6666
+ERROR: agent_user is not logged in - 6666
+ERROR: stop stereo_recording error - 6666|||||192.168.1.5|8600051|PAUSED
+SUCCESS: stereo_recording function sent - 6666|END||||192.168.1.5|8600051|PAUSED
+SUCCESS: stereo_recording function sent - 6666|BEGIN||||192.168.1.5|8600051|PAUSED
+SUCCESS: stereo_recording function sent - 6666|BEGIN_MIDCALL||||192.168.1.5|8600051|PAUSED
+NOTICE: not stereo_recording - 6666|||||192.168.1.5|8600051|PAUSED
+NOTICE: stereo_recording active - 6666|121242|20120810-012008__6666_|192.168.1.5|2012-08-10 01:20:10|192.168.1.5|8600051|PAUSED
+
+Code:
+
+```php
+<?php
+
+try {
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
+     $agent_user = '1000';
+     $vicidialAPI->stereoRecording($agent_user, ['value' => 'BEGIN', 'stage' => '_MIDCALL']);
+     $vicidialAPI->stereoRecording($agent_user, ['value' => 'STATUS']);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+--------------------------------------------------------------------------------
+[↑ Top](#agent-api-functions)
+
+send_notification
+---
+
+
+DESCRIPTION:
+can send a customizable message and customizable confetti effects to one or more active agent screens
+
+VALUES:
+ recipient_type -
+  REQUIRED, choices are below:
+   USER - send notification to a single user
+   USER_GROUP - send notification to all agents logged in under a particular user_group at the time the notification_date is reached
+   CAMPAIGN - send notification to all agents logged into a particular campaign at the time the notification_date is reached
+   ** If a recipient is passed but the recipient_type is missing or none of the above values, the recipient value will be used to look up a matching recipient_type.  Order of priority is USER, then USER_GROUP, then CAMPAIGN
+ recipient -
+  REQUIRED, needs to be a value corresponding to the recipient_type, meaning if you send to a recipient_type USER, recipient must be that user's ID.  For USER_GROUP, recipient must be a valid user_group from your dialer.
+ notification_date
+  OPTIONAL, date and time in yyyy-mm-dd HH:ii:ss format to send the notification.  If the desired recipients are not logged in, the notification will remain active for 1 minute after the date/time is reached.  Default is the current date and time.
+ notification_text
+  OPTIONAL, text to display in the agent alert box in the recipients agent interface.
+ text_size
+  OPTIONAL, used to customize the size of the notification text in points.  Numeric only, default value is 12.
+ text_font
+  OPTIONAL, used to customize the font of the notification text.  Default value is 'Arial'.
+ text_weight
+  OPTIONAL, used to customize the appearance of the notification text - currently supports 'bold', 'italic' and 'underline'.  Value can be passed as a delimited string ("bold,underline") or even a long single string ("underlineitalicbold").  Default value is 'bold'.
+ text_color
+  OPTIONAL, used to customize the color of the notification text - can use either a color name ('red', 'aqua', 'yellow', 'green') or a three or six-character hexadecimal value ("FF0", "009900").  Default is 'black'.
+ show_confetti
+  OPTIONAL, a Y/N flag that determines if a confetti effect will appear on the agent interface.  Default is 'N'.
+ duration
+  OPTIONAL, the length of time in seconds to show the confetti animation in the agent interface.  Numeric only, default is collected from the settings container "CONFETTI_SETTINGS" - if that does not exist, the default is 2 seconds.  Max value is 10 seconds.
+ maxParticleCount
+  OPTIONAL, the number of particles of confetti to show during the animation.  Numeric only, default is collected from the settings container "CONFETTI_SETTINGS" - if that does not exist, the default is 2350 particles.  Max value is 9999 particles.
+ particleSpeed
+  OPTIONAL, the speed at which the confetti floats through the screen.  Numeric only, default is collected from the settings container "CONFETTI_SETTINGS" - if that does not exist, the default is 60.  Max value is 100.
+
+EXAMPLE URLS:
+http://server/agc/api.php?user=6666&pass=1234&function=send_notification&source=test&recipient=6666&recipient_type=USER&show_confetti=Y
+http://server/agc/api.php?user=6666&pass=1234&function=send_notification&source=test&recipient=AGENTS&recipient_type=USER_GROUP&show_confetti=N&notification_text=Ten+minutes+to+closing&text_size=36&text_color=9900FF&text_weight=bold,italic,underline
+http://server/agc/api.php?user=6666&pass=1234&function=send_notification&source=test&recipient=TESTCAMP&recipient_type=CAMPAIGN&show_confetti=Y&duration=4&maxParticleCount=3000&particleSpeed=50&notification_text=YOU+ARE+FIRED&text_weight=underline&text_size=48&text_color=red
+
+RESPONSES:
+ERROR: Agent API Notifications are disabled on this system - 0
+ERROR: Missing recipient or recipient_type: (<recipient>|<recipient_type>)
+ERROR: Invalid request, missing variables
+ERROR: ACCESS TO CAMPAIGN TESTCAMP NOT ALLOWED FOR USER 6666
+ERROR: ACCESS TO USER GROUP ADMIN NOT ALLOWED FOR USER 6666
+ERROR: user_group DOES NOT EXIST - ADMIN|6666
+ERROR: 6667 DOES NOT EXIST in vicidial_users
+SUCCESS: notification queued
+** Additionally, there are "NOTICE" messages that will be included in the response if the notification date is improperly formatted/missing, or if the recipient_type is not included.
+
+Code:
+
+```php
+<?php
+
+try {
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
+     $agent_user = '1000';
+     $vicidialAPI->sendNotification([
+          'recipient_type' => 'USER_GROUP',
+          'recipient' => 'AGENTS',
+          'notification_text' => 'Ten minutes to closing',
+          'text_size' => '36',
+          'show_confetti' => 'Y',
+     ]);
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+--------------------------------------------------------------------------------
+[↑ Top](#agent-api-functions)
+
+refresh_panel
+---
+
+
+DESCRIPTION:
+Refresh/Reload/Reset one or more of the panels on the agent screen: script, script 2, callbacks, etc...
+
+VALUES:
+agent_user -
+ REQUIRED alphanumeric string for agent user
+
+OPTIONAL PANEL REFRESH TRIGGERS (these do not require a lead to be on the agent screen) -
+	formreload
+	scriptreload
+	script2reload
+	emailreload
+	chatreload
+	callbacksreload
+
+EXAMPLE URLS:
+http://server/agc/api.php?source=test&user=6666&pass=1234&function=refresh_panel&agent_user=6666&scriptreload=1&script2reload=1&callbacksreload=1
+http://server/agc/api.php?source=test&user=6666&pass=1234&function=refresh_panel&agent_user=6666&formreload=1
+
+RESPONSES:
+ERROR: agent_user not valid - 6666
+ERROR: agent_user is not logged in - 6666
+ERROR: no panels have been defined - 6666
+SUCCESS: refresh_panel request sent - 6666|1234|1|scriptreload,script2reload
+
+Code:
+
+```php
+<?php
+
+try {
+     $vicidialAPI = VicidialApi::create("127.0.0.1", "6666", "123")->agent();
+     $agent_user = '1000';
+     $vicidialAPI->refreshPanel($agent_user, ['scriptreload' => '1', 'callbacksreload' => '1']);
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";
 }

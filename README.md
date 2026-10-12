@@ -8,7 +8,8 @@ VICIDIAL is a software suite that is designed to interact with the Asterisk Open
 
 http://www.vicidial.org/vicidial.php
 
-Vicidial has an AGENT API and NON AGENT API, this classes are intended to make it easier to use in PHP
+Vicidial has an AGENT API and NON AGENT API, this classes are intended to make it easier to use in PHP.
+The wrapper covers **all 31 Agent API functions and all 61 Non-Agent API functions** documented by VICIdial (guarded by tests), see [How the VICIdial API works](docs/VICIDIAL_API_GUIDE.md).
 
 - http://vicidial.org/docs/NON-AGENT_API.txt
 - http://vicidial.org/docs/AGENT_API.txt
@@ -22,9 +23,9 @@ Requires PHP 8.2
 
 `composer require masterfermin02/vicidial-api-wrapper:1.0.3`
 
-## What's New in v2.0 🎉
+## What's New in v4.x 🎉
 
-Version 4.0 introduces major improvements for a better developer experience:
+Version 4.0 introduced major improvements for a better developer experience:
 
 ### Configuration System
 - **`VicidialConfig`**: A clean configuration object with named parameters
@@ -33,7 +34,7 @@ Version 4.0 introduces major improvements for a better developer experience:
 - **Better validation**: Built-in validation for configuration values
 - **Backward compatible**: Legacy factory methods still work (but are deprecated)
 
-### Response DTOs ✨ NEW
+### Response DTOs
 - **Structured responses**: No more regex or manual string parsing
 - **Helper methods**: `ok()`, `failed()`, `asArray()`, `asText()`, `toJson()`
 - **Type-safe**: Full IDE autocomplete and type checking
@@ -71,7 +72,12 @@ $config = VicidialConfig::create(
 $client = VicidialClient::make($config);
 ```
 
-See the [Migration Guide](MIGRATION.md) for upgrade instructions.
+### 4.1.0 (2026-10-12)
+- Full parity with the official Agent API (31 functions) and Non-Agent API (61 functions), guarded by tests
+- Fixed: `TransportException` autoload crash on network errors, `switchLead()` sending the wrong parameter, double URL-encoding in Agent methods, non-static `createWithBasicAuth()`
+- New docs: [How the VICIdial API works](docs/VICIDIAL_API_GUIDE.md) and [Roadmap](docs/ROADMAP.md)
+
+See the [CHANGELOG](CHANGELOG.md) and the [Migration Guide](MIGRATION.md) for details.
 
 ## Authentication
 
@@ -93,7 +99,7 @@ $config = VicidialConfig::create(
     protocol: 'https',           // Optional: 'http' or 'https' (default: 'http')
     verifyTls: true,             // Optional: Verify TLS certificates (default: true)
     timeout: 30,                 // Optional: Request timeout in seconds (default: 30)
-    urlEncodeDefault: false,     // Optional: URL encode by default (default: false)
+    urlEncodeDefault: false,     // Deprecated no-op: values are always URL-encoded once by the transport
     userAgent: 'MyApp/1.0',      // Optional: Custom user agent
     source: 'myapp'              // Optional: Source identifier (default: 'test')
 );
@@ -121,7 +127,7 @@ $config = VicidialConfig::createWithBasicAuth(
 $client = VicidialClient::make($config);
 ```
 
-### Response DTOs (New in v2.0)
+### Response DTOs (New in v4.0)
 
 All API methods now have Response DTO variants that return structured response objects instead of raw strings:
 
@@ -419,28 +425,26 @@ try {
     }
 ```
 
-### Example 5: Using URL encode for special characters
+### Example 5: Special characters are encoded for you
+Every query value is URL-encoded exactly once by the transport, so pass raw values. Do **not** call `urlencode()` yourself (that produced double-encoded values such as `%2B` turning into `%252B` in older versions).
+
 ```php
     <?php
-    
+
     require_once 'vendor/autoload.php';
 
     $fields['first_name'] = "John";
     $fields['last_name']  = "Doe";
-    $fields['address1']   = "123 Fake St";
-    $fields['phone_number']   = "18002474747";
-    
+    $fields['address1']   = "123 Fake St & Main";
+    $fields['phone_number']   = "+18002474747";
+
     try {
-        $agentApi = VicidialApi::create(
+        $adminApi = VicidialApi::create(
             getenv('YOUR_VICIDIAL_IP'),
             getenv('YOUR_VICIDIAL_USER'),
-            getenv('YOUR_VICIDIAL_PASSWORD'),
-            "test",
-            false
+            getenv('YOUR_VICIDIAL_PASSWORD')
         )->admin();
-        echo $agentApi
-        ->withUrlEncode(true)
-        ->addLead($fields);
+        echo $adminApi->addLead($fields);
     } catch (Exception $e) {
         echo 'Exception: ', $e->getMessage(), "\n";
     }
@@ -481,6 +485,8 @@ try {
 
 
 ### Docs:
+- [How the VICIdial API works](docs/VICIDIAL_API_GUIDE.md) 📘 **start here**: endpoints, auth, permissions, response formats, limits
+- [Audit and roadmap](docs/ROADMAP.md)
 - [Agent](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/agent.md)
 - [Admin](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/admin.md)
 - [Response DTO Guide](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/RESPONSE_DTO.md)

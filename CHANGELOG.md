@@ -5,6 +5,30 @@ All notable changes to the Vicidial API Wrapper will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2026-10-12
+
+### Added
+- **Full Non-Agent API parity** with `NON-AGENT_API.txt` (vicidial.org, updated 2026-09-25). New `Admin` methods, each with a `...Response()` DTO variant:
+  `soundsList`, `batchUpdateLead`, `agentInGroupAvailability`, `leadAllInfo`, `leadSearch`, `copyDid`, `deleteDncPhone`, `deleteFpgPhone`, `hopperBulkInsert`, `updateAltUrl`, `updatePresets`, `leadDearchive`, `updateRemoteAgent`, `userDetails`, `copyPhone`.
+- **Full Agent API parity** with `AGENT_API.txt` (updated 2025-08-30). New `Agent` methods with DTO variants: `stereoRecording`, `sendNotification`, `refreshPanel`.
+- Coverage guard tests (`AdminCoverageTest`, `AgentCoverageTest`) that fail when a documented Vicidial function has no wrapper method.
+- `tests/Fakers/RecordingTransporter` to assert on the exact URL and query string a resource method produces.
+- `docs/VICIDIAL_API_GUIDE.md`: how the Vicidial Agent and Non-Agent APIs work (endpoints, auth, permissions, response formats, limits) and how this wrapper maps onto them.
+- `docs/ROADMAP.md`: audit findings and prioritized improvement plan.
+- graphify knowledge graph of the codebase (`graphify-out/`) and a `CLAUDE.md` section so AI assistants query the graph before answering codebase questions.
+
+### Fixed
+- **`TransportException` could not be autoloaded.** The class lived in `TransporterException.php`, so any network error (timeout, DNS failure, connection refused) crashed with "Class not found" instead of throwing `TransportException`. The class now lives in `TransportException.php`; `TransporterException` remains as a deprecated alias.
+- **`VicidialApi::createWithBasicAuth()` was not static** although the README documents it as a static call, which failed with "Non-static method cannot be called statically".
+- **Double URL-encoding in `Agent` methods.** Values were passed through `urlencode()` and then `http_build_query()`, so `+` became `%252B` and spaces became `%2B`. Values are now encoded exactly once.
+- **`Agent::switchLead()` sent the lead as `value`**, which the Agent API ignores (it reads `lead_id` or `vendor_lead_code`), so the call always failed with "switch_lead not valid". It now sends `lead_id`.
+- Request URLs no longer contain a double slash between the host and the script path (`http://host//agc/api.php`).
+- Removed leftover "OpenAI" wording from `Factory` and `VicidialApi` docblocks.
+
+### Deprecated
+- Default `User-Agent` bumped to `VicidialApi-PHP-Wrapper/4.1`.
+- `VicidialConfig` option `urlEncodeDefault` / `isUrlEncodeDefault()`: a no-op since v3.0.0. Values are always encoded exactly once by the transport. README Example 5 (`withUrlEncode(true)`) referred to a method that no longer exists and has been rewritten.
+
 ## [2.0.0] - 2026-01-26
 
 ### Added - Major Features

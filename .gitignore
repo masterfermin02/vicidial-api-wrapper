@@ -6,3 +6,11 @@ coverage.xml
 .phpunit.result.cache
 build
 example/.env
+
+# graphify: keep graph.json / GRAPH_REPORT.md / graph.html, drop machine-specific state
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/cache/
+
+# Claude Code hooks written by `graphify claude install` reference a local absolute binary path
+.claude/settings.json

@@ -32,7 +32,7 @@ $config = VicidialConfig::create(
     protocol: 'https',              // Use HTTPS for secure connections
     verifyTls: true,                // Verify SSL/TLS certificates
     timeout: 60,                    // 60 second timeout for requests
-    urlEncodeDefault: false,        // Whether to URL encode parameters by default
+    urlEncodeDefault: false,        // Deprecated no-op: values are always URL-encoded once
     userAgent: 'MyApp/1.0',        // Custom user agent
     source: 'myapp'                 // Source identifier for tracking
 );

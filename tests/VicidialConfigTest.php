@@ -22,7 +22,7 @@ class VicidialConfigTest extends TestCase
         $this->assertTrue($config->isVerifyTls());
         $this->assertSame(30, $config->getTimeout());
         $this->assertFalse($config->isUrlEncodeDefault());
-        $this->assertSame('VicidialApi-PHP-Wrapper/2.0', $config->getUserAgent());
+        $this->assertSame('VicidialApi-PHP-Wrapper/4.1', $config->getUserAgent());
         $this->assertSame('test', $config->getSource());
         $this->assertFalse($config->hasBasicAuth());
         $this->assertSame('http://localhost', $config->getBaseUri());

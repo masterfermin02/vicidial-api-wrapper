@@ -20,7 +20,7 @@ final class VicidialConfig
         private readonly int $timeout = 30,
         private readonly int $connectTimeout = 10,
         private readonly bool $urlEncodeDefault = false,
-        private readonly string $userAgent = 'VicidialApi-PHP-Wrapper/2.0',
+        private readonly string $userAgent = 'VicidialApi-PHP-Wrapper/4.1',
         private readonly ?string $basicAuthUser = null,
         private readonly ?string $basicAuthPass = null,
         private readonly string $source = 'test',
@@ -53,7 +53,7 @@ final class VicidialConfig
         int $timeout = 30,
         int $connectTimeout = 10,
         bool $urlEncodeDefault = false,
-        string $userAgent = 'VicidialApi-PHP-Wrapper/2.0',
+        string $userAgent = 'VicidialApi-PHP-Wrapper/4.1',
         string $source = 'test',
         ?RetryConfig $retryConfig = null,
         ?LoggerInterface $logger = null,
@@ -85,7 +85,7 @@ final class VicidialConfig
         int $timeout = 30,
         int $connectTimeout = 10,
         bool $urlEncodeDefault = false,
-        string $userAgent = 'VicidialApi-PHP-Wrapper/2.0',
+        string $userAgent = 'VicidialApi-PHP-Wrapper/4.1',
         string $source = 'test',
         ?RetryConfig $retryConfig = null,
         ?LoggerInterface $logger = null,
@@ -143,6 +143,10 @@ final class VicidialConfig
         return $this->connectTimeout;
     }
 
+    /**
+     * @deprecated Has no effect. Query values are always URL-encoded exactly once by the
+     *             transport (http_build_query); do not pre-encode values yourself.
+     */
     public function isUrlEncodeDefault(): bool
     {
         return $this->urlEncodeDefault;
