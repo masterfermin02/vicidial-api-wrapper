@@ -160,7 +160,7 @@ All existing code continues to work without changes. Legacy methods are deprecat
 ## Next Steps for Users
 
 1. Review the [Migration Guide](../../MIGRATION.md)
-2. Check out [example/using_config.php](example/using_config.php)
+2. Check out [example/using_config.php](../../example/using_config.php)
 3. Update code to use new configuration approach
 4. Enjoy improved configuration control!
 

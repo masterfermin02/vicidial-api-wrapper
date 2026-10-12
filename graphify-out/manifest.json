@@ -1,9 +1,9 @@
 {
   "composer.json": {
-    "mtime": 1769445626.3886514,
-    "seen": 1791813054.713302,
-    "ast_hash": "8661dd730dc92c611eb67e975a7debcd",
-    "semantic_hash": "8661dd730dc92c611eb67e975a7debcd"
+    "mtime": 1791826688.6776698,
+    "seen": 1791826816.709373,
+    "ast_hash": "99b1e31b29f8aae40cd4733159c4d579",
+    "semantic_hash": ""
   },
   "example/admin/moh_list.php": {
     "mtime": 1700314768.8501437,
@@ -30,10 +30,10 @@
     "semantic_hash": "1566d58200c915e1a9b0dd7fb5ec5331"
   },
   "example/reliability_features.php": {
-    "mtime": 1769445626.3922086,
-    "seen": 1791813054.7133172,
-    "ast_hash": "84f5a23114e115b3eabe4bb8fbf40de1",
-    "semantic_hash": "84f5a23114e115b3eabe4bb8fbf40de1"
+    "mtime": 1791818503.338514,
+    "seen": 1791826816.7093928,
+    "ast_hash": "1fd78cfa8057e9550928b1db6496241f",
+    "semantic_hash": ""
   },
   "example/response_dto_usage.php": {
     "mtime": 1769445626.3930354,
@@ -66,16 +66,16 @@
     "semantic_hash": "11048ae0877186c1de8aec88c3f29896"
   },
   "src/Contracts/AdminContract.php": {
-    "mtime": 1791811874.96003,
-    "seen": 1791813054.7133272,
-    "ast_hash": "c6d77c082be6923c275ce145272a8c9d",
-    "semantic_hash": "c6d77c082be6923c275ce145272a8c9d"
+    "mtime": 1791825654.9416893,
+    "seen": 1791826816.709407,
+    "ast_hash": "72aaf55aa57803ebdec45cb2c0bcfbda",
+    "semantic_hash": ""
   },
   "src/Contracts/AgentContract.php": {
-    "mtime": 1791811874.962071,
-    "seen": 1791813054.7133281,
-    "ast_hash": "ff3009c1d0e20a8d6c8a284721bfed6b",
-    "semantic_hash": "ff3009c1d0e20a8d6c8a284721bfed6b"
+    "mtime": 1791825654.9471262,
+    "seen": 1791826816.709408,
+    "ast_hash": "6868b5059c6654ab4ecc61d4309a44d5",
+    "semantic_hash": ""
   },
   "src/Contracts/MetaInformationContract.php": {
     "mtime": 1700016124.5383453,
@@ -138,10 +138,10 @@
     "semantic_hash": "e3e6699b78ebb1f2e2f09f6c23c29ab2"
   },
   "src/Exceptions/InvalidArgumentException.php": {
-    "mtime": 1769453396.6781425,
-    "seen": 1791813054.713345,
-    "ast_hash": "b93876b98d88906107091e7ff9bbb848",
-    "semantic_hash": "b93876b98d88906107091e7ff9bbb848"
+    "mtime": 1791825449.292234,
+    "seen": 1791826816.7094321,
+    "ast_hash": "aa9ab8e495f9a433322e00f1a291cc2f",
+    "semantic_hash": ""
   },
   "src/Exceptions/InvalidIpException.php": {
     "mtime": 1769445626.3984582,
@@ -192,10 +192,10 @@
     "semantic_hash": "8c4208060d5e564da34aaf6a5cdf0982"
   },
   "src/Factory.php": {
-    "mtime": 1791811827.8996446,
-    "seen": 1791813054.7133582,
-    "ast_hash": "54755ba37a21ef5ae7de636e4d0ed5cb",
-    "semantic_hash": "54755ba37a21ef5ae7de636e4d0ed5cb"
+    "mtime": 1791825577.647893,
+    "seen": 1791826816.709446,
+    "ast_hash": "c163f994fd195abc9bdd69889bb1ca77",
+    "semantic_hash": ""
   },
   "src/Logger/NullLogger.php": {
     "mtime": 1769445626.401169,
@@ -204,22 +204,22 @@
     "semantic_hash": "0ead5130359459446a657d95058cb9ce"
   },
   "src/Resources/Admin.php": {
-    "mtime": 1791811874.9588497,
-    "seen": 1791813054.7133608,
-    "ast_hash": "9fc64f3b2e76ffec48941e909358817d",
-    "semantic_hash": "9fc64f3b2e76ffec48941e909358817d"
+    "mtime": 1791825577.6438994,
+    "seen": 1791826816.70946,
+    "ast_hash": "97a6403f2a9d6c25c21b01a3c1c893a9",
+    "semantic_hash": ""
   },
   "src/Resources/Agent.php": {
-    "mtime": 1791812052.1614568,
-    "seen": 1791813054.713362,
-    "ast_hash": "ea8be3ee0ff7cc111c4dff077c195089",
-    "semantic_hash": "ea8be3ee0ff7cc111c4dff077c195089"
+    "mtime": 1791825539.2323616,
+    "seen": 1791826816.709461,
+    "ast_hash": "2c1c7bbf114930e52ebce50b5e95a06c",
+    "semantic_hash": ""
   },
   "src/Resources/Concerns/HasResponseHelpers.php": {
-    "mtime": 1769445626.403434,
-    "seen": 1791813054.713364,
-    "ast_hash": "bb49b212a6e9a63d5d68a9ab0f42e2fe",
-    "semantic_hash": "bb49b212a6e9a63d5d68a9ab0f42e2fe"
+    "mtime": 1791825449.2877522,
+    "seen": 1791826816.7094631,
+    "ast_hash": "005a8db0d1b0d9f7fab191f4334d21a4",
+    "semantic_hash": ""
   },
   "src/Resources/Concerns/Streamable.php": {
     "mtime": 1700314772.1917584,
@@ -258,16 +258,16 @@
     "semantic_hash": "bd682b93ac05b0d7351db188c4114ad3"
   },
   "src/Responses/VicidialResponse.php": {
-    "mtime": 1769445626.4056563,
-    "seen": 1791813054.713374,
-    "ast_hash": "893c8ff6a3153e885b92ff13325f97e2",
-    "semantic_hash": "893c8ff6a3153e885b92ff13325f97e2"
+    "mtime": 1791825969.9316702,
+    "seen": 1791826816.709475,
+    "ast_hash": "add57966646a2b916f9298db6399e24c",
+    "semantic_hash": ""
   },
   "src/Transporters/HttpTransporter.php": {
-    "mtime": 1769454335.8043852,
-    "seen": 1791813054.713376,
-    "ast_hash": "67b01a3a52ba3a8bf47963d1eb68d046",
-    "semantic_hash": "67b01a3a52ba3a8bf47963d1eb68d046"
+    "mtime": 1791826199.681975,
+    "seen": 1791826816.709476,
+    "ast_hash": "fc608be21dce1bb15f1c5e5a05485bdc",
+    "semantic_hash": ""
   },
   "src/ValueObjects/ApiKey.php": {
     "mtime": 1700008967.8976073,
@@ -294,10 +294,10 @@
     "semantic_hash": "546a59fc49964e19f71f8813e5beaac9"
   },
   "src/ValueObjects/RetryConfig.php": {
-    "mtime": 1769453396.7184727,
-    "seen": 1791813054.713388,
-    "ast_hash": "7f25816a3751373c682742ab3702b9b6",
-    "semantic_hash": "7f25816a3751373c682742ab3702b9b6"
+    "mtime": 1791826199.6842875,
+    "seen": 1791826816.709484,
+    "ast_hash": "c3411de90f2fb98a90e8dfccf7baa087",
+    "semantic_hash": ""
   },
   "src/ValueObjects/Transporter/BaseUri.php": {
     "mtime": 1700009040.310784,
@@ -312,10 +312,10 @@
     "semantic_hash": "3233558fb70cdbfd072c831c9686c10c"
   },
   "src/ValueObjects/Transporter/Payload.php": {
-    "mtime": 1791811827.9893777,
-    "seen": 1791813054.713392,
-    "ast_hash": "3851fdd7829203460dee44771c48af02",
-    "semantic_hash": "3851fdd7829203460dee44771c48af02"
+    "mtime": 1791825843.5434716,
+    "seen": 1791826816.7094889,
+    "ast_hash": "44d8d8f6a447c3f715c5dd409c01079c",
+    "semantic_hash": ""
   },
   "src/ValueObjects/Transporter/QueryParams.php": {
     "mtime": 1700015687.7262495,
@@ -336,15 +336,15 @@
     "semantic_hash": "2c6fae2aafc3c949796c9ce6a2fcf7e4"
   },
   "src/VicidialClient.php": {
-    "mtime": 1769445626.4112458,
-    "seen": 1791813054.713398,
-    "ast_hash": "7c17d593a7e362e911f1cb0746c0f1b0",
-    "semantic_hash": "7c17d593a7e362e911f1cb0746c0f1b0"
+    "mtime": 1791818503.4976573,
+    "seen": 1791826816.709495,
+    "ast_hash": "2c4c34ad86b812538ac6971e456aa805",
+    "semantic_hash": ""
   },
   "src/VicidialConfig.php": {
-    "mtime": 1791814754.7667391,
-    "seen": 1791818408.3817332,
-    "ast_hash": "5014d0439c015341f68d1ebf5432f085",
+    "mtime": 1791826652.2021728,
+    "seen": 1791826816.709497,
+    "ast_hash": "ceefe37e4b0cfde9ed1ee5d6772bbdb6",
     "semantic_hash": ""
   },
   "tests/ClientTest.php": {
@@ -372,10 +372,10 @@
     "semantic_hash": "6bba5632b5d17bf7ece2e136609495f2"
   },
   "tests/FactoryTest.php": {
-    "mtime": 1769445626.4136543,
-    "seen": 1791813054.7134058,
-    "ast_hash": "f1e370b324735c0ac7480145d7cfa49d",
-    "semantic_hash": "f1e370b324735c0ac7480145d7cfa49d"
+    "mtime": 1791818503.464864,
+    "seen": 1791826816.7095098,
+    "ast_hash": "80bed2297ac4c807c25abdede04cd9f0",
+    "semantic_hash": ""
   },
   "tests/Fakers/FakeGuzzleClient.php": {
     "mtime": 1769445626.4147513,
@@ -408,10 +408,10 @@
     "semantic_hash": "763b422fa342e177643805c49d44c14f"
   },
   "tests/Mocks/MockPsrClient.php": {
-    "mtime": 1769455623.7849402,
-    "seen": 1791813054.713415,
-    "ast_hash": "7648f1671124ae763a62e5bf4d38ed9b",
-    "semantic_hash": "7648f1671124ae763a62e5bf4d38ed9b"
+    "mtime": 1791826199.6830788,
+    "seen": 1791826816.709524,
+    "ast_hash": "f344fe55344c24f973c308616fd9bb65",
+    "semantic_hash": ""
   },
   "tests/Resources/AdminCoverageTest.php": {
     "mtime": 1791811958.8678799,
@@ -426,10 +426,10 @@
     "semantic_hash": "2480b34e4379199aaeee3909f2f16127"
   },
   "tests/Resources/AgentCoverageTest.php": {
-    "mtime": 1791811958.8724158,
-    "seen": 1791813054.713419,
-    "ast_hash": "a4dc4a2e0a5e78c493584103de1401e3",
-    "semantic_hash": "a4dc4a2e0a5e78c493584103de1401e3"
+    "mtime": 1791825577.6459749,
+    "seen": 1791826816.70953,
+    "ast_hash": "482d5fdb346dd2817f26f91ee6dfdf7b",
+    "semantic_hash": ""
   },
   "tests/Resources/AgentEncodingTest.php": {
     "mtime": 1791811958.8758647,
@@ -444,10 +444,10 @@
     "semantic_hash": "337f3216bf9db2459e3a5586d38b91d0"
   },
   "tests/Resources/AgentTest.php": {
-    "mtime": 1769445626.4191272,
-    "seen": 1791813054.713423,
-    "ast_hash": "a599ac2b6764673478d8a81d862475f5",
-    "semantic_hash": "a599ac2b6764673478d8a81d862475f5"
+    "mtime": 1791818503.3918984,
+    "seen": 1791826816.709536,
+    "ast_hash": "54c0ab298125a2bb428dd019f9164b64",
+    "semantic_hash": ""
   },
   "tests/Responses/VicidialResponseTest.php": {
     "mtime": 1769455623.7595308,
@@ -461,12 +461,6 @@
     "ast_hash": "1f7cb1e29ddac3adedc6bfbcf9c24824",
     "semantic_hash": "1f7cb1e29ddac3adedc6bfbcf9c24824"
   },
-  "tests/Unit/Responses/VicidialResponseTest.php": {
-    "mtime": 1769454850.9183004,
-    "seen": 1791813054.7134268,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
-    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
-  },
   "tests/Unit/ValueObjects/BaseUriTest.php": {
     "mtime": 1769455623.7509408,
     "seen": 1791813054.713429,
@@ -474,10 +468,10 @@
     "semantic_hash": "ca7d3081c01594d710ba2cb1862460cf"
   },
   "tests/Unit/ValueObjects/HeadersTest.php": {
-    "mtime": 1769455623.7634501,
-    "seen": 1791813054.71343,
-    "ast_hash": "824bb184b7f9ad65a2561b6914de0506",
-    "semantic_hash": "824bb184b7f9ad65a2561b6914de0506"
+    "mtime": 1791818503.385382,
+    "seen": 1791826816.709545,
+    "ast_hash": "d8f682a74fdb2a2a50a2d3734886da43",
+    "semantic_hash": ""
   },
   "tests/Unit/ValueObjects/ParameterTest.php": {
     "mtime": 1769455623.7544494,
@@ -510,10 +504,10 @@
     "semantic_hash": "a467227658377dbe535901c2c131c7f8"
   },
   "tests/VicidialAPiTest.php": {
-    "mtime": 1769445626.422267,
-    "seen": 1791813054.713439,
-    "ast_hash": "362635466ba5f0680f7263fcf00aa0ba",
-    "semantic_hash": "362635466ba5f0680f7263fcf00aa0ba"
+    "mtime": 1791818503.4438329,
+    "seen": 1791826816.709554,
+    "ast_hash": "1ab2469f23747bc952be013f8d329a40",
+    "semantic_hash": ""
   },
   "tests/VicidialApiBasicAuthTest.php": {
     "mtime": 1791811958.8863776,
@@ -522,58 +516,58 @@
     "semantic_hash": "e5b31764a878dd261af50dd4cd846f50"
   },
   "tests/VicidialConfigTest.php": {
-    "mtime": 1791814767.739022,
-    "seen": 1791818408.3817768,
-    "ast_hash": "391eff23097a9bfdd7ab0e301e65687d",
+    "mtime": 1791826652.2034876,
+    "seen": 1791826816.709559,
+    "ast_hash": "f772e809e3548fe8040c9110716307fb",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1791818376.540289,
-    "seen": 1791818408.38178,
-    "ast_hash": "b779e3dda11692a059353d6c6ee28fd3",
+    "mtime": 1791826797.7847648,
+    "seen": 1791826816.7095628,
+    "ast_hash": "0b298c3c6eddb45231c29ae251f9d368",
     "semantic_hash": ""
   },
   "MIGRATION.md": {
-    "mtime": 1791814754.7669804,
-    "seen": 1791818408.381783,
-    "ast_hash": "230bb5960432b49f839fcb582d0f81fa",
+    "mtime": 1791826811.688728,
+    "seen": 1791826816.709567,
+    "ast_hash": "7f41c9f166be76194a640b27029a1602",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1791818396.384856,
-    "seen": 1791818408.381784,
-    "ast_hash": "beecf0e44b2316cfdc3c14355a72f819",
+    "mtime": 1791826763.3143587,
+    "seen": 1791826816.709568,
+    "ast_hash": "c57958501ee61a94fd13dc6af394a1b1",
     "semantic_hash": ""
   },
   "docs/ERROR_HANDLING.md": {
-    "mtime": 1791818396.3876903,
-    "seen": 1791818408.381786,
-    "ast_hash": "1b9b9d63e67ddd625595ac32dd35102f",
+    "mtime": 1791826250.4848478,
+    "seen": 1791826816.709569,
+    "ast_hash": "e535043467688b7830501920f62cd421",
     "semantic_hash": ""
   },
   "docs/README.md": {
-    "mtime": 1791818376.4922173,
-    "seen": 1791818408.38179,
-    "ast_hash": "273b78c7e002b019cbab14e51a53d82c",
+    "mtime": 1791826763.3721225,
+    "seen": 1791826816.709575,
+    "ast_hash": "44551bb8977091c019893330c50dca4f",
     "semantic_hash": ""
   },
   "docs/RESPONSE_DTO.md": {
-    "mtime": 1791818396.3902137,
-    "seen": 1791818408.381793,
-    "ast_hash": "205fdfb1dc4a1ad5d906ea58ea3de1f1",
+    "mtime": 1791826040.8655431,
+    "seen": 1791826816.70958,
+    "ast_hash": "6b0a1f8b089f0963dd0dc9a709c10eba",
     "semantic_hash": ""
   },
   "docs/ROADMAP.md": {
-    "mtime": 1791818376.5400186,
-    "seen": 1791818408.381794,
-    "ast_hash": "9f915d635aeb1a0e045c7d9ab69e0675",
+    "mtime": 1791826797.7843466,
+    "seen": 1791826816.7095811,
+    "ast_hash": "3877bda51a677c73ccda5121b1768b4e",
     "semantic_hash": ""
   },
   "docs/VICIDIAL_API_GUIDE.md": {
-    "mtime": 1791812149.7887304,
-    "seen": 1791813054.713473,
-    "ast_hash": "474bbdb19f2dde93a30986744521e85d",
-    "semantic_hash": "474bbdb19f2dde93a30986744521e85d"
+    "mtime": 1791826763.3711548,
+    "seen": 1791826816.709582,
+    "ast_hash": "7ec553eb9c2b2c2d6777e18336e69beb",
+    "semantic_hash": ""
   },
   "docs/admin.md": {
     "mtime": 1791812055.3120346,
@@ -588,10 +582,10 @@
     "semantic_hash": "b37140df99b28ce9375e151425439871"
   },
   "docs/response-formats.md": {
-    "mtime": 1769445626.3906324,
-    "seen": 1791813054.7134788,
-    "ast_hash": "fb8ded105e2178eebe89fd062efbb458",
-    "semantic_hash": "fb8ded105e2178eebe89fd062efbb458"
+    "mtime": 1791826250.4802191,
+    "seen": 1791826816.709602,
+    "ast_hash": "5d76262a7922e2dd2dcb93bb17c73b90",
+    "semantic_hash": ""
   },
   "tests/README.md": {
     "mtime": 1769456093.6716423,
@@ -618,21 +612,21 @@
     "semantic_hash": ""
   },
   "docs/QUICKSTART.md": {
-    "mtime": 1791818396.3897195,
-    "seen": 1791818408.381788,
-    "ast_hash": "c2b549564062f6e8c33a54a1f1af9da3",
+    "mtime": 1791826811.6771407,
+    "seen": 1791826816.709574,
+    "ast_hash": "e2fe5375bb0c816ab2d0fff394f03a64",
     "semantic_hash": ""
   },
   "docs/RELIABILITY_FEATURES.md": {
-    "mtime": 1769445626.3854585,
-    "seen": 1791818408.3817909,
-    "ast_hash": "8bfc19bb88829e452f834a149636d33a",
+    "mtime": 1791826250.4816203,
+    "seen": 1791826816.7095768,
+    "ast_hash": "9e969f976541ddef2dad02f199fc06da",
     "semantic_hash": ""
   },
   "docs/RELIABILITY_QUICK_REFERENCE.md": {
-    "mtime": 1769445626.387641,
-    "seen": 1791818408.381792,
-    "ast_hash": "7c748ff58036a2adca8c9bc7d42b055d",
+    "mtime": 1791826811.6778748,
+    "seen": 1791826816.709578,
+    "ast_hash": "15a96de6eaeaa8d2944cd2521e33740c",
     "semantic_hash": ""
   },
   "docs/archive/CHECKLIST.md": {
@@ -642,9 +636,9 @@
     "semantic_hash": ""
   },
   "docs/archive/COMPLETE_FEATURE_SUMMARY.md": {
-    "mtime": 1791818406.0701036,
-    "seen": 1791818408.381801,
-    "ast_hash": "727ed651bb768050098562ff77aaab5c",
+    "mtime": 1791826811.6833494,
+    "seen": 1791826816.709589,
+    "ast_hash": "df4e743892bca97697a430effa9f38af",
     "semantic_hash": ""
   },
   "docs/archive/ERROR_MODEL_IMPLEMENTATION.md": {
@@ -654,9 +648,9 @@
     "semantic_hash": ""
   },
   "docs/archive/IMPLEMENTATION_SUMMARY.md": {
-    "mtime": 1791818396.554178,
-    "seen": 1791818408.381804,
-    "ast_hash": "aec71331675e167360dfb45db5356225",
+    "mtime": 1791826811.682521,
+    "seen": 1791826816.709592,
+    "ast_hash": "e3e7f4ec0dad07e833857bf7589dd365",
     "semantic_hash": ""
   },
   "docs/archive/NAMING_CONVENTIONS_IMPLEMENTATION.md": {
@@ -693,6 +687,168 @@
     "mtime": 1791816499.8370197,
     "seen": 1791818408.3818119,
     "ast_hash": "94fc548a34607166a368f5d30bf687b1",
+    "semantic_hash": ""
+  },
+  "config/vicidial.php": {
+    "mtime": 1791826652.1082623,
+    "seen": 1791826816.709379,
+    "ast_hash": "a5acf106f8c52c71b4e70bfe9894a1d9",
+    "semantic_hash": ""
+  },
+  "scripts/check-api-parity.php": {
+    "mtime": 1791826655.336801,
+    "seen": 1791826816.709402,
+    "ast_hash": "9c67b4271078c90fa380b24125886858",
+    "semantic_hash": ""
+  },
+  "scripts/scrape-official-responses.py": {
+    "mtime": 1791826655.3319428,
+    "seen": 1791826816.709404,
+    "ast_hash": "a908d4624d820e2e7c5513926d0ab92d",
+    "semantic_hash": ""
+  },
+  "src/Diagnostics/EndpointCheck.php": {
+    "mtime": 1791826652.0771332,
+    "seen": 1791826816.7094169,
+    "ast_hash": "ba99f19046a33d63ead42439a37fab2b",
+    "semantic_hash": ""
+  },
+  "src/Diagnostics/Ping.php": {
+    "mtime": 1791826672.7966661,
+    "seen": 1791826816.709418,
+    "ast_hash": "4a90fb9c6784a129020fc60b17e646c8",
+    "semantic_hash": ""
+  },
+  "src/Diagnostics/PingReport.php": {
+    "mtime": 1791826652.0826998,
+    "seen": 1791826816.70942,
+    "ast_hash": "170c66dea1c175eb122475ecefbff6c1",
+    "semantic_hash": ""
+  },
+  "src/Laravel/Console/PingCommand.php": {
+    "mtime": 1791826652.103064,
+    "seen": 1791826816.7094479,
+    "ast_hash": "3d406240f82245eac61b4ad894c6ac4d",
+    "semantic_hash": ""
+  },
+  "src/Laravel/Facades/Vicidial.php": {
+    "mtime": 1791826652.098039,
+    "seen": 1791826816.709449,
+    "ast_hash": "f4c58401fbe9b615cccc1845721cd883",
+    "semantic_hash": ""
+  },
+  "src/Laravel/VicidialServiceProvider.php": {
+    "mtime": 1791826652.0931044,
+    "seen": 1791826816.70945,
+    "ast_hash": "121a698823738a52894fda173b8e9ad1",
+    "semantic_hash": ""
+  },
+  "src/Parameters/AddLeadParameters.php": {
+    "mtime": 1791825449.2793458,
+    "seen": 1791826816.709453,
+    "ast_hash": "de4e631158457181e9f24d940b2f6089",
+    "semantic_hash": ""
+  },
+  "src/Parameters/DialParameters.php": {
+    "mtime": 1791825449.2698128,
+    "seen": 1791826816.709454,
+    "ast_hash": "0d2ec22d9ac04bf4ae25c6e4b5c2e09b",
+    "semantic_hash": ""
+  },
+  "src/Parameters/DispoParameters.php": {
+    "mtime": 1791825449.2740371,
+    "seen": 1791826816.709456,
+    "ast_hash": "960489c06149d707277585b3b291b0b3",
+    "semantic_hash": ""
+  },
+  "src/Parameters/Parameters.php": {
+    "mtime": 1791825449.2653093,
+    "seen": 1791826816.709457,
+    "ast_hash": "464a7d752e896c45000861879c34a210",
+    "semantic_hash": ""
+  },
+  "src/Parameters/UpdateLeadParameters.php": {
+    "mtime": 1791825449.2833877,
+    "seen": 1791826816.7094579,
+    "ast_hash": "711e4a3f83210d8c117b731921fe0b93",
+    "semantic_hash": ""
+  },
+  "tests/Contract/OfficialResponsesTest.php": {
+    "mtime": 1791826759.5474982,
+    "seen": 1791826816.709501,
+    "ast_hash": "2694341d65a6b1f73ef78b143ca83d1a",
+    "semantic_hash": ""
+  },
+  "tests/Contract/RetryStatusCodeTest.php": {
+    "mtime": 1791826199.700629,
+    "seen": 1791826816.709505,
+    "ast_hash": "3d8fd47bafdf4fa3bbda34aeaa82e6e3",
+    "semantic_hash": ""
+  },
+  "tests/Diagnostics/PingTest.php": {
+    "mtime": 1791826711.15026,
+    "seen": 1791826816.709506,
+    "ast_hash": "fc8f975626783153d01a53fc3297e355",
+    "semantic_hash": ""
+  },
+  "tests/Fixtures/official/responses.json": {
+    "mtime": 1791826357.32653,
+    "seen": 1791826816.7095191,
+    "ast_hash": "ec1be779270931ecfac7221cd1eb4ba0",
+    "semantic_hash": ""
+  },
+  "tests/Laravel/TestApplication.php": {
+    "mtime": 1791826711.1030366,
+    "seen": 1791826816.7095208,
+    "ast_hash": "ba58803eed65453a0ca9c1e3df11ecf5",
+    "semantic_hash": ""
+  },
+  "tests/Laravel/VicidialServiceProviderTest.php": {
+    "mtime": 1791826711.1499517,
+    "seen": 1791826816.709522,
+    "ast_hash": "826445f7eb41ed2f09fd278e64a76f52",
+    "semantic_hash": ""
+  },
+  "tests/Parameters/ParametersTest.php": {
+    "mtime": 1791825662.107801,
+    "seen": 1791826816.709525,
+    "ast_hash": "5af73af684b85dd80474a4368c8a5e44",
+    "semantic_hash": ""
+  },
+  "tests/Resources/AgentResponseVariantsTest.php": {
+    "mtime": 1791825661.9840257,
+    "seen": 1791826816.709535,
+    "ast_hash": "995598aec300ac4fbcf501a4f76039c8",
+    "semantic_hash": ""
+  },
+  "tests/Responses/VicidialResponseParsingTest.php": {
+    "mtime": 1791825927.8657432,
+    "seen": 1791826816.709538,
+    "ast_hash": "b3cb8082546025940a472a4fe819473d",
+    "semantic_hash": ""
+  },
+  "tests/VicidialConfigFromArrayTest.php": {
+    "mtime": 1791826653.8107815,
+    "seen": 1791826816.709557,
+    "ast_hash": "d196ecd1474c4af8e5e6ee61f645de3a",
+    "semantic_hash": ""
+  },
+  ".github/workflows/api-parity.yml": {
+    "mtime": 1791826655.3502002,
+    "seen": 1791826816.7095602,
+    "ast_hash": "d67b6080f13f0606c0d2160b8c1b3380",
+    "semantic_hash": ""
+  },
+  "docs/LARAVEL.md": {
+    "mtime": 1791826763.3231308,
+    "seen": 1791826816.7095711,
+    "ast_hash": "f93d305a0212dc7108a6915ffcce7d27",
+    "semantic_hash": ""
+  },
+  "scripts/README.md": {
+    "mtime": 1791826655.3460915,
+    "seen": 1791826816.7096052,
+    "ast_hash": "01c85a58406a7a75f275a35b03970658",
     "semantic_hash": ""
   }
 }

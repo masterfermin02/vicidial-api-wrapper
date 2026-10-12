@@ -17,6 +17,36 @@ The wrapper covers **all 31 Agent API functions and all 61 Non-Agent API functio
 - http://vicidial.org/docs/NON-AGENT_API.txt
 - http://vicidial.org/docs/AGENT_API.txt
 
+## Click-to-dial in 10 lines
+
+```sh
+composer require masterfermin02/vicidial-api-wrapper
+```
+
+```php
+use VicidialApi\Parameters\DialParameters;
+use VicidialApi\Parameters\DispoParameters;
+use VicidialApi\VicidialClient;
+use VicidialApi\VicidialConfig;
+
+$client = VicidialClient::make(VicidialConfig::create(host: 'vicidial.example.com', user: 'api_user', pass: 'api_pass', protocol: 'https'));
+
+$dial = $client->agent()->dialResponse('1000', new DialParameters(phoneNumber: '7275551212', phoneCode: 1));
+if ($dial->failed()) {
+    throw new RuntimeException($dial->message());   // "agent_user is not logged in - 1000", "auth USER DOES NOT HAVE PERMISSION ..."
+}
+
+// ... when the conversation is over:
+$client->agent()->hangupResponse('1000');
+$client->agent()->dispoResponse('1000', new DispoParameters(status: 'SALE'));
+```
+
+`1000` is the agent logged in to the VICIdial agent screen; `api_user` is a VICIdial user with
+user_level 7+ and API access. Not sure the server, credentials or permissions are right? Run the
+[connectivity check](docs/VICIDIAL_API_GUIDE.md#check-the-setup) first. Full walkthrough in
+[How the VICIdial API works](docs/VICIDIAL_API_GUIDE.md); Laravel users get a service provider,
+a `Vicidial` facade and `php artisan vicidial:ping`, see [Laravel integration](docs/LARAVEL.md).
+
 ## Install
 Requires PHP 8.2
 
@@ -74,6 +104,13 @@ $config = VicidialConfig::create(
 );
 $client = VicidialClient::make($config);
 ```
+
+### 4.2.0 (unreleased)
+- Every Agent function has a `...Response()` variant; typed parameter objects (`DialParameters`, `AddLeadParameters`, ...)
+- `VicidialResponse::fields()`, `rows()`, `statusCode()`; empty / HTML / HTTP-error bodies are errors, not success
+- 5xx and non-throwing PSR-18 clients are retried; idempotency guidance for `add_lead`
+- Laravel service provider, `Vicidial` facade, `config/vicidial.php`, `php artisan vicidial:ping`; framework-free `Diagnostics\Ping`
+- Every example response from the official docs is a parsing test; weekly API-parity workflow
 
 ### 4.1.0 (2026-10-12)
 - Full parity with the official Agent API (31 functions) and Non-Agent API (61 functions), guarded by tests

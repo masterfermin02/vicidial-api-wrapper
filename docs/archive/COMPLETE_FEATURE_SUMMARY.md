@@ -103,8 +103,8 @@ $config = VicidialConfig::create(
 - [../RELIABILITY_QUICK_REFERENCE.md](../RELIABILITY_QUICK_REFERENCE.md) - Cheat sheet
 
 **Examples**:
-- [example/reliability_features.php](example/reliability_features.php)
-- [example/custom_retry.php](example/custom_retry.php)
+- [example/reliability_features.php](../../example/reliability_features.php)
+- [example/custom_retry.php](../../example/custom_retry.php)
 
 **Impact**: Production-ready reliability that prevents outages and enables debugging
 
@@ -327,9 +327,9 @@ $client = VicidialClient::make($config);
 - [NAMING_CONVENTIONS_IMPLEMENTATION.md](NAMING_CONVENTIONS_IMPLEMENTATION.md) - Naming implementation
 
 ### Examples
-- [example/reliability_features.php](example/reliability_features.php) - Production setup
-- [example/custom_retry.php](example/custom_retry.php) - Custom retries
-- [example/using_config.php](example/using_config.php) - Configuration examples
+- [example/reliability_features.php](../../example/reliability_features.php) - Production setup
+- [example/custom_retry.php](../../example/custom_retry.php) - Custom retries
+- [example/using_config.php](../../example/using_config.php) - Configuration examples
 
 ---
 

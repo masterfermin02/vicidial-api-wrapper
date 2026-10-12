@@ -18,7 +18,7 @@ what was fixed, and what is still worth doing. It is meant to be edited: delete 
 
 ## Still open, in priority order
 
-### 1. Release hygiene: done in 4.1.0 / 4.1.1
+### 1. Release hygiene: done in 4.1.0 and the following commits
 - ~~Version drift~~ resolved: 4.1.0 tagged and released, README, CHANGELOG and User-Agent agree.
 - ~~No CI~~ resolved: `.github/workflows/ci.yml` runs pint, rector, phpstan and phpunit on PHP 8.2, 8.3 and 8.4 for every push and pull request.
 - ~~Root directory clutter~~ resolved: user guides moved to `docs/`, implementation summaries to `docs/archive/`, `docs/response-dto.md` merged into `docs/RESPONSE_DTO.md`.
@@ -41,11 +41,16 @@ what was fixed, and what is still worth doing. It is meant to be edited: delete 
 - ~~Idempotency note~~ resolved: `RetryConfig` docblock, `docs/RELIABILITY_FEATURES.md` ("Retries are not idempotent"), the quick reference and the README warn that `add_lead` retries can duplicate and show the split read/write client setup.
 - ~~Expose raw PSR-7 status and headers~~ resolved: `VicidialResponse::statusCode()`, `headers()`, `header()`.
 
-### 5. Developer experience
-- Laravel service provider + facade + `config/vicidial.php` (the author's other projects are Laravel; this is the most requested integration for PHP dialer tooling).
-- A `vicidial:ping` console command that calls `version` on both endpoints and prints permission errors in plain language.
-- Fixture-driven "contract" tests built from the example responses in the official docs, so parsing is validated against real shapes (the fixtures file already exists; extend it per function).
-- Publish `docs/VICIDIAL_API_GUIDE.md` content in the README's first screen; most visitors want "how do I click-to-dial" in 10 lines.
+### 5. Developer experience: done in 4.2.0
+- ~~Laravel service provider + facade + `config/vicidial.php`~~ resolved: `VicidialApi\Laravel\VicidialServiceProvider` (auto-discovered), `Vicidial` facade, publishable `config/vicidial.php`, `VicidialConfig::fromArray()` for any framework. See `docs/LARAVEL.md`.
+- ~~`vicidial:ping` console command~~ resolved: `php artisan vicidial:ping` and the framework-free `VicidialApi\Diagnostics\Ping` probe `version` + `webserver` on the Agent API and `version` + `campaigns_list` on the Non-Agent API and explain failures (wrong URL, wrong password, user_level, API access, proxy pages, DNS, TLS) in plain language.
+- ~~Fixture-driven contract tests from the official examples~~ resolved: `scripts/scrape-official-responses.py` builds `tests/Fixtures/official/responses.json` (722 example responses for 89 functions); `OfficialResponsesTest` parses every one and checks its status, message and fields.
+- ~~README first screen~~ resolved: "Click-to-dial in 10 lines" sits above the install section.
 
-### 6. Keep parity automatically
-- The official docs change a few times a year (`NON-AGENT_API.txt` was updated 2026-09-25). A scheduled job that downloads both files, diffs the function index against `AdminCoverageTest` / `AgentCoverageTest`, and opens an issue when something new appears would keep this list honest.
+### 6. Keep parity automatically: done in 4.2.0
+- ~~Scheduled diff of the official function index~~ resolved: `scripts/check-api-parity.php` downloads both docs, extracts the index and lists documented functions without a wrapper method; `.github/workflows/api-parity.yml` runs it every Monday (and on demand) and opens or comments on an issue labelled `api-parity`.
+
+## Deferred to 5.0 (breaking)
+- Return `VicidialResponse` from every resource method by default and keep the string variants as `...Raw()`.
+- Drop the `urlEncodeDefault` config option, the `TransporterException` alias and the unused `Payload::list/retrieve/upload/cancel/delete` template methods.
+- Replace the "body contains ERROR anywhere" heuristic in `VicidialResponse::determineStatus()` with per-function knowledge of which outputs are raw data.

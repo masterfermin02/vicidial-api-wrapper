@@ -119,6 +119,18 @@ $response = $client->agent()->dialResponse('1000', [
 ]);
 ```
 
+<a id="check-the-setup"></a>
+**Check the setup** (host, credentials, permissions) before anything else:
+
+```php
+use VicidialApi\Diagnostics\Ping;
+
+$report = (new Ping($client))->run();
+echo $report->toText();      // [OK] / [FAIL] per probe with a plain-language explanation
+```
+
+Laravel: `php artisan vicidial:ping`. See [docs/LARAVEL.md](LARAVEL.md).
+
 **Push a lead and queue it:**
 
 ```php

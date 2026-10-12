@@ -16,6 +16,8 @@ final class VicidialConfig
      */
     public const DEFAULT_SOURCE = 'vicidial-api-wrapper';
 
+    public const DEFAULT_USER_AGENT = 'VicidialApi-PHP-Wrapper/4.2';
+
     public function __construct(
         private readonly string $host,
         private readonly string $user,
@@ -25,7 +27,7 @@ final class VicidialConfig
         private readonly int $timeout = 30,
         private readonly int $connectTimeout = 10,
         private readonly bool $urlEncodeDefault = false,
-        private readonly string $userAgent = 'VicidialApi-PHP-Wrapper/4.1',
+        private readonly string $userAgent = self::DEFAULT_USER_AGENT,
         private readonly ?string $basicAuthUser = null,
         private readonly ?string $basicAuthPass = null,
         private readonly string $source = self::DEFAULT_SOURCE,
@@ -58,7 +60,7 @@ final class VicidialConfig
         int $timeout = 30,
         int $connectTimeout = 10,
         bool $urlEncodeDefault = false,
-        string $userAgent = 'VicidialApi-PHP-Wrapper/4.1',
+        string $userAgent = self::DEFAULT_USER_AGENT,
         string $source = self::DEFAULT_SOURCE,
         ?RetryConfig $retryConfig = null,
         ?LoggerInterface $logger = null,
@@ -90,7 +92,7 @@ final class VicidialConfig
         int $timeout = 30,
         int $connectTimeout = 10,
         bool $urlEncodeDefault = false,
-        string $userAgent = 'VicidialApi-PHP-Wrapper/4.1',
+        string $userAgent = self::DEFAULT_USER_AGENT,
         string $source = self::DEFAULT_SOURCE,
         ?RetryConfig $retryConfig = null,
         ?LoggerInterface $logger = null,
@@ -108,6 +110,59 @@ final class VicidialConfig
             basicAuthUser: $basicAuthUser,
             basicAuthPass: $basicAuthPass,
             source: $source,
+            retryConfig: $retryConfig,
+            logger: $logger,
+        );
+    }
+
+    /**
+     * Build a configuration from a plain array, as read from a config file or environment.
+     *
+     * Keys (snake_case, all optional except host/user/pass): host, user, pass, protocol, verify_tls,
+     * timeout, connect_timeout, source, user_agent, basic_auth => [user, pass],
+     * retry => [enabled, max_attempts, initial_delay_ms, max_delay_ms, multiplier, retry_on_5xx,
+     * retry_on_network_errors, retry_on_429]. Unknown keys are ignored. This is what the Laravel
+     * service provider feeds from config/vicidial.php.
+     *
+     * @param  array<string, mixed>  $config
+     */
+    public static function fromArray(array $config, ?LoggerInterface $logger = null): self
+    {
+        $string = static fn (mixed $value, string $default = ''): string => is_scalar($value) ? (string) $value : $default;
+        $int = static fn (mixed $value, int $default): int => is_numeric($value) ? (int) $value : $default;
+        $bool = static fn (mixed $value, bool $default): bool => is_bool($value) ? $value : (is_scalar($value) ? filter_var($value, FILTER_VALIDATE_BOOL) : $default);
+
+        /** @var array<string, mixed> $basicAuth */
+        $basicAuth = is_array($config['basic_auth'] ?? null) ? $config['basic_auth'] : [];
+        $basicAuthUser = $string($basicAuth['user'] ?? null);
+        $basicAuthPass = $string($basicAuth['pass'] ?? null);
+
+        /** @var array<string, mixed> $retry */
+        $retry = is_array($config['retry'] ?? null) ? $config['retry'] : [];
+        $retryConfig = $bool($retry['enabled'] ?? false, false)
+            ? RetryConfig::custom(
+                maxAttempts: $int($retry['max_attempts'] ?? null, 3),
+                initialDelayMs: $int($retry['initial_delay_ms'] ?? null, 1000),
+                maxDelayMs: $int($retry['max_delay_ms'] ?? null, 10000),
+                multiplier: is_numeric($retry['multiplier'] ?? null) ? (float) $retry['multiplier'] : 2.0,
+                retryOn5xx: $bool($retry['retry_on_5xx'] ?? true, true),
+                retryOnNetworkErrors: $bool($retry['retry_on_network_errors'] ?? true, true),
+                retryOn429: $bool($retry['retry_on_429'] ?? true, true),
+            )
+            : RetryConfig::disabled();
+
+        return new self(
+            host: $string($config['host'] ?? null),
+            user: $string($config['user'] ?? null),
+            pass: $string($config['pass'] ?? null),
+            protocol: $string($config['protocol'] ?? null, 'http'),
+            verifyTls: $bool($config['verify_tls'] ?? true, true),
+            timeout: $int($config['timeout'] ?? null, 30),
+            connectTimeout: $int($config['connect_timeout'] ?? null, 10),
+            userAgent: $string($config['user_agent'] ?? null, self::DEFAULT_USER_AGENT) ?: self::DEFAULT_USER_AGENT,
+            basicAuthUser: $basicAuthUser !== '' ? $basicAuthUser : null,
+            basicAuthPass: $basicAuthPass !== '' ? $basicAuthPass : null,
+            source: $string($config['source'] ?? null, self::DEFAULT_SOURCE) ?: self::DEFAULT_SOURCE,
             retryConfig: $retryConfig,
             logger: $logger,
         );

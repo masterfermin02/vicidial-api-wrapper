@@ -198,7 +198,7 @@ $client->agent()->pause('user', 'PAUSE');
 
 - [Full Documentation](README.md)
 - [Migration Guide](../MIGRATION.md)
-- [Complete Examples](example/using_config.php)
+- [Complete Examples](../example/using_config.php)
 - [Agent API Docs](agent.md)
 - [Admin API Docs](admin.md)
 

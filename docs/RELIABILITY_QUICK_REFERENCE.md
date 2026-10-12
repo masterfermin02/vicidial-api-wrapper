@@ -265,8 +265,8 @@ jq 'select(.context.duration_ms > 5000)' logs/vicidial.log
 ## 📚 See Also
 
 - [RELIABILITY_FEATURES.md](RELIABILITY_FEATURES.md) - Complete guide
-- [example/reliability_features.php](example/reliability_features.php) - Working example
-- [example/custom_retry.php](example/custom_retry.php) - Custom configurations
+- [example/reliability_features.php](../example/reliability_features.php) - Working example
+- [example/custom_retry.php](../example/custom_retry.php) - Custom configurations
 
 ## 💡 Pro Tips
 

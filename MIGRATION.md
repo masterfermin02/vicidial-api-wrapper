@@ -73,7 +73,7 @@ $client = VicidialClient::make($config);
 | `verifyTls` | bool | `true` | Verify SSL/TLS certificates |
 | `timeout` | int | `30` | Request timeout in seconds |
 | `urlEncodeDefault` | bool | `false` | Deprecated no-op; the transport always URL-encodes values exactly once |
-| `userAgent` | string | `'VicidialApi-PHP-Wrapper/4.1'` | Custom user agent string |
+| `userAgent` | string | `'VicidialApi-PHP-Wrapper/4.2'` | Custom user agent string |
 | `source` | string | `'vicidial-api-wrapper'` | Source identifier shown in VICIdial logs (max 20 chars; was `'test'` before 4.2.0) |
 
 ### VicidialConfig::createWithBasicAuth()

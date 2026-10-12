@@ -1,0 +1,911 @@
+{
+  "_source": {
+    "agent": "http://vicidial.org/docs/AGENT_API.txt (updated 2025-08-30)",
+    "non_agent": "http://vicidial.org/docs/NON-AGENT_API.txt (updated 2026-09-25)",
+    "generator": "see scripts/README.md"
+  },
+  "agent": {
+    "external_hangup": [
+      "ERROR: external_hangup not valid - 1|6666",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "SUCCESS: external_hangup function set - 1|6666"
+    ],
+    "external_status": [
+      "ERROR: external_status not valid - A|6666",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "SUCCESS: external_status function set - A|6666"
+    ],
+    "external_pause": [
+      "ERROR: external_pause not valid - PAUSE|6666",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "SUCCESS: external_pause function set - PAUSE|1232020456|6666"
+    ],
+    "logout": [
+      "ERROR: logout not valid - PAUSE|6666",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "SUCCESS: logout function set - LOGOUT|1232020456|6666"
+    ],
+    "external_dial": [
+      "NOTICE: defined dial_ingroup not found - FAKE_INGROUP",
+      "ERROR: external_dial not valid - 7275551212|1|YES|6666",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: agent_user is not allowed to place manual dial calls - 6666",
+      "ERROR: caller_id_number from group_alias is not valid - 6666|TESTING|123",
+      "ERROR: group_alias is not valid - 6666|TESTING",
+      "ERROR: outbound_cid is not allowed on this system - 6666|3125551212|DISABLED",
+      "ERROR: vtiger callback activity does not exist in vtiger system - 12345",
+      "ERROR: phone_number is already in this agents manual dial queue - 6666|7275551211",
+      "ERROR: lead_id is not valid - 6666|1234567",
+      "ERROR: phone number is not valid - 6666||1234567|",
+      "ERROR: phone number lead_id search not found - 6666|7275551212|1234567|",
+      "SUCCESS: external_dial function set - 7275551212|6666|1|YES|NO|YES|123456|1232020456|9|TESTING|7275551211|"
+    ],
+    "preview_dial_action": [
+      "ERROR: preview_dial_action not valid - 7275551212|1|YES|6666",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: agent_user is not allowed to place manual dial calls - 6666",
+      "ERROR: preview dialing not allowed on this campaign - 6666|TESTING|DISABLED",
+      "ERROR: preview dial skipping not allowed on this campaign - 6666|TESTING|PREVIEW_ONLY",
+      "ERROR: alt number dialing not allowed on this campaign - 6666|TESTING|N",
+      "SUCCESS: preview_dial_action function set - DIALONLY|6666|DIALONLY"
+    ],
+    "external_add_lead": [
+      "ERROR: external_add_lead not valid - 7275551212|1|6666|",
+      "ERROR: no user found - 6666",
+      "ERROR: lead insertion failed - 7275551212|TESTCAMP|101|6666",
+      "ERROR: add_lead PHONE NUMBER IN DNC - 7275551212|6666",
+      "ERROR: add_lead PHONE NUMBER IN CAMPAIGN DNC - 7275551212|TESTCAMP|6666",
+      "ERROR: campaign manual dial list undefined - 7275551212|TESTCAMP|6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "SUCCESS: lead added - 7275551212|TESTCAMP|101|123456|6666"
+    ],
+    "change_ingroups": [
+      "ERROR: change_ingroups not valid - N| TEST_IN SALESLINE -",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: campaign does not allow inbound calls - 6666",
+      "ERROR: user is not allowed to change agent in-groups - 6666|TESTING|123",
+      "ERROR: campaign dial_method does not allow outbound autodial - 6666|TESTING",
+      "ERROR: ingroup does not exist - FAKE_IN| TEST_IN FAKE_IN SALESLINE -",
+      "ERROR: ingroup_choices are required for ADD and REMOVE values - ADD|",
+      "SUCCESS: change_ingroups function set - YES| TEST_IN SALESLINE -|6666"
+    ],
+    "update_fields": [
+      "ERROR: update_fields not valid - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: user is not allowed to modify lead information - 6666|1234",
+      "ERROR: agent_user does not have a lead on their screen - 6666|1234",
+      "ERROR: no fields have been defined - 6666",
+      "SUCCESS: update_fields lead updated - 6666|1234|87498|vendor_lead_code='1234567',address1=''"
+    ],
+    "refresh_panel": [
+      "ERROR: agent_user not valid - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: no panels have been defined - 6666",
+      "SUCCESS: refresh_panel request sent - 6666|1234|1|scriptreload,script2reload"
+    ],
+    "set_timer_action": [
+      "ERROR: set_timer_action not valid - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: user is not allowed to modify campaign settings - 6666|1234",
+      "SUCCESS: set_timer_action lead updated - 6666|1234|MESSAGE_ONLY|test message|15"
+    ],
+    "st_login_log": [
+      "ERROR: st_login_log not valid - 6666|207",
+      "ERROR: no user found - 6666",
+      "SUCCESS: st_login_log user found - 6666"
+    ],
+    "st_get_agent_active_lead": [
+      "ERROR: st_get_agent_active_lead not valid - 6666|207",
+      "ERROR: no user found - 6666",
+      "ERROR: user not logged in - 6666",
+      "ERROR: no active lead found - 6666",
+      "SUCCESS: st_get_agent_active_lead lead found - 6666|7275551212|123456|9987-1234765|SK|WILLIAMS|JUH764AJJJ9"
+    ],
+    "ra_call_control": [
+      "ERROR: ra_call_control not valid - Y0315201639000402027|6666|INGROUPTRANSFER",
+      "ERROR: no user found - 6666",
+      "ERROR: user not logged in - 6666",
+      "ERROR: no active call found - Y0315201639000402027",
+      "ERROR: phone_number is not valid - 9",
+      "ERROR: ingroup is not valid - TESTINGROUP",
+      "ERROR: stage is not valid - XYZ",
+      "SUCCESS: ra_call_control transferred - 6666|Y0315201639000402027|SALESLINE",
+      "SUCCESS: ra_call_control hungup - 6666|Y0315201639000402027|HANGUP"
+    ],
+    "send_dtmf": [
+      "ERROR: send_dtmf not valid - QQ|6666",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "SUCCESS: send_dtmf function set - QQQQ1234SQQQQQ6654P|6666"
+    ],
+    "park_call": [
+      "ERROR: park_call not valid - PARK_CUSTOMER|6666",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: agent_user does not have a lead on their screen - 6666",
+      "SUCCESS: park_call function set - PARK_CUSTOMER|6666"
+    ],
+    "transfer_conference": [
+      "ERROR: transfer_conference not valid - QQ|6666",
+      "ERROR: value is not valid - XYZFUNCTION|6666",
+      "ERROR: no user found - 6666",
+      "ERROR: ingroup is not valid - XYZINGROUP",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: agent_user does not have a live call - 6666",
+      "ERROR: caller_id_number from group_alias is not valid - 6666|TESTING|123",
+      "ERROR: group_alias is not valid - 6666|TESTING",
+      "ERROR: cid_choice is not valid - 6666|TESTING",
+      "ERROR: agent_user has previous active 3-way calls - 6666|1|0|YES",
+      "ERROR: agent_user has current active 3-way call - 6666|1|0|YES",
+      "SUCCESS: transfer_conference function set - LOCAL_CLOSER|SALESLINE||YES|6666|M2141842580000000044|"
+    ],
+    "recording": [
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: stop recording error - 6666|||||192.168.1.5|8600051|PAUSED",
+      "SUCCESS: recording function sent - 6666|STOP||||192.168.1.5|8600051|PAUSED",
+      "SUCCESS: recording function sent - 6666|START||||192.168.1.5|8600051|PAUSED",
+      "SUCCESS: recording function sent - 6666|START_MIDCALL||||192.168.1.5|8600051|PAUSED",
+      "NOTICE: not recording - 6666|||||192.168.1.5|8600051|PAUSED",
+      "NOTICE: recording active - 6666|121242|20120810-012008__6666_|192.168.1.5|2012-08-10 01:20:10|192.168.1.5|8600051|PAUSED"
+    ],
+    "stereo_recording": [
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: stop stereo_recording error - 6666|||||192.168.1.5|8600051|PAUSED",
+      "SUCCESS: stereo_recording function sent - 6666|END||||192.168.1.5|8600051|PAUSED",
+      "SUCCESS: stereo_recording function sent - 6666|BEGIN||||192.168.1.5|8600051|PAUSED",
+      "SUCCESS: stereo_recording function sent - 6666|BEGIN_MIDCALL||||192.168.1.5|8600051|PAUSED",
+      "NOTICE: not stereo_recording - 6666|||||192.168.1.5|8600051|PAUSED",
+      "NOTICE: stereo_recording active - 6666|121242|20120810-012008__6666_|192.168.1.5|2012-08-10 01:20:10|192.168.1.5|8600051|PAUSED"
+    ],
+    "webphone_url": [
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: webphone_url not valid - 6666|DISPLAY",
+      "ERROR: webphone_url error - webphone url is empty - 6666",
+      "ERROR: webphone_url error - no session data - 6666"
+    ],
+    "call_agent": [
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: call_agent not valid - 6666|CALL",
+      "ERROR: call_agent error - entry is empty - 6666",
+      "ERROR: call_agent error - no session data - 6666",
+      "SUCCESS: call_agent function sent - 6666"
+    ],
+    "audio_playback": [
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - PLAY|6666",
+      "ERROR: audio_playback not valid - ss-noservice|PLAY|6666",
+      "ERROR: audio_playback error - entry is empty - PLAY|6666",
+      "ERROR: audio_playback error - no session data - PLAY|6666",
+      "ERROR: audio_playback error - no audio playing in agent session - 8600051|10.10.10.15|PAUSE|6666",
+      "ERROR: audio_playback error - audio already playing in agent session - 8600051|10.10.10.15|PLAY|6666",
+      "NOTICE: audio_playback previous playback stopped - PLAY|Y|6666",
+      "SUCCESS: audio_playback function sent - ss-noservice|PLAY|6666"
+    ],
+    "switch_lead": [
+      "ERROR: switch_lead not valid - ||6666",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: agent_user does not have a live call - 6666",
+      "ERROR: agent call is not inbound - 6666|V2012367890123456789",
+      "ERROR: campaign not found - 6666|TESTCAMP",
+      "ERROR: campaign does not allow inbound lead search - 6666|TESTCAMP",
+      "ERROR: switch-to lead not found - 6666|12345|123456789",
+      "SUCCESS: switch_lead function set - 6666|12345|1234567890|TESTCAMP|12346"
+    ],
+    "vm_message": [
+      "ERROR: vm_message not valid - ||6666",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: current call does not match lead_id submitted - 6666",
+      "ERROR: agent_user does not have a live call - 6666",
+      "SUCCESS: vm_message function set - 6666|12345|EXship01|EXship02|EXship03"
+    ],
+    "pause_code": [
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: pause_code not valid - 6666|JUMPING",
+      "ERROR: pause_code error - agent is not paused - 6666",
+      "SUCCESS: pause_code function sent - 6666"
+    ],
+    "calls_in_queue_count": [
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "SUCCESS: calls_in_queue_count - 0"
+    ],
+    "force_fronter_leave_3way": [
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: agent_user is not on a phone call - 6666",
+      "ERROR: no fronter found - 6666",
+      "SUCCESS: force_fronter_leave_3way SENT - 6667",
+      "SUCCESS: force_fronter_leave_3way command sent over CCC - test_ccc"
+    ],
+    "force_fronter_audio_stop": [
+      "ERROR: force_fronter_audio_stop not valid - LOCAL_AND_CCC|6666",
+      "ERROR: auth USER DOES NOT HAVE PERMISSION TO USE THIS FUNCTION - LOCAL_AND_CCC|6666|force_fronter_audio_stop",
+      "ERROR: no user found - 6666",
+      "ERROR: agent_user is not logged in - 6666",
+      "ERROR: agent_user is not on a phone call - 6666",
+      "ERROR: no fronter session found - |6666|1234",
+      "ERROR: no fronter found - 6666",
+      "ERROR: force_fronter_audio_stop error - no audio playing in other agent session - 8600051|10.0.0.5||6666|1234",
+      "SUCCESS: force_fronter_audio_stop function SENT - LOCAL_AND_CCC||6667|1234",
+      "SUCCESS: force_fronter_audio_stop command sent over CCC - test_ccc"
+    ],
+    "send_notification": [
+      "ERROR: Agent API Notifications are disabled on this system - 0",
+      "ERROR: Missing recipient or recipient_type: (<recipient>|<recipient_type>)",
+      "ERROR: Invalid request, missing variables",
+      "ERROR: ACCESS TO CAMPAIGN TESTCAMP NOT ALLOWED FOR USER 6666",
+      "ERROR: ACCESS TO USER GROUP ADMIN NOT ALLOWED FOR USER 6666",
+      "ERROR: user_group DOES NOT EXIST - ADMIN|6666",
+      "ERROR: 6667 DOES NOT EXIST in vicidial_users",
+      "SUCCESS: notification queued"
+    ]
+  },
+  "non_agent": {
+    "sounds_list": [
+      "ERROR: sounds_list USER DOES NOT HAVE PERMISSION TO VIEW SOUNDS LIST",
+      "ERROR: audio store web directory does not exist: |6666|sounds_list|/srv/www/htdocs/1234|",
+      "ERROR: sounds_list CENTRAL SOUND CONTROL IS NOT ACTIVE"
+    ],
+    "moh_list": [
+      "ERROR: moh_list USER DOES NOT HAVE PERMISSION TO VIEW SOUNDS LIST",
+      "ERROR: moh_list CENTRAL SOUND CONTROL IS NOT ACTIVE"
+    ],
+    "vm_list": [
+      "ERROR: vm_list USER DOES NOT HAVE PERMISSION TO VIEW VOICEMAIL BOXES LIST",
+      "ERROR: vm_list CENTRAL SOUND CONTROL IS NOT ACTIVE"
+    ],
+    "blind_monitor": [
+      "SUCCESS: blind_monitor HAS BEEN LAUNCHED - 350a|010*010*010*017*350|8600051",
+      "ERROR: blind_monitor INVALID PHONE LOGIN - 350q",
+      "ERROR: blind_monitor INVALID SESSION ID - 8602051",
+      "ERROR: blind_monitor USER DOES NOT HAVE PERMISSION TO BLIND MONITOR - 6666|0",
+      "ERROR: NO FUNCTION SPECIFIED"
+    ],
+    "agent_ingroup_info": [
+      "ERROR: agent_ingroup_info USER DOES NOT HAVE PERMISSION TO GET AGENT INFO - 6666|0",
+      "ERROR: agent_ingroup_info INVALID USER ID - 1255|6666"
+    ],
+    "agent_ingroup_availability": [
+      "ERROR: agent_ingroup_availability USER DOES NOT HAVE PERMISSION TO GET AGENT INFO - 6666|0",
+      "ERROR: NO INGROUPS DEFINED",
+      "ERROR: NO INGROUPS FOUND"
+    ],
+    "agent_campaigns": [
+      "ERROR: agent_campaigns USER DOES NOT HAVE PERMISSION TO GET AGENT INFO - 6666|0",
+      "ERROR: agent_campaigns INVALID USER ID - 1255|6666",
+      "ERROR: agent_campaigns AGENT USER DOES NOT EXIST - 1000|6666",
+      "ERROR: agent_campaigns THIS AGENT USER HAS NO AVAILABLE CAMPAIGNS - 1000|6666"
+    ],
+    "campaigns_list": [
+      "ERROR: campaigns_list USER DOES NOT HAVE PERMISSION TO GET CAMPAIGN INFO - 6666|0",
+      "ERROR: campaigns_list THIS USER HAS NO VIEWABLE CAMPAIGNS - 6666"
+    ],
+    "hopper_list": [
+      "ERROR: hopper_list USER DOES NOT HAVE PERMISSION TO GET CAMPAIGN INFO - 6666|0",
+      "ERROR: hopper_list THIS CAMPAIGN DOES NOT EXIST - 6666|TESTCAMP",
+      "ERROR: hopper_list THERE ARE NO LEADS IN THE HOPPER FOR THIS CAMPAIGN - 6666|TESTCAMP"
+    ],
+    "hopper_bulk_insert": [
+      "NOTICE: hopper_bulk_insert LEAD ADDED TO HOPPER - 7275551111|193715|1677922|6666",
+      "NOTICE: hopper_bulk_insert NOT ADDED TO HOPPER, OUTSIDE OF LOCAL TIME - 7275551111|193715|-5|NY|0",
+      "NOTICE: hopper_bulk_insert NOT ADDED TO HOPPER, CAMPAIGN DOES NOT EXIST - 101|193715",
+      "NOTICE: hopper_bulk_insert NOT ADDED TO HOPPER, LEAD NOT FOUND - 193715",
+      "NOTICE: hopper_bulk_insert NOT ADDED TO HOPPER, LEAD IS ALREADY IN THE HOPPER - 193715",
+      "NOTICE: hopper_bulk_insert NOT ADDED TO HOPPER, LEAD HOPPER INSERT ERROR - 193715",
+      "SUCCESS: hopper_bulk_insert LEADS HAVE BEEN INSERTED INTO THE HOPPER - 2|0|8432948|6666",
+      "ERROR: hopper_bulk_insert NO LEADS HAVE BEEN INSERTED INTO THE HOPPER - 1|0|6666",
+      "ERROR: hopper_bulk_insert USER DOES NOT HAVE PERMISSION TO ADD LEADS TO THE HOPPER - 6666|0"
+    ],
+    "recording_lookup": [
+      "ERROR: recording_lookup USER DOES NOT HAVE PERMISSION TO GET RECORDING INFO - 6666|0",
+      "ERROR: recording_lookup INVALID SEARCH PARAMETERS - 6666|1000||2010-12-03|",
+      "ERROR: recording_lookup NO RECORDINGS FOUND - 1255|6666||2010-12-03|"
+    ],
+    "did_log_export": [
+      "ERROR: did_log_export USER DOES NOT HAVE PERMISSION TO GET DID INFO - 6666|0",
+      "ERROR: did_log_export INVALID SEARCH PARAMETERS - 6666|3125551212|2010-12-03",
+      "ERROR: did_log_export NO RECORDS FOUND - 1255|3125551212|2010-12-03"
+    ],
+    "phone_number_log": [
+      "ERROR: phone_number_log USER DOES NOT HAVE PERMISSION TO GET CALL LOG INFO - 6666|0",
+      "ERROR: phone_number_log NO VALID PHONE NUMBERS DEFINED - 6666|312|2010-12-03",
+      "ERROR: phone_number_log NO RECORDS FOUND - 1255|3125551212|2010-12-03"
+    ],
+    "agent_stats_export": [
+      "ERROR: agent_stats_export USER DOES NOT HAVE PERMISSION TO GET AGENT INFO - 6666|0",
+      "ERROR: agent_stats_export INVALID SEARCH PARAMETERS - 6666||2010-12-03 00:00:00|2010-12-03 00:00:01|",
+      "ERROR: agent_stats_export NO RECORDS FOUND - 1255||2010-12-03 00:00:00|2010-12-03 00:00:01|"
+    ],
+    "user_group_status": [
+      "ERROR: user_group_status USER DOES NOT HAVE PERMISSION TO GET USER GROUP INFO - 6666|0",
+      "ERROR: user_group_status INVALID SEARCH PARAMETERS - 6666||"
+    ],
+    "in_group_status": [
+      "ERROR: in_group_status USER DOES NOT HAVE PERMISSION TO GET IN-GROUP INFO - 6666|0",
+      "ERROR: in_group_status INVALID SEARCH PARAMETERS - 6666||"
+    ],
+    "agent_status": [
+      "ERROR: agent_status USER DOES NOT HAVE PERMISSION TO GET AGENT INFO - 6666|0",
+      "ERROR: agent_status INVALID SEARCH PARAMETERS - 6666||",
+      "ERROR: agent_status AGENT NOT FOUND - 6666||",
+      "ERROR: agent_status AGENT NOT LOGGED IN - 6666||"
+    ],
+    "user_details": [
+      "ERROR: user_details USER DOES NOT HAVE PERMISSION TO GET USER DETAILS - 6666|0",
+      "ERROR: user_details INVALID SEARCH PARAMETERS - 6666||",
+      "ERROR: user_details USER NOT FOUND - 6666||"
+    ],
+    "callid_info": [
+      "ERROR: callid_info USER DOES NOT HAVE PERMISSION TO GET CALL INFO - 6666|0",
+      "ERROR: callid_info INVALID SEARCH PARAMETERS - 6666||",
+      "ERROR: callid_info CALL NOT FOUND - 6666||",
+      "ERROR: callid_info CALL LOG NOT FOUND - 6666||"
+    ],
+    "lead_field_info": [
+      "ERROR: lead_field_info USER DOES NOT HAVE PERMISSION TO GET LEAD INFO - 6666|0",
+      "ERROR: lead_field_info INVALID SEARCH PARAMETERS - 6666||",
+      "ERROR: lead_field_info LIST NOT FOUND - 6666||",
+      "ERROR: lead_field_info LEAD NOT FOUND - 6666||",
+      "ERROR: lead_field_info LEAD FIELD NOT FOUND - 6666||"
+    ],
+    "lead_all_info": [
+      "ERROR: lead_all_info USER DOES NOT HAVE PERMISSION TO GET LEAD INFO - 6666|0",
+      "ERROR: lead_all_info LIST NOT FOUND - 6666|||",
+      "ERROR: lead_all_info LEAD NOT FOUND - 6666|||"
+    ],
+    "lead_status_search": [
+      "ERROR: lead_status_search USER DOES NOT HAVE PERMISSION TO GET LEAD INFO - 6666|0",
+      "ERROR: lead_status_search INVALID SEARCH PARAMETERS - 6666|||",
+      "ERROR: lead_status_search NO RESULTS FOUND - 6666|||"
+    ],
+    "lead_search": [
+      "ERROR: lead_search USER DOES NOT HAVE PERMISSION TO SEARCH FOR LEADS - 6666|0",
+      "ERROR: lead_search NO VALID SEARCH METHOD - ||||",
+      "ERROR: lead_search NO MATCHES FOUND IN THE SYSTEM - ||||"
+    ],
+    "ccc_lead_info": [
+      "ERROR: ccc_lead_info USER DOES NOT HAVE PERMISSION TO GET LEAD INFO - 6666|0",
+      "ERROR: ccc_lead_info INVALID SEARCH PARAMETERS - 6666||",
+      "ERROR: ccc_lead_info CALL NOT FOUND - 6666||",
+      "ERROR: ccc_lead_info LEAD NOT FOUND - 6666||"
+    ],
+    "lead_callback_info": [
+      "ERROR: lead_callback_info USER DOES NOT HAVE PERMISSION TO GET LEAD INFO - 6666|0",
+      "ERROR: lead_callback_info INVALID SEARCH PARAMETERS - 6666||",
+      "ERROR: lead_callback_info LEAD NOT FOUND - 6666||",
+      "ERROR: lead_callback_info CALLBACK NOT FOUND - 6666||"
+    ],
+    "lead_dearchive": [
+      "ERROR: lead_dearchive USER DOES NOT HAVE PERMISSION TO MODIFY LEAD INFO - 6666|0",
+      "ERROR: lead_dearchive INVALID SEARCH PARAMETERS - 6666||",
+      "ERROR: lead_dearchive LEAD INSERT FAILED - 6666||",
+      "ERROR: lead_dearchive NON-ARCHIVED LEAD FOUND - 6666||",
+      "ERROR: lead_dearchive ARCHIVED LEAD NOT FOUND - 6666||",
+      "SUCCESS: lead_dearchive LEAD DE-ARCHIVED - 6666|274071|1|1"
+    ],
+    "update_log_entry": [
+      "ERROR: update_log_entry USER DOES NOT HAVE PERMISSION TO UPDATE LOGS - 6666|0",
+      "ERROR: update_log_entry INVALID SEARCH PARAMETERS - 6666||",
+      "ERROR: update_log_entry GROUP NOT FOUND - 6666||",
+      "ERROR: update_log_entry NO RECORDS FOUND - 6666||||",
+      "ERROR: update_log_entry NO RECORDS UPDATED - 6666|TESTCAMP|M9131554060000426264|SALEX|SALEX|1347566056.399",
+      "SUCCESS: update_log_entry RECORD HAS BEEN UPDATED - 6666|6666|TESTCAMP|M9131554060000426264|SALEX|WN|1347566056.399|"
+    ],
+    "add_lead": [
+      "SUCCESS: add_lead LEAD HAS BEEN ADDED - 7275551111|6666|999|193715|-4",
+      "NOTICE: add_lead ADDED TO HOPPER - 7275551111|6666|193715|1677922",
+      "SUCCESS: add_lead LEAD HAS BEEN ADDED - 7275551111|6666|999|193716|-4",
+      "NOTICE: add_lead CUSTOM FIELDS VALUES ADDED - 7275551111|1234|101",
+      "NOTICE: add_lead CUSTOM FIELDS NOT ADDED, CUSTOM FIELDS DISABLED - 7275551111|Y|0",
+      "NOTICE: add_lead CUSTOM FIELDS NOT ADDED, NO CUSTOM FIELDS DEFINED FOR THIS LIST - 7275551111|1234|101",
+      "NOTICE: add_lead CUSTOM FIELDS NOT ADDED, NO FIELDS DEFINED - 7275551111|1234|101",
+      "NOTICE: add_lead MULTI-ALT-PHONE NUMBERS LOADED - 3|6666|193716",
+      "NOTICE: add_lead NOT ADDED TO HOPPER, OUTSIDE OF LOCAL TIME - 7275551111|6666|193716|-4|0",
+      "NOTICE: add_lead SCHEDULED CALLBACK ADDED - 1234|2011-09-29 12:00:01|TESTCAMP|6666|USERONLY|CALLBK",
+      "NOTICE: add_lead SCHEDULED CALLBACK NOT ADDED, USER NOT VALID - 1234|TESTCAMP|6|",
+      "NOTICE: add_lead SCHEDULED CALLBACK NOT ADDED, CAMPAIGN NOT VALID - 1234|XYZ",
+      "NOTICE: add_lead NANPA options disabled, NANPA prefix data not loaded - 0|6666",
+      "ERROR: add_lead INVALID PHONE NUMBER LENGTH - 72755|6666",
+      "ERROR: add_lead INVALID PHONE NUMBER PREFIX - 72755|6666",
+      "ERROR: add_lead INVALID PHONE NUMBER AREACODE - 72755|6666",
+      "ERROR: add_lead INVALID PHONE NUMBER NANPA AREACODE PREFIX - 7275551212|6666",
+      "ERROR: add_lead USER DOES NOT HAVE PERMISSION TO ADD LEADS TO THE SYSTEM - 6666|0",
+      "ERROR: add_lead NOT AN ALLOWED LIST ID - 7275551212|98762",
+      "ERROR: add_lead NOT A DEFINED LIST ID, LIST EXISTS CHECK ENABLED - 7275551212|12344",
+      "ERROR: NO FUNCTION SPECIFIED",
+      "ERROR: add_lead DUPLICATE PHONE NUMBER IN LIST - 7275551111|101|8765444",
+      "ERROR: add_lead DUPLICATE PHONE NUMBER IN CAMPAIGN LISTS - 7275551111|101|8765444|101",
+      "ERROR: add_lead DUPLICATE PHONE NUMBER IN SYSTEM - 7275551111|101|8765444|101",
+      "ERROR: add_lead DUPLICATE PHONE NUMBER IN LIST - 7275551111|101|8765444|PHONE",
+      "ERROR: add_lead DUPLICATE PHONE NUMBER IN CAMPAIGN LISTS - 7275551111|101|8765444|101|ALT",
+      "ERROR: add_lead DUPLICATE PHONE NUMBER IN SYSTEM - 7275551111|101|8765444|101|PHONE",
+      "ERROR: add_lead DUPLICATE TITLE ALT_PHONE IN LIST - 1234|7275551111|101|8765444",
+      "ERROR: add_lead DUPLICATE TITLE ALT_PHONE IN CAMPAIGN LISTS - 1234|7275551111|101|8765444|101",
+      "ERROR: add_lead DUPLICATE TITLE ALT_PHONE IN SYSTEM - 1234|7275551111|101|8765444|101",
+      "ERROR: add_lead DUPLICATE NAME PHONE IN LIST - Bob|Smith|7275551113|101|8765444|101",
+      "ERROR: add_lead DUPLICATE NAME PHONE IN CAMPAIGN LISTS - Bob|Smith|7275551113|101|8765444|101",
+      "ERROR: add_lead DUPLICATE NAME PHONE IN SYSTEM - Bob|Smith|7275551113|101|8765444|101"
+    ],
+    "update_lead": [
+      "SUCCESS: update_lead LEAD HAS BEEN UPDATED - 6666|193716",
+      "NOTICE: update_lead CUSTOM FIELDS VALUES UPDATED - 7275551111|1234|101",
+      "NOTICE: update_lead CUSTOM FIELDS NOT UPDATED, CUSTOM FIELDS DISABLED - 7275551111|Y|0",
+      "NOTICE: update_lead CUSTOM FIELDS NOT UPDATED, NO CUSTOM FIELDS DEFINED FOR THIS LIST - 7275551111|1234|101",
+      "NOTICE: update_lead CUSTOM FIELDS NOT UPDATED, NO FIELDS DEFINED - 7275551111|1234|101",
+      "NOTICE: update_lead SCHEDULED CALLBACK UPDATED - 1234|2011-09-29 12:00:01|TESTCAMP|6666|USERONLY|CALLBK",
+      "NOTICE: update_lead SCHEDULED CALLBACK NOT UPDATED, NO FIELDS SPECIFIED - 1234|",
+      "NOTICE: update_lead SCHEDULED CALLBACK ADDED - 1234|2011-09-29 12:00:01|TESTCAMP|6666|USERONLY|CALLBK",
+      "NOTICE: update_lead SCHEDULED CALLBACK NOT ADDED, USER NOT VALID - 1234|TESTCAMP|6|",
+      "NOTICE: update_lead SCHEDULED CALLBACK NOT ADDED, CAMPAIGN NOT VALID - 1234|XYZ",
+      "NOTICE: update_lead NO MATCHES FOUND IN THE SYSTEM - 6666|4567|897654327|7275551212",
+      "SUCCESS: update_lead LEAD HAS BEEN ADDED - 7275551111|6666|999|193716|-4",
+      "SUCCESS: update_lead LEAD HAS BEEN DELETED - 7275551111|6666|999|193716|-4",
+      "NOTICE: update_lead CUSTOM FIELDS ENTRY DELETED 1 - 7275551111|6666|999|193716|-4",
+      "NOTICE: update_lead CUSTOM FIELDS DATA HAS BEEN DELETED - 6666|193716|1|1",
+      "NOTICE: update_lead LEADS FOUND IN THE SYSTEM: |6666|1010542|12345678901234|9998887112|3333444|0",
+      "NOTICE: update_lead ADDED TO HOPPER - 7275551111|6666|193715|1677922",
+      "NOTICE: update_lead NOT ADDED TO HOPPER - 7275551111|6666|193715|1677922",
+      "NOTICE: update_lead NOT ADDED TO HOPPER, OUTSIDE OF LOCAL TIME - 7275551111|193715|-5|0|6666",
+      "NOTICE: update_lead NOT ADDED TO HOPPER, LEAD NOT FOUND - 7275551111|193715|6666",
+      "NOTICE: update_lead NOT ADDED TO HOPPER, LEAD IS ALREADY IN THE HOPPER - 7275551111|193715|6666",
+      "NOTICE: update_lead REMOVED FROM HOPPER - 7275551111|193715|READY|6666",
+      "NOTICE: update_lead NOT REMOVED FROM HOPPER - 7275551111|193715|DNC|6666",
+      "NOTICE: update_lead NOT REMOVED FROM HOPPER, LEAD IS NOT IN THE HOPPER - 7275551111|193715|6666",
+      "ERROR: update_lead INVALID DATA FOR LEAD INSERTION - 6666|||",
+      "ERROR: update_lead NO MATCHES FOUND IN THE SYSTEM - 6666|||",
+      "ERROR: update_lead NO VALID SEARCH METHOD - 6666|SYSTEM|||",
+      "ERROR: update_lead NOT A DEFINED LIST ID, LIST EXISTS CHECK ENABLED - 6666|139",
+      "ERROR: update_lead USER DOES NOT HAVE PERMISSION TO UPDATE LEADS IN THE SYSTEM - 6666|0",
+      "ERROR: update_lead NOT AN ALLOWED LIST ID, SEARCH - 7275551212|98762",
+      "ERROR: update_lead NOT AN ALLOWED LIST ID, RESULTS - 7275551212|98762",
+      "ERROR: update_lead NOT AN ALLOWED LIST ID, INSERT - 7275551212|98762"
+    ],
+    "batch_update_lead": [
+      "SUCCESS: batch_update_lead LEADS HAVE BEEN UPDATED - 6666|2|2345,2346",
+      "ERROR: batch_update_lead USER DOES NOT HAVE PERMISSION TO UPDATE LEADS IN THE SYSTEM - 6666|0|",
+      "ERROR: batch_update_lead NO LEADS DEFINED - 6666|",
+      "ERROR: batch_update_lead NOT AN ALLOWED LIST ID - 6666|138",
+      "ERROR: batch_update_lead NOT A DEFINED LIST ID, LIST EXISTS CHECK ENABLED - 6666|138",
+      "ERROR: batch_update_lead NO LEADS FOUND - 6666|0|2345,2346"
+    ],
+    "add_user": [
+      "ERROR: add_user USER DOES NOT HAVE PERMISSION TO ADD USERS - 6666|0",
+      "ERROR: add_user YOU MUST USE ALL REQUIRED FIELDS - 6666|1000||||",
+      "ERROR: add_user USER DOES NOT HAVE PERMISSION TO ADD USERS IN THIS USER LEVEL - 6666|8",
+      "ERROR: add_user USER GROUP DOES NOT EXIST - 6666|ADFHR",
+      "ERROR: add_user USER ALREADY EXISTS - 6666|6666",
+      "SUCCESS: add_user USER HAS BEEN ADDED - 6666|1000|1234|8|Testing+Person|AGENTS"
+    ],
+    "copy_user": [
+      "ERROR: copy_user USER DOES NOT HAVE PERMISSION TO COPY USERS - 6666|0",
+      "ERROR: copy_user YOU MUST USE ALL REQUIRED FIELDS - 6666|1000|5555|||",
+      "ERROR: copy_user USER DOES NOT HAVE PERMISSION TO COPY USERS IN THIS USER LEVEL - 9|8",
+      "ERROR: copy_user SOURCE USER DOES NOT EXIST - 6666|5555",
+      "ERROR: copy_user USER GROUP DOES NOT EXIST - 6666|ADFHR",
+      "ERROR: copy_user USER ALREADY EXISTS - 6666|6666",
+      "SUCCESS: copy_user USER HAS BEEN COPIED - 6666|1000|1234|Testing+Person|5555"
+    ],
+    "update_user": [
+      "ERROR: update_user USER DOES NOT HAVE PERMISSION TO UPDATE USERS - 6666|0",
+      "ERROR: update_user USER DOES NOT HAVE PERMISSION TO DELETE USERS - 6666|7878",
+      "ERROR: update_user YOU MUST USE ALL REQUIRED FIELDS - 6666||",
+      "ERROR: update_user USER DOES NOT EXIST - 6666|78789",
+      "ERROR: update_user USER DOES NOT HAVE PERMISSION TO UPDATE THIS USER - 6666|7878",
+      "ERROR: update_user YOU MUST USE A VALID FULL NAME, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: update_user YOU MUST USE A VALID USER LEVEL, THIS IS AN OPTIONAL FIELD - 6666|0|9|1",
+      "ERROR: update_user YOU MUST USE A VALID USER GROUP, THIS IS AN OPTIONAL FIELD - 6666|FAKEGROUP|0",
+      "ERROR: update_user YOU MUST USE A VALID PHONE LOGIN, THIS IS AN OPTIONAL FIELD - 6666|fakephone|0|0",
+      "ERROR: update_user YOU MUST USE A VALID PHONE PASSWORD, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_user YOU MUST USE A VALID HOTKEYS SETTING, THIS IS AN OPTIONAL FIELD - 6666|2",
+      "ERROR: update_user YOU MUST USE A VALID VOICEMAIL ID, THIS IS AN OPTIONAL FIELD - 6666",
+      "ERROR: update_user YOU MUST USE A VALID EMAIL, THIS IS AN OPTIONAL FIELD - 6666",
+      "ERROR: update_user YOU MUST USE A VALID CUSTOM ONE, THIS IS AN OPTIONAL FIELD - 6666",
+      "ERROR: update_user YOU MUST USE A VALID CUSTOM TWO, THIS IS AN OPTIONAL FIELD - 6666",
+      "ERROR: update_user YOU MUST USE A VALID CUSTOM THREE, THIS IS AN OPTIONAL FIELD - 6666",
+      "ERROR: update_user YOU MUST USE A VALID CUSTOM FOUR, THIS IS AN OPTIONAL FIELD - 6666",
+      "ERROR: update_user YOU MUST USE A VALID CUSTOM FIVE, THIS IS AN OPTIONAL FIELD - 6666",
+      "ERROR: update_user ACTIVE MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666",
+      "ERROR: update_user wrapup_seconds_override MUST BE A VALID DIGIT BETWEEN -1 AND 9999, THIS IS AN OPTIONAL FIELD - 6666|-2",
+      "ERROR: update_user YOU MUST USE A VALID CAMPAIGN RANK, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_user YOU MUST USE A VALID CAMPAIGN GRADE, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_user YOU MUST USE A VALID IN-GROUP RANK, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_user YOU MUST USE A VALID IN-GROUP GRADE, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_user NO UPDATES DEFINED - 6666|0",
+      "NOTICE: update_user USER CAMPAIGN RANKS/GRADES HAVE BEEN UPDATED - 6666|9|10|TESTCAMP|1",
+      "NOTICE: update_user USER IN-GROUP RANKS/GRADES HAVE BEEN UPDATED - 6666|9|10|TEST_IN|1",
+      "NOTICE: update_user USER PASSWORD RESET FAILED: NO VALID EMAIL PROVIDED - 6666|email@doman",
+      "NOTICE: update_user USER PASSWORD RESET FAILED: EMAIL FAILURE - 6666|info@vicidial.com|email-error",
+      "NOTICE: update_user update_user USER PASSWORD HAS BEEN RESET - 6666|info@vicidial.com",
+      "SUCCESS: update_user USER HAS BEEN UPDATED - 6666|7878",
+      "SUCCESS: update_user USER HAS BEEN DELETED - 6666|7878"
+    ],
+    "update_remote_agent": [
+      "ERROR: update_remote_agent USER DOES NOT HAVE PERMISSION TO UPDATE REMOTE AGENTS - 6666|0",
+      "ERROR: update_remote_agent YOU MUST USE ALL REQUIRED FIELDS - 6666||",
+      "ERROR: update_remote_agent REMOTE AGENT DOES NOT EXIST - 6666|78789",
+      "ERROR: update_remote_agent USER DOES NOT HAVE PERMISSION TO UPDATE THIS REMOTE AGENT - 6666",
+      "ERROR: update_remote_agent YOU MUST USE A VALID NUMBER OF LINES, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_remote_agent YOU MUST USE A VALID CAMPAIGN ID, THIS IS AN OPTIONAL FIELD - 6666|TEST|0",
+      "ERROR: update_remote_agent STATUS MUST BE ACTIVE OR INACTIVE, THIS IS AN OPTIONAL FIELD - 6666|Y",
+      "ERROR: update_remote_agent NO UPDATES DEFINED - 6666|0",
+      "NOTICE: update_remote_agent REMOTE AGENT IS ALREADY ACTIVE - 6666|7878",
+      "NOTICE: update_remote_agent REMOTE AGENT IS ALREADY INACTIVE - 6666|7878",
+      "SUCCESS: update_remote_agent USER HAS BEEN UPDATED - 6666|7878"
+    ],
+    "add_group_alias": [
+      "ERROR: add_group_alias USER DOES NOT HAVE PERMISSION TO ADD GROUP ALIASES - 6666|0",
+      "ERROR: add_group_alias YOU MUST USE ALL REQUIRED FIELDS - 6666|||1000",
+      "ERROR: add_group_alias GROUP ALIAS ALREADY EXISTS - 6666|7275551212",
+      "SUCCESS: add_group_alias GROUP ALIAS HAS BEEN ADDED - 6666|7275551212|test_group_alias|test group alias"
+    ],
+    "add_dnc_phone": [
+      "ERROR: add_dnc_phone USER DOES NOT HAVE PERMISSION TO ADD DNC NUMBERS - 6666|0",
+      "ERROR: add_dnc_phone YOU MUST USE ALL REQUIRED FIELDS - 6666|||1000",
+      "ERROR: add_dnc_phone DNC NUMBER ALREADY EXISTS - 6666|7275551212",
+      "SUCCESS: add_dnc_phone DNC NUMBER HAS BEEN ADDED - 6666|7275551212|TESTCAMP"
+    ],
+    "delete_dnc_phone": [
+      "ERROR: delete_dnc_phone USER DOES NOT HAVE PERMISSION TO DELETE DNC NUMBERS - 6666|0",
+      "ERROR: delete_dnc_phone YOU MUST USE ALL REQUIRED FIELDS - 6666|||1000",
+      "ERROR: delete_dnc_phone DNC NUMBER DOES NOT EXIST - 6666|7275551212",
+      "SUCCESS: delete_dnc_phone DNC NUMBER HAS BEEN DELETED - 6666|7275551212|TESTCAMP"
+    ],
+    "add_fpg_phone": [
+      "ERROR: add_fpg_phone USER DOES NOT HAVE PERMISSION TO ADD FILTER PHONE GROUP NUMBERS - 6666|0",
+      "ERROR: add_fpg_phone YOU MUST USE ALL REQUIRED FIELDS - 6666|||1000",
+      "ERROR: add_fpg_phone FILTER PHONE GROUP DOES NOT EXIST - 6666|TEST_IN_FILTER2",
+      "ERROR: add_fpg_phone FILTER PHONE GROUP NUMBER ALREADY EXISTS - 6666|7275551212|TEST_IN_FILTER",
+      "SUCCESS: add_fpg_phone FILTER PHONE GROUP NUMBER HAS BEEN ADDED - 6666|7275551212|TEST_IN_FILTER"
+    ],
+    "delete_fpg_phone": [
+      "ERROR: delete_fpg_phone USER DOES NOT HAVE PERMISSION TO DELETE FILTER PHONE GROUP NUMBERS - 6666|0",
+      "ERROR: delete_fpg_phone YOU MUST USE ALL REQUIRED FIELDS - 6666|||1000",
+      "ERROR: delete_fpg_phone FILTER PHONE GROUP DOES NOT EXIST - 6666|TEST_IN_FILTER2",
+      "ERROR: delete_fpg_phone FILTER PHONE GROUP NUMBER DOES NOT EXIST - 6666|7275551212|TEST_IN_FILTER",
+      "SUCCESS: delete_fpg_phone FILTER PHONE GROUP NUMBER HAS BEEN DELETED - 6666|7275551212|TEST_IN_FILTER"
+    ],
+    "add_phone": [
+      "ERROR: add_phone USER DOES NOT HAVE PERMISSION TO ADD PHONES - 6666|0",
+      "ERROR: add_phone YOU MUST USE ALL REQUIRED FIELDS - 6666|1000|||||||||||",
+      "ERROR: add_phone SERVER DOES NOT EXIST - 6666|10.0.9.9",
+      "ERROR: add_phone PHONE ALREADY EXISTS ON THIS SERVER - 6666|10.0.9.8|cc101",
+      "ERROR: add_phone PHONE LOGIN ALREADY EXISTS - 6666|cc100",
+      "ERROR: add_phone YOU MUST USE A VALID TIMEZONE - 6666|-5",
+      "ERROR: add_phone TEMPLATE ID DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|cc100|batch",
+      "SUCCESS: add_phone PHONE HAS BEEN ADDED - 6666|cc100|10.0.9.8|SIP|100"
+    ],
+    "copy_phone": [
+      "ERROR: copy_phone USER DOES NOT HAVE PERMISSION TO COPY PHONES - 6666|0",
+      "ERROR: copy_phone YOU MUST USE ALL REQUIRED FIELDS - 6666|1000|||||||||||",
+      "ERROR: copy_phone SOURCE SERVER DOES NOT EXIST - 6666|10.0.9.8",
+      "ERROR: copy_phone SOURCE PHONE DOES NOT EXIST ON THIS SERVER - 6666|10.0.9.8|cc100",
+      "ERROR: copy_phone SERVER DOES NOT EXIST - 6666|10.0.9.9",
+      "ERROR: copy_phone PHONE ALREADY EXISTS ON THIS SERVER - 6666|10.0.9.8|cc101",
+      "ERROR: copy_phone PHONE LOGIN ALREADY EXISTS - 6666|cc100",
+      "SUCCESS: copy_phone PHONE HAS BEEN COPIED - 6666|cc100|10.0.9.8|SIP|100"
+    ],
+    "update_phone": [
+      "ERROR: update_phone USER DOES NOT HAVE PERMISSION TO UPDATE PHONES - 6666|0",
+      "ERROR: update_phone YOU MUST USE ALL REQUIRED FIELDS - 6666||",
+      "ERROR: update_phone SERVER DOES NOT EXIST - 6666|10.0.9.9",
+      "ERROR: update_phone PHONE DOES NOT EXIST ON THIS SERVER - 6666|10.0.9.8|cc101",
+      "ERROR: update_phone LOGIN ALREADY EXISTS - 6666|x101",
+      "ERROR: update_phone YOU MUST USE A VALID TIMEZONE - 6666|-99",
+      "ERROR: update_phone YOU MUST USE A VALID DIALPLAN NUMBER - 6666|0",
+      "ERROR: update_phone YOU MUST USE A VALID VOICEMAIL NUMBER - 6666|0",
+      "ERROR: update_phone YOU MUST USE A VALID PHONE PASSWORD - 6666|0",
+      "ERROR: update_phone YOU MUST USE A VALID REGISTRATION PASSWORD - 6666|0",
+      "ERROR: update_phone YOU MUST USE A VALID PROTOCOL - 6666|0",
+      "ERROR: update_phone YOU MUST USE A VALID PHONE NAME - 6666|0",
+      "ERROR: update_phone YOU MUST USE A VALID PHONE CONTEXT - 6666|0",
+      "ERROR: update_phone YOU MUST USE A VALID EMAIL - 6666|x.com",
+      "ERROR: update_phone NO UPDATES DEFINED - 6666|0",
+      "ERROR: update_phone ACTIVE MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_phone OUTBOUND CID MUST BE FROM 6 TO 18 DIGITS, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_phone OUTBOUND ALT CID MUST BE FROM 6 TO 18 DIGITS, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_phone USER GROUP MUST BE FROM 2 TO 20 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_phone PHONE RING TIMEOUT MUST BE FROM 2 TO 180 SECONDS, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_phone DELETE VOICEMAIL AFTER EMAIL MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|0",
+      "ERROR: update_phone TEMPLATE ID DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|cc100|batch",
+      "SUCCESS: update_phone PHONE HAS BEEN UPDATED - 6666|cc100|10.0.9.8|SIP|100",
+      "SUCCESS: update_phone PHONE HAS BEEN DELETED - 6666|cc100|10.0.9.8|",
+      "NOTICE: update_phone USER DOES NOT HAVE PERMISSION TO DELETE PHONES - 6666|7878"
+    ],
+    "add_phone_alias": [
+      "ERROR: add_phone_alias USER DOES NOT HAVE PERMISSION TO ADD PHONE ALIASES - 6666|0",
+      "ERROR: add_phone_alias YOU MUST USE ALL REQUIRED FIELDS - 6666||||",
+      "ERROR: add_phone_alias PHONE ALIAS ALREADY EXISTS - 6666|x101",
+      "ERROR: add_phone_alias PHONE DOES NOT EXIST - 6666|cc100",
+      "SUCCESS: add_phone_alias PHONE ALIAS HAS BEEN ADDED - 6666|x100|testing_x100|cc100,bb100"
+    ],
+    "update_phone_alias": [
+      "ERROR: update_phone_alias USER DOES NOT HAVE PERMISSION TO UPDATE PHONE ALIASES - 6666|0",
+      "ERROR: update_phone_alias YOU MUST USE ALL REQUIRED FIELDS - 6666||||",
+      "ERROR: update_phone_alias PHONE ALIAS DOES NOT EXIST - 6666|x101",
+      "ERROR: update_phone_alias YOU MUST USE A VALID ALIAS NAME - 6666|x",
+      "ERROR: update_phone_alias PHONE DOES NOT EXIST - 6666|cc100",
+      "SUCCESS: update_phone_alias PHONE ALIAS HAS BEEN UPDATED - 6666|x100|",
+      "SUCCESS: update_phone_alias PHONE ALIAS HAS BEEN DELETED - 6666|x100|"
+    ],
+    "server_refresh": [
+      "ERROR: server_refresh USER DOES NOT HAVE PERMISSION TO REFRESH SERVERS - 6666|0",
+      "ERROR: server_refresh YOU MUST USE ALL REQUIRED FIELDS - 6666|",
+      "SUCCESS: server_refresh SERVER REFRESH HAS BEEN TRIGGERED - 6666|1"
+    ],
+    "add_list": [
+      "ERROR: add_list USER DOES NOT HAVE PERMISSION TO ADD LISTS - 6666|0",
+      "ERROR: add_list YOU MUST USE ALL REQUIRED FIELDS - 6666|1000||",
+      "ERROR: add_list CAMPAIGN DOES NOT EXIST - 6666|TESTCIMP",
+      "ERROR: add_list LIST ALREADY EXISTS - 6666|1101",
+      "ERROR: add_list SCRIPT DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|TESTSCRIPT",
+      "ERROR: add_list IN-GROUP DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|TEST_IN8",
+      "ERROR: add_list RESET TIME IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: add_list EXPIRATION DATE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: add_list LOCAL CALL TIME DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: add_list TIME ZONE METHOD IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: add_list TRANSFER CONF OVERRIDE ONE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: add_list TRANSFER CONF OVERRIDE TWO IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: add_list TRANSFER CONF OVERRIDE THREE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: add_list TRANSFER CONF OVERRIDE FOUR IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: add_list TRANSFER CONF OVERRIDE FIVE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: add_list CUSTOM FIELDS LIST ID TO COPY FROM DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|1101|1102|0",
+      "ERROR: add_list CUSTOM FIELDS LIST ID TO COPY FROM HAS NO CUSTOM FIELDS, THIS IS AN OPTIONAL FIELD - 6666|1101|1102|0",
+      "ERROR: add_list USER DOES NOT HAVE PERMISSION TO MODIFY CUSTOM FIELDS, THIS IS AN OPTIONAL FIELD - 6666|1101|1102|0",
+      "SUCCESS: add_list LIST HAS BEEN ADDED - 6666|1101|TESTCAMP"
+    ],
+    "update_list": [
+      "ERROR: update_list USER DOES NOT HAVE PERMISSION TO UPDATE LISTS - 6666",
+      "ERROR: update_list YOU MUST USE ALL REQUIRED FIELDS - 6666|1",
+      "ERROR: update_list NOT AN ALLOWED LIST ID - 98762",
+      "NOTICE: update_list LIST DOES NOT EXIST, SENDING TO add_list FUNCTION - 6666|1000",
+      "ERROR: update_list LIST DOES NOT EXIST - 6666|1000",
+      "ERROR: update_list CAMPAIGN DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|TESTCIMP",
+      "ERROR: update_list SCRIPT DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|TESTSCRIPT",
+      "ERROR: update_list IN-GROUP DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|TEST_IN8",
+      "ERROR: update_list LIST NAME MUST BE FROM 6 TO 30 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|test",
+      "ERROR: update_list ACTIVE MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|U",
+      "ERROR: update_list OUTBOUND CID MUST BE FROM 6 TO 18 DIGITS, THIS IS AN OPTIONAL FIELD - 6666|12345",
+      "ERROR: update_list ANSWERING MACHINE MESSAGE MUST LESS THAN 101 DIGITS, THIS IS AN OPTIONAL FIELD - 6666|123...",
+      "ERROR: update_list RESET TIME IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: update_list EXPIRATION DATE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: update_list TIME ZONE METHOD IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: update_list LOCAL CALL TIME DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: update_list TRANSFER CONF OVERRIDE ONE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: update_list TRANSFER CONF OVERRIDE TWO IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: update_list TRANSFER CONF OVERRIDE THREE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: update_list TRANSFER CONF OVERRIDE FOUR IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: update_list TRANSFER CONF OVERRIDE FIVE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "NOTICE: update_list NO UPDATES DEFINED - 6666|",
+      "SUCCESS: update_list LIST HAS BEEN UPDATED - 6666|1101",
+      "NOTICE: update_list LEADS IN LIST HAVE BEEN RESET - 6666|1101|324",
+      "NOTICE: update_list LIST RESET FAILED, daily reset limit reached: 2 / 2 - 6666|1101",
+      "NOTICE: update_list USER DOES NOT HAVE PERMISSION TO DELETE LISTS - 6666|0",
+      "NOTICE: update_list LIST HAS BEEN DELETED - 6666|1101|1",
+      "NOTICE: update_list USER DOES NOT HAVE PERMISSION TO DELETE LEADS - 6666|0",
+      "NOTICE: update_list LEADS IN LIST HAVE BEEN DELETED - 6666|1101|324",
+      "NOTICE: update_list CUSTOM FIELDS LIST ID TO COPY FROM DOES NOT EXIST, THIS IS AN OPTIONAL FIELD - 6666|1101|1102|0",
+      "NOTICE: update_list CUSTOM FIELDS LIST ID TO COPY FROM HAS NO CUSTOM FIELDS, THIS IS AN OPTIONAL FIELD - 6666|1101|1102|0",
+      "NOTICE: update_list USER DOES NOT HAVE PERMISSION TO MODIFY CUSTOM FIELDS, THIS IS AN OPTIONAL FIELD - 6666|1101|1102|0",
+      "NOTICE: update_list COPY CUSTOM FIELDS COMMAND SENT - 6666|1101|APPEND|ERROR: Fields not copied|",
+      "NOTICE: update_list COPY CUSTOM FIELDS COMMAND SENT - 6666|1101|APPEND|SUCCESS: Fields copied|",
+      "NOTICE: update_list CUSTOM FIELDS LIST ID TO ADD TO HAS NO CUSTOM FIELDS, THIS IS AN OPTIONAL FIELD - 6666|1101",
+      "NOTICE: update_list REQUIRED CUSTOM FIELDS VARIABLES ARE MISSING, FIELD NOT ADDED, THIS IS AN OPTIONAL FIELD - 6666|1101||||||",
+      "NOTICE: update_list CUSTOM FIELDS LIST ID TO UPDATE TO HAS NO CUSTOM FIELDS, THIS IS AN OPTIONAL FIELD - 6666|1101||||||",
+      "NOTICE: update_list REQUIRED CUSTOM FIELDS VARIABLES ARE MISSING, FIELD NOT UPDATED, THIS IS AN OPTIONAL FIELD - 6666|1101|||",
+      "NOTICE: update_list FIELD DOES NOT EXIST, FIELD NOT UPDATED, THIS IS AN OPTIONAL FIELD - 6666|1101|abc|||||",
+      "NOTICE: update_list CUSTOM FIELDS LIST ID TO DELETE TO HAS NO CUSTOM FIELDS, THIS IS AN OPTIONAL FIELD - 6666|1101|",
+      "NOTICE: update_list REQUIRED CUSTOM FIELDS VARIABLES ARE MISSING, FIELD NOT DELETED, THIS IS AN OPTIONAL FIELD - 6666|1101|||",
+      "NOTICE: update_list FIELD DOES NOT EXIST, FIELD NOT DELETED, THIS IS AN OPTIONAL FIELD - 6666|1101|abc|",
+      "NOTICE: update_list ADD CUSTOM FIELD COMMAND SENT - 6666|1101|new_field|TEXT|ERROR: Field not added|",
+      "NOTICE: update_list ADD CUSTOM FIELD COMMAND SENT - 6666|1101|new_field|TEXT|SUCCESS: Field added|",
+      "NOTICE: update_list UPDATE CUSTOM FIELD COMMAND SENT - 6666|1101|new_field|TEXT|ERROR: Field not updated|",
+      "NOTICE: update_list UPDATE CUSTOM FIELD COMMAND SENT - 6666|1101|new_field|TEXT|SUCCESS: Field updated|",
+      "NOTICE: update_list DELETE CUSTOM FIELD COMMAND SENT - 6666|1101|new_field|TEXT|ERROR: Field not deleted|",
+      "NOTICE: update_list DELETE CUSTOM FIELD COMMAND SENT - 6666|1101|new_field|TEXT|SUCCESS: Field deleted|"
+    ],
+    "list_info": [
+      "ERROR: list_info USER DOES NOT HAVE PERMISSION TO MODIFY LISTS - 6666",
+      "ERROR: list_info YOU MUST USE ALL REQUIRED FIELDS - 6666|1",
+      "ERROR: list_info NOT AN ALLOWED LIST ID - 98762",
+      "ERROR: list_info LIST DOES NOT EXIST - 98762"
+    ],
+    "list_custom_fields": [
+      "ERROR: list_custom_fields CUSTOM LIST FIELDS ARE NOT ENABLED ON THIS SYSTEM - 6666",
+      "ERROR: list_custom_fields USER DOES NOT HAVE PERMISSION TO MODIFY LISTS - 6666",
+      "ERROR: list_custom_fields YOU MUST USE ALL REQUIRED FIELDS - 6666|1",
+      "ERROR: list_custom_fields NOT AN ALLOWED LIST ID - 98762",
+      "ERROR: list_custom_fields LIST DOES NOT EXIST - 98762"
+    ],
+    "check_phone_number": [
+      "ERROR: check_phone_number USER DOES NOT HAVE PERMISSION TO CHECK PHONE NUMBERS - |6666|0|",
+      "ERROR: check_phone_number THIS IS NOT A VALID CALL TIME - |6666|badct|",
+      "ERROR: check_phone_number NANPA options disabled, NANPA prefix data not loaded - 0|6666",
+      "ERROR: check_phone_number INVALID PHONE NUMBER LENGTH - 72755|6666",
+      "ERROR: check_phone_number INVALID PHONE NUMBER PREFIX - 72755|6666",
+      "ERROR: check_phone_number INVALID PHONE NUMBER AREACODE - 72755|6666",
+      "ERROR: check_phone_number INVALID PHONE NUMBER NANPA AREACODE PREFIX - 7275551212|6666",
+      "ERROR: check_phone_number PHONE NUMBER IN DNC - 7275551112|6666"
+    ],
+    "logged_in_agents": [
+      "ERROR: logged_in_agents USER DOES NOT HAVE PERMISSION TO GET AGENT INFO - 6666|0",
+      "ERROR: logged_in_agents NO LOGGED IN AGENTS"
+    ],
+    "call_status_stats": [
+      "ERROR: call_status_stats INVALID OR MISSING CAMPAIGNS",
+      "ERROR: auth USER DOES NOT HAVE PERMISSION TO USE THIS FUNCTION",
+      "ERROR: call_status_stats USER DOES NOT HAVE PERMISSION TO VIEW STATS"
+    ],
+    "call_dispo_report": [
+      "ERROR: call_dispo_report INVALID OR MISSING CAMPAIGNS, INGROUPS, OR DIDS",
+      "ERROR: call_dispo_report USER DOES NOT HAVE PERMISSION TO USE THIS FUNCTION",
+      "ERROR: call_dispo_report USER DOES NOT HAVE PERMISSION TO VIEW STATS"
+    ],
+    "update_campaign": [
+      "ERROR: update_campaign USER DOES NOT HAVE PERMISSION TO UPDATE CAMPAIGNS - 6666",
+      "ERROR: update_campaign YOU MUST USE ALL REQUIRED FIELDS - 6666|1",
+      "ERROR: update_campaign NOT AN ALLOWED CAMPAIGN ID - 98762",
+      "ERROR: update_campaign CAMPAIGN DOES NOT EXIST - 6666|1000",
+      "ERROR: update_campaign AUTO DIAL LEVEL MUST BE FROM 0 TO 18, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: update_campaign DIAL METHOD IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|12",
+      "ERROR: update_campaign ADAPT MAXIMUM DIAL LEVEL MUST BE FROM 1 TO 5 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|12",
+      "ERROR: update_campaign ROUTING EXTENSION MUST BE FROM 3 TO 20 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|12",
+      "ERROR: update_campaign HOPPER LEVEL MUST BE FROM 1 TO 2000, THIS IS AN OPTIONAL FIELD - 6666|12345",
+      "ERROR: update_campaign DIAL TIMEOUT MUST BE FROM 1 TO 120, THIS IS AN OPTIONAL FIELD - 6666|123",
+      "ERROR: update_campaign CAMPAIGN NAME MUST BE FROM 6 TO 40 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|test",
+      "ERROR: update_campaign CAMPAIGN CID MUST BE FROM 6 TO 20 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|test",
+      "ERROR: update_campaign CAMPAIGN LEAD FILTER MUST BE A VALID FILTER IN THE SYSTEM, THIS IS AN OPTIONAL FIELD - 6666|test",
+      "ERROR: update_campaign TRANSFER CONF NUMBER ONE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: update_campaign TRANSFER CONF NUMBER TWO IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: update_campaign TRANSFER CONF NUMBER THREE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: update_campaign TRANSFER CONF NUMBER FOUR IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: update_campaign TRANSFER CONF NUMBER FIVE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|123456789012345678901234567890123456789012345678901",
+      "ERROR: update_campaign ACTIVE MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|U",
+      "ERROR: update_campaign LIST ORDER INCLUDING RANDOM ARE NOT ALLOWED, THIS IS AN OPTIONAL FIELD - |6666|RANDOM 2nd NEW|",
+      "ERROR: update_campaign LIST ORDER IS NOT VALID, THIS IS AN OPTIONAL FIELD - |6666|Y|",
+      "ERROR: update_campaign LIST ORDER IS NOT A VALID LENGTH, THIS IS AN OPTIONAL FIELD - |6666|Y|",
+      "ERROR: update_campaign LIST ORDER RANDOMIZE IS NOT VALID, THIS IS AN OPTIONAL FIELD - |6666|X|",
+      "ERROR: update_campaign LIST ORDER RANDOMIZE IS NOT A VALID LENGTH, THIS IS AN OPTIONAL FIELD - |6666|YES|",
+      "ERROR: update_campaign LIST ORDER SECONDARY IS NOT VALID, THIS IS AN OPTIONAL FIELD - |6666|Y|",
+      "ERROR: update_campaign LIST ORDER SECONDARY IS NOT A VALID LENGTH, THIS IS AN OPTIONAL FIELD - |6666|LEAD|",
+      "ERROR: update_campaign DIAL STATUS ADD IS NOT VALID, THIS IS AN OPTIONAL FIELD - |6666|A1234567|",
+      "ERROR: update_campaign DIAL STATUS ADD FAILURE, TOO MANY EXISTING DIAL STATUSES, THIS IS AN OPTIONAL FIELD - |6666|A12345|",
+      "ERROR: update_campaign DIAL STATUS REMOVE IS NOT VALID, THIS IS AN OPTIONAL FIELD - |6666|A1234567|",
+      "ERROR: update_campaign DIAL STATUS REMOVE FAILURE, NO EXISTING DIAL STATUSES SET, THIS IS AN OPTIONAL FIELD - |666666|A12345|",
+      "ERROR: update_campaign DIAL STATUS REMOVE FAILURE, NOT AN EXISTING DIAL STATUS, THIS IS AN OPTIONAL FIELD - |666666|A12345|",
+      "ERROR: update_campaign DISPO CALL URL IS NOT VALID, THIS IS AN OPTIONAL FIELD: |6666|XY",
+      "ERROR: update_campaign WENFORM 1 URL IS NOT VALID, THIS IS AN OPTIONAL FIELD: |6666|XY",
+      "ERROR: update_campaign WENFORM 2 URL IS NOT VALID, THIS IS AN OPTIONAL FIELD: |6666|XY",
+      "ERROR: update_campaign WENFORM 3 URL IS NOT VALID, THIS IS AN OPTIONAL FIELD: |6666|XY",
+      "NOTICE: update_campaign NO UPDATES DEFINED - 6666|",
+      "NOTICE: update_campaign HOPPER HAS BEEN RESET - 6666|1101|324",
+      "SUCCESS: update_campaign CAMPAIGN HAS BEEN UPDATED - 6666|1101"
+    ],
+    "update_alt_url": [
+      "ERROR: update_alt_url USER DOES NOT HAVE PERMISSION TO UPDATE CAMPAIGNS - 6666",
+      "ERROR: update_alt_url YOU MUST USE ALL REQUIRED FIELDS - 6666|1",
+      "ERROR: update_alt_url NOT AN ALLOWED CAMPAIGN ID - 98762",
+      "ERROR: update_alt_url CAMPAIGN DOES NOT EXIST - 6666|1000",
+      "ERROR: update_alt_url NO VALID URL TYPE DEFINED: - 6666|||",
+      "ERROR: update_alt_url NO ENTRY TYPE DEFINED - 6666||",
+      "ERROR: update_alt_url CAMPAIGNS dispo URL IS NOT SET TO ALT - 6666|dispo|campaign|TESTCAMP",
+      "ERROR: update_alt_url ALT URL ID DOES NOT EXIST - 6666|2|dispo|campaign|TESTCAMP|2",
+      "ERROR: update_alt_url ACTIVE MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|U",
+      "ERROR: update_alt_url URL ADDRESS IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: update_alt_url URL RANK IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|999999",
+      "ERROR: update_alt_url URL CAL LENGTH IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|999999",
+      "ERROR: update_alt_url URL STATUSES IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: update_alt_url URL DESCRIPTION IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: update_alt_url URL LISTS IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|",
+      "NOTICE: update_campaign NO UPDATES DEFINED - 6666|",
+      "SUCCESS: update_alt_url ALT URL HAS BEEN UPDATED - 6666|1|dispo|campaign|TESTCAMP",
+      "SUCCESS: update_alt_url ALT URL HAS BEEN ADDED - 6666|NEW URL ID: 2|dispo|campaign|TESTCAMP",
+      "NOTICE: update_alt_url LIST, No Records Found - 6666|dispo|campaign|TESTCAMP|0"
+    ],
+    "update_presets": [
+      "ERROR: update_presets USER DOES NOT HAVE PERMISSION TO UPDATE CAMPAIGNS - 6666",
+      "ERROR: update_presets YOU MUST USE ALL REQUIRED FIELDS - 6666|1",
+      "ERROR: update_presets NOT AN ALLOWED CAMPAIGN ID - 98762",
+      "ERROR: update_presets CAMPAIGN DOES NOT EXIST - 6666|1000",
+      "ERROR: update_presets PRESET NAME DOES NOT EXIST - 6666|2|dispo|campaign|TESTCAMP|2",
+      "ERROR: update_presets PRESET HIDE NUMBER MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|U",
+      "ERROR: update_presets PRESET DTMF IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|",
+      "NOTICE: update_campaign NO UPDATES DEFINED - 6666|",
+      "SUCCESS: update_presets PRESET HAS BEEN UPDATED - 6666|1|campaign|TESTCAMP",
+      "SUCCESS: update_presets PRESET HAS BEEN ADDED - 6666|NEW PRESET: SUPPORT LINE|TESTCAMP",
+      "SUCCESS: update_presets PRESET HAS BEEN DELETED - 6666|SUPPORT LINE|TESTCAMP",
+      "NOTICE: update_presets LIST, No Records Found - 6666|TESTCAMP|0"
+    ],
+    "add_did": [
+      "ERROR: add_did USER DOES NOT HAVE PERMISSION TO ADD DIDS - 6666",
+      "ERROR: add_did YOU MUST USE ALL REQUIRED FIELDS - 6666|1",
+      "ERROR: add_did NOT AN ALLOWED DID - 98762",
+      "ERROR: add_did DID ALREADY EXISTS - 6666|1000",
+      "ERROR: add_did DID DESCRIPTION MUST BE FROM 6 TO 50 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: add_did ACTIVE MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|U",
+      "ERROR: add_did DID ROUTE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|12",
+      "ERROR: add_did RECORD CALL MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: add_did EXTENSION MUST BE FROM 1 TO 50 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: add_did EXTENSION CONTEXT MUST BE FROM 1 TO 50 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: add_did VOICEMAIL EXTENSION MUST BE FROM 1 TO 10 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: add_did PHONE EXTENSION MUST BE FROM 1 TO 100 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: add_did SERVER IP MUST BE A VALID SERVER IN THE SYSTEM, THIS IS AN OPTIONAL FIELD - 6666|0.0.0.0",
+      "ERROR: add_did GROUP ID MUST BE A VALID INBOUND GROUP IN THE SYSTEM, THIS IS AN OPTIONAL FIELD - 6666|test",
+      "ERROR: add_did MENU ID MUST BE A VALID CALL MENU IN THE SYSTEM, THIS IS AN OPTIONAL FIELD - 6666|test_menu",
+      "ERROR: add_did CLEAN CID NUMBER MUST BE FROM 1 TO 20 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: add_did CALL HANDLE METHOD MUST BE FROM 3 TO 20 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|1",
+      "ERROR: add_did AGENT SEARCH METHOD MUST BE 2 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|1",
+      "ERROR: add_did LIST ID MUST BE FROM 3 TO 14 DIGITS, THIS IS AN OPTIONAL FIELD - 6666|1",
+      "ERROR: add_did ENTRY LIST ID MUST BE FROM 1 TO 14 DIGITS, THIS IS AN OPTIONAL FIELD - 6666|999999999999999",
+      "ERROR: add_did CAMPAIGN MUST BE FROM 1 TO 8 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|TESTCAMPS",
+      "ERROR: add_did PHONE CODE MUST BE FROM 1 TO 10 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|99999999999",
+      "SUCCESS: add_did DID HAS BEEN ADDED - 6666|1101"
+    ],
+    "copy_did": [
+      "ERROR: copy_did USER DOES NOT HAVE PERMISSION TO ADD DIDS - 6666",
+      "ERROR: copy_did YOU MUST USE ALL REQUIRED FIELDS - 6666|1|1",
+      "ERROR: copy_did NOT AN ALLOWED DID - 98762",
+      "ERROR: copy_did DID DESCRIPTION MUST BE EITHER BLANK OR FROM 6 TO 50 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "NOTICE: copy_did DID ALREADY EXISTS - 6666|1000",
+      "NOTICE: copy_did DID HAS BEEN ADDED - 6666|1000|1001|12|1",
+      "ERROR: copy_did NO DIDS ADDED - 6666|1000|0|1",
+      "SUCCESS: copy_did DIDS HAVE BEEN ADDED - 6666|1000|1|0"
+    ],
+    "update_did": [
+      "ERROR: update_did USER DOES NOT HAVE PERMISSION TO UPDATE DIDS - 6666",
+      "ERROR: update_did USER DOES NOT HAVE PERMISSION TO DELETE DIDS - 6666",
+      "ERROR: update_did YOU MUST USE ALL REQUIRED FIELDS - 6666|1",
+      "ERROR: update_did NOT AN ALLOWED DID - 98762",
+      "ERROR: update_did DID DOES NOT EXIST - 6666|1000",
+      "ERROR: update_did DID DESCRIPTION MUST BE FROM 6 TO 50 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|012",
+      "ERROR: update_did ACTIVE MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|U",
+      "ERROR: update_did DID ROUTE IS NOT VALID, THIS IS AN OPTIONAL FIELD - 6666|12",
+      "ERROR: update_did RECORD CALL MUST BE Y OR N, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: update_did EXTENSION MUST BE FROM 1 TO 50 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: update_did EXTENSION CONTEXT MUST BE FROM 1 TO 50 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: update_did VOICEMAIL EXTENSION MUST BE FROM 1 TO 10 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: update_did PHONE EXTENSION MUST BE FROM 1 TO 100 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: update_did SERVER IP MUST BE A VALID SERVER IN THE SYSTEM, THIS IS AN OPTIONAL FIELD - 6666|0.0.0.0",
+      "ERROR: update_did GROUP ID MUST BE A VALID INBOUND GROUP IN THE SYSTEM, THIS IS AN OPTIONAL FIELD - 6666|test",
+      "ERROR: update_did MENU ID MUST BE A VALID CALL MENU IN THE SYSTEM, THIS IS AN OPTIONAL FIELD - 6666|test_menu",
+      "ERROR: update_did CLEAN CID NUMBER MUST BE FROM 1 TO 20 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|",
+      "ERROR: update_did CALL HANDLE METHOD MUST BE FROM 3 TO 20 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|1",
+      "ERROR: update_did AGENT SEARCH METHOD MUST BE 2 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|1",
+      "ERROR: update_did LIST ID MUST BE FROM 3 TO 14 DIGITS, THIS IS AN OPTIONAL FIELD - 6666|1",
+      "ERROR: update_did ENTRY LIST ID MUST BE FROM 1 TO 14 DIGITS, THIS IS AN OPTIONAL FIELD - 6666|999999999999999",
+      "ERROR: update_did CAMPAIGN MUST BE FROM 1 TO 8 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|TESTCAMPS",
+      "ERROR: update_did PHONE CODE MUST BE FROM 1 TO 10 CHARACTERS, THIS IS AN OPTIONAL FIELD - 6666|99999999999",
+      "NOTICE: update_did NO UPDATES DEFINED - 6666|",
+      "SUCCESS: update_did DID HAS BEEN DELETED - 6666|23|1101",
+      "SUCCESS: update_did DID HAS BEEN UPDATED - 6666|1101"
+    ],
+    "update_cid_group_entry": [
+      "ERROR: update_cid_group_entry USER DOES NOT HAVE PERMISSION TO UPDATE CID GROUPS - 6666",
+      "ERROR: update_cid_group_entry YOU MUST USE ALL REQUIRED FIELDS - 6666|1||",
+      "ERROR: update_cid_group_entry NOT AN ALLOWED CID GROUP - 98762",
+      "ERROR: update_cid_group_entry CID GROUP DOES NOT EXIST - 6666|1000",
+      "ERROR: update_cid_group_entry THIS CID GROUP HAS NO ENTRIES - 6666|1000",
+      "SUCCESS: update_cid_group_entry CID GROUP INFO AS FOLLOWS - 1101|---ALL---|---ALL---|3",
+      "ERROR: update_cid_group_entry YOU MUST DEFINE AN AREACODE WHEN ADDING AND ENTRY - 6666|1000|---ALL---",
+      "ERROR: update_cid_group_entry YOU MUST DEFINE A CID NUMBER WHEN ADDING AND ENTRY - 6666|1000|1",
+      "ERROR: update_cid_group_entry THIS CID GROUP ENTRY ALREADY EXISTS - 6666|1000|813|8135551212",
+      "SUCCESS: update_cid_group_entry CID GROUP ENTRY HAS BEEN ADDED - 6666|1101|813|8135551212|1",
+      "SUCCESS: update_cid_group_entry CID GROUP ENTRIES HAVE BEEN DELETED - 6666|1101|813|8135551212|1",
+      "ERROR: update_cid_group_entry NO UPDATES DEFINED - 6666|813|8135551212||",
+      "SUCCESS: update_cid_group_entry CID GROUP ENTRIES HAVE BEEN UPDATED - 6666|1101|813|8135551212|1",
+      "ERROR: NO FUNCTION SPECIFIED"
+    ]
+  }
+}

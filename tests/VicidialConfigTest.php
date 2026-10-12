@@ -25,7 +25,7 @@ class VicidialConfigTest extends TestCase
         $this->assertTrue($config->isVerifyTls());
         $this->assertSame(30, $config->getTimeout());
         $this->assertFalse($config->isUrlEncodeDefault());
-        $this->assertSame('VicidialApi-PHP-Wrapper/4.1', $config->getUserAgent());
+        $this->assertSame('VicidialApi-PHP-Wrapper/4.2', $config->getUserAgent());
         $this->assertSame('vicidial-api-wrapper', $config->getSource());
         $this->assertLessThanOrEqual(20, strlen($config->getSource()), 'VICIdial caps source at 20 characters');
         $this->assertFalse($config->hasBasicAuth());
