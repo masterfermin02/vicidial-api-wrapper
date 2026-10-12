@@ -147,11 +147,12 @@ echo "PHP Version: " . $response->get('php version');
 echo "Server: " . $response->get('server name');
 ```
 
-### 5. CSV/Tab-Delimited (Report Exports)
+### 5. CSV / Tab / Pipe Reports (multi-line)
 
-Some admin reports can output in CSV or tab format.
+Report and list functions accept `stage=csv|tab|json|pipe` and `header=YES`. Multi-line output is
+parsed into rows (4.2.0+).
 
-**Example**:
+**Example** (`agent_stats_export`, `stage=csv&header=YES`):
 ```
 user,full_name,user_group,calls,login_time
 1029,test agent,ADMIN,1,0:01:52
@@ -160,26 +161,33 @@ user,full_name,user_group,calls,login_time
 
 **Parsed Structure**:
 ```php
-// First line becomes header (if header=YES)
-// Subsequent lines are pipe-delimited fields
+$response->columns();              // ["user", "full_name", "user_group", "calls", "login_time"]
+$response->rows();                 // [["user" => "1029", "full_name" => "test agent", ...], [...]]
+$response->rows()[1]['calls'];     // "5"
+$response->get('delimiter');       // ","
 ```
 
-## Response Status Detection
+The header row is used when the request sent `header=YES` (the transport passes that hint along) or when the
+first line consists of lowercase identifiers. Without a header, rows are plain lists:
+```php
+// moh_list: default|default_hold.gsm|on_hold_music.wav  (one class per line)
+$response->rows()[0][1];           // "default_hold.gsm"
+```
 
-The DTO automatically determines success or failure:
+`stage=json` output is `json_decode`d: an object is available through `get()`, a list through `rows()`.
 
-### SUCCESS
-- Starts with `SUCCESS:`
-- Contains no ERROR indicators
-- Informational responses (VERSION, lists, etc.)
+### 6. Failure shapes that are not VICIdial output
 
-### ERROR
-- Starts with `ERROR:`
-- Contains ERROR keyword
+A proxy, load balancer or web server in front of VICIdial can answer instead of the API. These are
+reported as `error` even though the body has no `ERROR:` prefix:
 
-### NOTICE
-- Starts with `NOTICE:`
-- Warnings or informational messages
+| Body | `status()` | `message()` |
+|---|---|---|
+| empty | `error` | `Empty response body` |
+| HTML (`text/html` or `<!DOCTYPE` / `<html`) | `error` | `HTML response instead of API output (...)` |
+| anything with HTTP status 400+ and no `SUCCESS:` prefix | `error` | depends on body |
+
+`statusCode()`, `headers()` and `header('x-served-by')` expose the HTTP layer for debugging.
 
 ## Common Response Examples
 
@@ -248,8 +256,8 @@ $raw = $response->raw();
 preg_match('/SUCCESS: .+ - (\d+)\|(\d+)/', $raw, $matches);
 
 // Use parsed accessors
-$data0 = $response->get('data_0');
-$data1 = $response->get('data_1');
+[$status, $epoch, $user] = $response->fields();   // "PAUSE", "1232020456", "6666"
+$data1 = $response->get('data_1');                // "1232020456"
 ```
 
 ### 3. Use Defaults for Optional Fields
@@ -295,9 +303,9 @@ if ($response->ok()) {
 }
 
 // Direct access
-$value1 = $response->get('data_0');
+$value1 = $response->fields()[0];
 $type = $response->get('result_type'); // "SUCCESS"
-$message = $response->get('message');
+$message = $response->message();
 ```
 
 ## Summary
@@ -308,6 +316,8 @@ The VicidialResponse DTO handles all Vicidial API response formats automatically
 ✅ **VERSION format** - Special key:value pairs in pipes  
 ✅ **Pipe-delimited lists** - Numbered field access  
 ✅ **Multi-line key:value** - Direct key access  
-✅ **CSV exports** - Comma-separated parsing  
+✅ **CSV / tab / pipe reports** - `rows()` keyed by header  
+✅ **JSON (`stage=json`)** - decoded  
+✅ **Empty / HTML / HTTP-error bodies** - reported as errors, not success  
 
 No manual parsing, regex, or format detection needed - it just works!

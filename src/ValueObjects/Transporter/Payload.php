@@ -137,6 +137,14 @@ final class Payload
     /**
      * Creates a new Psr 7 Request instance.
      */
+    /**
+     * A query parameter of this payload, or null when it is not set.
+     */
+    public function parameter(string $name): mixed
+    {
+        return $this->parameters[$name] ?? null;
+    }
+
     public function toRequest(BaseUri $baseUri, Headers $headers, QueryParams $queryParams): RequestInterface
     {
         $psr17Factory = new Psr17Factory;

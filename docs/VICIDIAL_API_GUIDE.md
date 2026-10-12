@@ -124,7 +124,7 @@ $response = $client->agent()->dialResponse('1000', [
 ```php
 $admin = $client->admin();
 $lead = $admin->addLeadResponse(['phone_number' => '3125551212', 'list_id' => '101', 'first_name' => 'Jane']);
-$leadId = $lead->get('data_1'); // "SUCCESS: add_lead LEAD HAS BEEN ADDED - 3125551212|101|<lead_id>|..."
+$leadId = $lead->fields()[2]; // "SUCCESS: add_lead LEAD HAS BEEN ADDED - 3125551212|101|<lead_id>|..." -> phone, list, lead_id
 $admin->hopperBulkInsert(['lead_ids' => $leadId, 'hopper_priority' => '50']);
 ```
 

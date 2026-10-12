@@ -9,44 +9,80 @@ use Stringable;
 use VicidialApi\Contracts\ResponseContract;
 
 /**
- * Vicidial API Response DTO
+ * Vicidial API Response DTO.
  *
- * Provides structured access to API responses with helpers for common operations.
+ * Wraps the plain-text body VICIdial returns and exposes it three ways:
  *
- * @implements ResponseContract<array{status: string, raw: string, parsed: mixed, requestId: string|null}>
+ * - `raw()` the body as received
+ * - `get()` / `parsed()` a key => value view (see docs/response-formats.md for the keys per format)
+ * - `fields()` / `rows()` positional data for pipe / CSV / tab payloads
+ *
+ * Status is `success`, `error` or `notice`. Empty bodies, HTML bodies (login pages,
+ * proxy error pages) and HTTP status codes of 400 and above are reported as `error`
+ * even though VICIdial did not say `ERROR:`.
+ *
+ * @implements ResponseContract<array<string, mixed>>
  */
 final class VicidialResponse implements ResponseContract, Stringable
 {
     /** @use Concerns\ArrayAccessible<array<string, mixed>> */
     use Concerns\ArrayAccessible;
 
+    public const STATUS_SUCCESS = 'success';
+
+    public const STATUS_ERROR = 'error';
+
+    public const STATUS_NOTICE = 'notice';
+
     /**
      * @param  array<string, mixed>  $parsed
+     * @param  array<string, string>  $headers
      */
     private function __construct(
         private readonly string $status,
         private readonly string $raw,
         private readonly array $parsed,
         private readonly ?string $requestId = null,
+        private readonly ?int $statusCode = null,
+        private readonly array $headers = [],
     ) {}
 
     /**
      * Create a VicidialResponse from raw API response content.
      *
-     * @param  array<string, string>  $headers
+     * @param  string  $content  response body
+     * @param  array<string, string>  $headers  response headers (first value per header)
+     * @param  int|null  $statusCode  HTTP status code when known
+     * @param  bool|null  $hasHeader  whether a tabular body carries a header row (`header=YES` was sent); null = detect
      */
-    public static function from(string $content, array $headers = []): self
+    public static function from(string $content, array $headers = [], ?int $statusCode = null, ?bool $hasHeader = null): self
     {
-        $raw = $content;
-        $parsed = self::parseContent($content);
-        $status = self::determineStatus($content, $parsed);
-        $requestId = $headers['X-Request-ID'] ?? $headers['x-request-id'] ?? null;
+        $requestId = self::headerValue($headers, 'X-Request-ID');
+        $contentType = strtolower(self::headerValue($headers, 'Content-Type') ?? '');
 
-        return new self($status, $raw, $parsed, $requestId);
+        if (trim($content) === '') {
+            return new self(self::STATUS_ERROR, $content, ['message' => 'Empty response body'], $requestId, $statusCode, $headers);
+        }
+
+        if (str_contains($contentType, 'text/html') || self::looksLikeHtml($content)) {
+            return new self(
+                self::STATUS_ERROR,
+                $content,
+                ['message' => 'HTML response instead of API output (login page, proxy or web server error?)', 'result' => $content],
+                $requestId,
+                $statusCode,
+                $headers,
+            );
+        }
+
+        $parsed = self::parseContent($content, $hasHeader);
+        $status = self::determineStatus($content, $statusCode);
+
+        return new self($status, $content, $parsed, $requestId, $statusCode, $headers);
     }
 
     /**
-     * Get the response status.
+     * Get the response status: success, error or notice.
      */
     public function status(): string
     {
@@ -80,17 +116,41 @@ final class VicidialResponse implements ResponseContract, Stringable
     }
 
     /**
+     * HTTP status code of the response, when the transport provided it.
+     */
+    public function statusCode(): ?int
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * Response headers (first value per header), as provided by the transport.
+     *
+     * @return array<string, string>
+     */
+    public function headers(): array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * One response header, looked up case-insensitively.
+     */
+    public function header(string $name): ?string
+    {
+        return self::headerValue($this->headers, $name);
+    }
+
+    /**
      * Check if the response indicates success.
      * Vicidial returns "SUCCESS:" prefix for successful operations
      */
     public function ok(): bool
     {
-        // Check status first (most reliable)
-        if ($this->status === 'success') {
+        if ($this->status === self::STATUS_SUCCESS) {
             return true;
         }
 
-        // Additional check for explicit SUCCESS prefix
         return str_starts_with(strtoupper($this->raw), 'SUCCESS:');
     }
 
@@ -100,6 +160,79 @@ final class VicidialResponse implements ResponseContract, Stringable
     public function failed(): bool
     {
         return ! $this->ok();
+    }
+
+    /**
+     * Message text: everything after `SUCCESS:` / `ERROR:` / `NOTICE:`, or the
+     * explanation for empty / HTML bodies. Null for raw data payloads.
+     */
+    public function message(): ?string
+    {
+        $message = $this->parsed['message'] ?? null;
+
+        return is_string($message) ? $message : null;
+    }
+
+    /**
+     * Positional values of a single-line payload, in order.
+     *
+     * For `SUCCESS: external_pause function set - PAUSE|1232020456|6666` this is
+     * ["PAUSE", "1232020456", "6666"] (the part after " - "); for a raw `a|b|c` line
+     * it is ["a", "b", "c"] (the `field_N` values). Empty for multi-line payloads: use rows().
+     *
+     * @return list<string>
+     */
+    public function fields(): array
+    {
+        if (isset($this->parsed['result_type'])) {
+            $message = $this->message() ?? '';
+
+            if (! str_contains($message, '|')) {
+                return [];
+            }
+
+            $separator = strpos($message, ' - ');
+            $data = $separator === false ? $message : substr($message, $separator + 3);
+
+            return array_map('trim', explode('|', $data));
+        }
+
+        $fields = [];
+        for ($i = 0; array_key_exists('field_'.$i, $this->parsed); $i++) {
+            $value = $this->parsed['field_'.$i];
+            $fields[] = is_scalar($value) ? (string) $value : '';
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Rows of a multi-line pipe / CSV / tab payload (reports, lists, `stage=csv|tab|pipe`).
+     *
+     * With a header row (`header=YES`, or detected) each row is keyed by column name,
+     * otherwise rows are lists. Empty for single-line payloads: use fields().
+     *
+     * @return list<array<int|string, string>>
+     */
+    public function rows(): array
+    {
+        /** @var list<array<int|string, string>> $rows */
+        $rows = is_array($this->parsed['rows'] ?? null) ? $this->parsed['rows'] : [];
+
+        return $rows;
+    }
+
+    /**
+     * Column names of a tabular payload when a header row was present.
+     *
+     * @return list<string>
+     */
+    public function columns(): array
+    {
+        /** @var list<string> $columns */
+        $columns = is_array($this->parsed['columns'] ?? null) ? $this->parsed['columns'] : [];
+
+        return $columns;
     }
 
     /**
@@ -149,7 +282,7 @@ final class VicidialResponse implements ResponseContract, Stringable
     /**
      * {@inheritDoc}
      *
-     * @return array{status: string, raw: string, parsed: array<string, mixed>, requestId: string|null}
+     * @return array{status: string, raw: string, parsed: array<string, mixed>, requestId: string|null, statusCode: int|null, headers: array<string, string>}
      */
     public function toArray(): array
     {
@@ -158,6 +291,8 @@ final class VicidialResponse implements ResponseContract, Stringable
             'raw' => $this->raw,
             'parsed' => $this->parsed,
             'requestId' => $this->requestId,
+            'statusCode' => $this->statusCode,
+            'headers' => $this->headers,
         ];
     }
 
@@ -171,34 +306,27 @@ final class VicidialResponse implements ResponseContract, Stringable
 
     /**
      * Parse the content into a structured array.
-     * Based on actual Vicidial API response formats from documentation.
+     *
+     * Order matters: a `SUCCESS:` line can contain pipes, JSON contains colons and
+     * newlines, and a CSV report can contain `key: value`-looking timestamps.
      *
      * @return array<string, mixed>
      */
-    private static function parseContent(string $content): array
+    private static function parseContent(string $content, ?bool $hasHeader): array
     {
         $content = trim($content);
 
-        // Vicidial typically returns pipe-delimited responses
-        // Examples:
-        // - "SUCCESS: external_pause function set - PAUSE|1232020456|6666"
-        // - "ERROR: agent_user is not logged in - 6666"
-        // - "VERSION: 2.0.5-2|BUILD: 90116-1229|DATE: 2009-01-15 14:59:33|EPOCH: 1222020803"
-
-        $parsed = [];
-
-        // Check if response starts with SUCCESS or ERROR
-        if (preg_match('/^(SUCCESS|ERROR|NOTICE):\s*(.+)$/i', $content, $matches)) {
+        // 1. "SUCCESS: external_pause function set - PAUSE|1232020456|6666"
+        if (preg_match('/^(SUCCESS|ERROR|NOTICE):\s*(.*)$/is', $content, $matches)) {
             $type = strtoupper($matches[1]);
-            $message = $matches[2];
+            $message = trim($matches[2]);
 
-            $parsed['result_type'] = $type;
-            $parsed['message'] = $message;
+            $parsed = ['result_type' => $type, 'message' => $message];
 
-            // Parse the message for additional pipe-delimited data
+            // data_N splits the whole message on "|" (kept for backward compatibility, so
+            // data_0 is "external_pause function set - PAUSE"); fields() gives the clean values.
             if (str_contains($message, '|')) {
-                $parts = explode('|', $message);
-                foreach ($parts as $index => $part) {
+                foreach (explode('|', $message) as $index => $part) {
                     $parsed["data_$index"] = trim($part);
                 }
             }
@@ -206,62 +334,82 @@ final class VicidialResponse implements ResponseContract, Stringable
             return $parsed;
         }
 
-        // Check for multi-line key-value format (like webserver response)
-        // Example: "set.timezone: America/New_York\nabbr.timezone: EDT"
-        if (str_contains($content, "\n") && str_contains($content, ':')) {
-            $lines = explode("\n", $content);
-            $hasKeyValue = false;
+        // 2. JSON (stage=json)
+        if (str_starts_with($content, '{') || str_starts_with($content, '[')) {
+            try {
+                $decoded = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 
+                if (is_array($decoded)) {
+                    if (array_is_list($decoded)) {
+                        /** @var list<array<int|string, string>> $decoded */
+                        return ['rows' => $decoded];
+                    }
+
+                    /** @var array<string, mixed> $decoded */
+                    return $decoded;
+                }
+            } catch (JsonException) {
+                // not JSON after all, fall through
+            }
+        }
+
+        $lines = array_values(array_filter(array_map('trim', explode("\n", $content)), fn (string $line): bool => $line !== ''));
+
+        // 3. Multi-line tabular data (reports and lists: stage=pipe|csv|tab, optional header=YES)
+        if (count($lines) > 1) {
+            $table = self::parseTable($lines, $hasHeader);
+            if ($table !== null) {
+                return $table;
+            }
+        }
+
+        // 4. Multi-line "key: value" (webserver)
+        if (count($lines) > 1) {
+            $parsed = [];
             foreach ($lines as $line) {
-                $line = trim($line);
-                if ($line === '' || str_starts_with($line, ';')) {
+                if (str_starts_with($line, ';')) {
                     continue;
                 }
 
                 if (preg_match('/^([^:]+):\s*(.*)$/', $line, $matches)) {
-                    $key = trim($matches[1]);
-                    $value = trim($matches[2]);
-                    $parsed[$key] = $value;
-                    $hasKeyValue = true;
+                    $parsed[trim($matches[1])] = trim($matches[2]);
                 }
             }
 
-            if ($hasKeyValue) {
+            if ($parsed !== []) {
                 return $parsed;
             }
         }
 
-        // Parse pipe-delimited data (common for lists and version info)
-        // Example: "user|allowed_campaigns|allowed_ingroups"
-        if (str_contains($content, '|')) {
-            $parts = explode('|', $content);
-
-            // Check if it looks like VERSION format
-            if (str_starts_with($content, 'VERSION:')) {
-                foreach ($parts as $part) {
-                    if (preg_match('/^([A-Z]+):\s*(.+)$/', trim($part), $matches)) {
-                        $parsed[strtolower($matches[1])] = trim($matches[2]);
-                    }
-                }
-
-                if ($parsed !== []) {
-                    return $parsed;
+        // 5. "VERSION: 2.14-890a|BUILD: 210303-1234|DATE: ...|EPOCH: ..."
+        if (str_starts_with($content, 'VERSION:') && str_contains($content, '|')) {
+            $parsed = [];
+            foreach (explode('|', $content) as $part) {
+                if (preg_match('/^([A-Z]+):\s*(.+)$/', trim($part), $matches)) {
+                    $parsed[strtolower($matches[1])] = trim($matches[2]);
                 }
             }
 
-            // Generic pipe-delimited data
-            foreach ($parts as $index => $value) {
+            if ($parsed !== []) {
+                return $parsed;
+            }
+        }
+
+        // 6. Single pipe-delimited line: "user|allowed_campaigns|allowed_ingroups"
+        if (str_contains($content, '|')) {
+            $parsed = [];
+            foreach (explode('|', $content) as $index => $value) {
                 $parsed["field_$index"] = trim($value);
             }
 
             return $parsed;
         }
 
-        // Parse CSV-like format with headers (some reports use this)
-        if (str_contains($content, ',') && ! str_contains($content, "\n")) {
-            $parts = str_getcsv($content);
-            foreach ($parts as $index => $value) {
-                if ($value) {
+        // 7. Single CSV line
+        if (str_contains($content, ',') && count($lines) === 1) {
+            $parsed = [];
+            foreach (str_getcsv($content, ',', '"', '\\') as $index => $value) {
+                if ($value !== null && $value !== '') {
                     $parsed["field_$index"] = trim($value);
                 }
             }
@@ -269,82 +417,118 @@ final class VicidialResponse implements ResponseContract, Stringable
             return $parsed;
         }
 
-        // Try JSON parsing (rare but possible with some custom implementations)
-        if (self::isJson($content)) {
-            try {
-                /** @var array<string, mixed> $decoded */
-                $decoded = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-
-                return $decoded;
-            } catch (JsonException) {
-                // Fall through
-            }
-        }
-
-        // Return raw content as single result
         return ['result' => $content];
     }
 
     /**
-     * Determine the status from the content.
-     * Vicidial responses typically start with SUCCESS:, ERROR:, or NOTICE:
+     * Detect a delimiter every line shares and split into rows.
      *
-     * @param  array<string, mixed>  $parsed
+     * @param  list<string>  $lines
+     * @return array<string, mixed>|null
      */
-    private static function determineStatus(string $content, array $parsed): string
+    private static function parseTable(array $lines, ?bool $hasHeader): ?array
     {
-        $contentUpper = strtoupper($content);
-
-        // Check for explicit SUCCESS indicator (most common Vicidial format)
-        if (str_starts_with($contentUpper, 'SUCCESS:')) {
-            return 'success';
-        }
-
-        // Check for explicit ERROR indicator
-        if (str_starts_with($contentUpper, 'ERROR:')) {
-            return 'error';
-        }
-
-        // Check for NOTICE indicator (usually warnings)
-        if (str_starts_with($contentUpper, 'NOTICE:')) {
-            return 'notice';
-        }
-
-        // Check parsed data for result_type
-        if (isset($parsed['result_type']) && is_string($parsed['result_type'])) {
-            $resultType = strtolower($parsed['result_type']);
-            if ($resultType === 'success') {
-                return 'success';
+        foreach (["\t", '|', ','] as $delimiter) {
+            $count = substr_count($lines[0], $delimiter);
+            if ($count === 0) {
+                continue;
             }
-            if ($resultType === 'error') {
-                return 'error';
+
+            foreach ($lines as $line) {
+                if (substr_count($line, $delimiter) !== $count) {
+                    continue 2;
+                }
             }
-            if ($resultType === 'notice') {
-                return 'notice';
+
+            $rows = array_map(
+                fn (string $line): array => array_map('trim', $delimiter === ','
+                    ? array_map(fn (?string $cell): string => (string) $cell, str_getcsv($line, ',', '"', '\\'))
+                    : explode($delimiter, $line)),
+                $lines,
+            );
+
+            $hasHeader ??= self::looksLikeHeader($rows[0]);
+
+            if (! $hasHeader) {
+                return ['rows' => $rows, 'delimiter' => $delimiter];
             }
+
+            /** @var list<string> $columns */
+            $columns = array_shift($rows);
+            $keyed = array_map(fn (array $row): array => array_combine($columns, $row), $rows);
+
+            return ['rows' => $keyed, 'columns' => $columns, 'delimiter' => $delimiter];
         }
 
-        // For responses that don't start with SUCCESS/ERROR (like version, lists, etc.)
-        // we consider them successful if they don't contain ERROR
-        if (str_contains($contentUpper, 'ERROR')) {
-            return 'error';
-        }
-
-        // Default to success for informational responses (version, lists, etc.)
-        return 'success';
+        return null;
     }
 
     /**
-     * Check if a string is valid JSON.
+     * VICIdial header rows are lowercase identifiers: status,call_id,lead_id,...
+     *
+     * @param  list<string>  $cells
      */
-    private static function isJson(string $string): bool
+    private static function looksLikeHeader(array $cells): bool
     {
-        if (! str_starts_with(trim($string), '{') && ! str_starts_with(trim($string), '[')) {
-            return false;
+        foreach ($cells as $cell) {
+            if (preg_match('/^[a-z][a-z0-9_]*$/', $cell) !== 1) {
+                return false;
+            }
         }
 
-        json_decode($string);
+        return count(array_unique($cells)) === count($cells);
+    }
 
-        return json_last_error() === JSON_ERROR_NONE;
+    /**
+     * Determine the status from the content.
+     */
+    private static function determineStatus(string $content, ?int $statusCode): string
+    {
+        $contentUpper = strtoupper(ltrim($content));
+
+        if (str_starts_with($contentUpper, 'SUCCESS:')) {
+            return self::STATUS_SUCCESS;
+        }
+
+        if (str_starts_with($contentUpper, 'ERROR:')) {
+            return self::STATUS_ERROR;
+        }
+
+        if (str_starts_with($contentUpper, 'NOTICE:')) {
+            return self::STATUS_NOTICE;
+        }
+
+        if ($statusCode !== null && $statusCode >= 400) {
+            return self::STATUS_ERROR;
+        }
+
+        // Raw data payloads (version, lists, reports) carry no prefix; VICIdial still
+        // prints "ERROR" somewhere in the body when a report request is rejected.
+        if (str_contains($contentUpper, 'ERROR')) {
+            return self::STATUS_ERROR;
+        }
+
+        return self::STATUS_SUCCESS;
+    }
+
+    private static function looksLikeHtml(string $content): bool
+    {
+        $start = strtolower(substr(ltrim($content), 0, 15));
+
+        return str_starts_with($start, '<!doctype') || str_starts_with($start, '<html');
+    }
+
+    /**
+     * @param  array<string, string>  $headers
+     */
+    private static function headerValue(array $headers, string $name): ?string
+    {
+        foreach ($headers as $key => $value) {
+            if (strcasecmp($key, $name) === 0) {
+                return $value;
+            }
+        }
+
+        return null;
     }
 }

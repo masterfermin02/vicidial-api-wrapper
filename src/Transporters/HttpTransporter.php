@@ -112,7 +112,10 @@ final class HttpTransporter implements TransporterContract
             $headers[$name] = $values[0] ?? '';
         }
 
-        return VicidialResponse::from($contents, $headers);
+        $header = $payload->parameter('header');
+        $hasHeader = is_string($header) ? strtoupper($header) === 'YES' : null;
+
+        return VicidialResponse::from($contents, $headers, $response->getStatusCode(), $hasHeader);
     }
 
     /**

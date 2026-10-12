@@ -93,6 +93,53 @@ $requestId = $response->requestId();
 // Example: "req_abc123xyz789"
 ```
 
+##### `statusCode(): ?int`, `headers(): array`, `header(string $name): ?string`
+
+The HTTP status code and response headers as the transport saw them (4.2.0+). Useful to tell a load
+balancer or proxy answer apart from VICIdial output. `header()` is case-insensitive.
+
+```php
+$response->statusCode();          // 200
+$response->header('x-served-by'); // "lb-2" or null
+```
+
+##### `message(): ?string`
+
+Everything after the `SUCCESS:` / `ERROR:` / `NOTICE:` prefix, or the explanation for an empty or HTML body.
+`null` for raw data payloads (lists, reports).
+
+##### `fields(): array`
+
+Positional values of a single-line payload, in order, without the message text (4.2.0+):
+
+```php
+// SUCCESS: external_pause function set - PAUSE|1232020456|6666
+$response->fields();        // ["PAUSE", "1232020456", "6666"]
+
+// INCALL|M4050908070000012345|12345|TESTCAMP
+$response->fields();        // ["INCALL", "M4050908070000012345", "12345", "TESTCAMP"]
+```
+
+`get('data_N')` and `get('field_N')` still work; note that `data_0` keeps the historical shape
+`"external_pause function set - PAUSE"` (the message is not stripped there). Prefer `fields()`.
+
+##### `rows(): array` and `columns(): array`
+
+Multi-line reports and lists (`stage=pipe|csv|tab`) are parsed into rows (4.2.0+). When the request
+sent `header=YES`, or the first line looks like a header (`status,call_id,lead_id`), rows are keyed by
+column name and `columns()` lists them; otherwise rows are plain lists.
+
+```php
+$report = $client->admin()->agentStatusResponse(['agent_user' => '1000', 'stage' => 'csv', 'header' => 'YES']);
+$report->columns();            // ["status", "call_id", "lead_id", "campaign_id", ...]
+$report->rows()[0]['status'];  // "INCALL"
+
+$moh = $client->admin()->mohListResponse([]);
+$moh->rows()[0][1];            // "default_hold.gsm" (no header row)
+```
+
+`stage=json` output is decoded: an object becomes `parsed()`, a list becomes `rows()`.
+
 ### Response Status
 
 #### `ok(): bool`
@@ -108,6 +155,12 @@ if ($response->ok()) {
 This method returns `true` when:
 - The status is `'success'`
 - The raw response starts with `"SUCCESS:"`
+
+Since 4.2.0 the status is `'error'` (so `ok()` is `false`) for three shapes that VICIdial itself never
+produces but a misconfigured proxy, load balancer or web server does:
+- an **empty body** (`message()` is `"Empty response body"`),
+- an **HTML body** (`Content-Type: text/html` or a body starting with `<!DOCTYPE` / `<html`), typically a login page,
+- an **HTTP status of 400 or above** when the body has no `SUCCESS:` prefix.
 
 #### `failed(): bool`
 
@@ -263,9 +316,14 @@ Parsed as:
 ]
 ```
 
-#### 5. JSON Format
+#### 5. Tabular Format (reports, lists)
 
-If the response is valid JSON, it's parsed as-is:
+Multi-line pipe, CSV or tab output becomes `rows()` (keyed by `columns()` when a header row is present),
+see `rows()` above.
+
+#### 6. JSON Format
+
+If the response is valid JSON (`stage=json`), it's parsed as-is:
 
 ```json
 {"status": "success", "data": {"id": 123}}

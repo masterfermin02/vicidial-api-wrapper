@@ -12,10 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Typed parameter objects `VicidialApi\Parameters\{DialParameters, DispoParameters, AddLeadParameters, UpdateLeadParameters}`; `dial()`, `dispo()`, `addLead()` and `updateLead()` accept them in place of an array. `with()` adds unmodelled parameters such as custom list fields.
 - `Agent::dial()` accepts `lead_id` without a `phone_number`, as documented for `external_dial`.
 - `Agent::UPDATE_FIELDS_ALLOWED` public constant.
+- `VicidialResponse::fields()` (positional values without the message text), `message()`, `rows()` and `columns()` (multi-line pipe / CSV / tab reports, keyed by header when `header=YES` was sent or a header line is detected), `statusCode()`, `headers()` and `header()` (raw HTTP layer). `from()` takes the HTTP status code and a header hint; `HttpTransporter` passes both.
+- `stage=json` bodies are decoded (objects via `get()`, lists via `rows()`); previously they fell into the `key: value` branch.
+- `Payload::parameter()` accessor.
 - GitHub Actions CI (`.github/workflows/ci.yml`) running pint, rector, phpstan and phpunit on PHP 8.2, 8.3 and 8.4.
 - `docs/README.md` documentation index.
 
 ### Changed
+- `VicidialResponse` reports `error` (so `ok()` is false) for an empty body, an HTML body (`text/html` content type or `<!DOCTYPE` / `<html` start) and for HTTP status 400+ without a `SUCCESS:` prefix. These are proxy / web-server answers, never VICIdial output, and used to read as success.
+- `VicidialResponse::toArray()` includes `statusCode` and `headers`.
 - `Agent::dial()` and `Agent::updateFields()` throw `VicidialApi\Exceptions\InvalidArgumentException` (a `VicidialException`) instead of a bare `\Exception`. The stale `@deprecated` tag on that class was removed.
 - `Agent::updateFields()` allow-list re-synced with AGENT_API.txt (2025-08-30): the `formreload`, `scriptreload`, `script2reload`, `emailreload` and `chatreload` triggers are accepted.
 - Default `source` query parameter is `vicidial-api-wrapper` instead of `test` (`VicidialConfig::DEFAULT_SOURCE`). It is a free-text label that shows up in VICIdial logs; set `source:` explicitly if you depended on `test`.

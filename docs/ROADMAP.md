@@ -31,10 +31,10 @@ what was fixed, and what is still worth doing. It is meant to be edited: delete 
 - ~~Typed parameter objects~~ resolved: `DialParameters`, `DispoParameters`, `AddLeadParameters`, `UpdateLeadParameters` in `VicidialApi\Parameters`; the array overloads remain.
 - ~~`source` defaults to `'test'`~~ resolved: defaults to `vicidial-api-wrapper` (`VicidialConfig::DEFAULT_SOURCE`, exactly the 20-character API limit).
 
-### 3. Response parsing
-- `VicidialResponse::determineStatus()` returns `success` for any body without `ERROR`, so an empty body or an HTML login page from a misconfigured proxy reads as success. Treat empty bodies and `text/html` content as errors.
-- Reports requested with `stage=csv|tab|json` and `header=YES` should parse into rows keyed by header. Today everything multi-line falls into the `key: value` branch or `result`.
-- `ok()` is case-insensitive on `SUCCESS:` but `parseContent()` splits `data_N` only when the message contains a pipe. Document the `data_N` / `field_N` naming or expose `fields(): array` directly.
+### 3. Response parsing: done in 4.2.0
+- ~~Empty bodies and HTML login pages read as success~~ resolved: empty bodies, `text/html` (or `<!DOCTYPE`/`<html`) bodies and HTTP status 400+ without a `SUCCESS:` prefix are `error`.
+- ~~`stage=csv|tab|json` reports not parsed~~ resolved: multi-line pipe / CSV / tab output becomes `rows()` (keyed by `columns()` when `header=YES` was sent or a header line is detected); `stage=json` is decoded. JSON is tried before the `key: value` branch, which used to swallow it.
+- ~~Document `data_N` / `field_N` or expose `fields()`~~ resolved: `fields()` returns the clean positional values, `message()` the text; `data_N` keeps its historical shape for compatibility. Documented in `docs/RESPONSE_DTO.md` and `docs/response-formats.md`.
 
 ### 4. Transport
 - `HttpTransporter::sendRequest()` catches `ClientExceptionInterface` but only Guzzle's `ClientException` carries a response; a PSR-18 client that returns 5xx **without throwing** is never retried. Retry on the response status code, not only on exceptions.
