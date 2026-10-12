@@ -159,7 +159,7 @@ This method returns `true` when:
 Since 4.2.0 the status is `'error'` (so `ok()` is `false`) for three shapes that VICIdial itself never
 produces but a misconfigured proxy, load balancer or web server does:
 - an **empty body** (`message()` is `"Empty response body"`),
-- an **HTML body** (`Content-Type: text/html` or a body starting with `<!DOCTYPE` / `<html`), typically a login page,
+- an **HTML body** (starts with a tag such as `<!DOCTYPE`, `<html`, `<h1>`), typically a login or proxy error page. The `Content-Type` header alone never flips the status: VICIdial's scripts can send `text/html` for valid output, so a `SUCCESS:` line or a pipe list with that header still parses as success,
 - an **HTTP status of 400 or above** when the body has no `SUCCESS:` prefix.
 
 #### `failed(): bool`

@@ -184,7 +184,7 @@ reported as `error` even though the body has no `ERROR:` prefix:
 | Body | `status()` | `message()` |
 |---|---|---|
 | empty | `error` | `Empty response body` |
-| HTML (`text/html` or `<!DOCTYPE` / `<html`) | `error` | `HTML response instead of API output (...)` |
+| HTML body (starts with a tag: `<!DOCTYPE`, `<html`, `<h1>`, ...) | `error` | `HTML response instead of API output (...)` |
 | anything with HTTP status 400+ and no `SUCCESS:` prefix | `error` | depends on body |
 
 `statusCode()`, `headers()` and `header('x-served-by')` expose the HTTP layer for debugging.
@@ -194,7 +194,7 @@ reported as `error` even though the body has no `ERROR:` prefix:
 `status()` is one of:
 
 - `success`: body starts with `SUCCESS:`, or a raw data payload (version, lists, reports) without `ERROR` in it
-- `error`: body starts with `ERROR:`, contains `ERROR`, is empty, is HTML, or came with HTTP status 400+
+- `error`: body starts with `ERROR:`, contains `ERROR`, is empty, starts with an HTML tag, or came with HTTP status 400+
 - `notice`: body starts with `NOTICE:`
 
 `ok()` is true only for `success`; `failed()` is its inverse.

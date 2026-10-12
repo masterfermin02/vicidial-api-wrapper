@@ -18,8 +18,8 @@ use VicidialApi\Contracts\ResponseContract;
  * - `fields()` / `rows()` positional data for pipe / CSV / tab payloads
  *
  * Status is `success`, `error` or `notice`. Empty bodies, HTML bodies (login pages,
- * proxy error pages) and HTTP status codes of 400 and above are reported as `error`
- * even though VICIdial did not say `ERROR:`.
+ * proxy error pages, detected from the body itself) and HTTP status codes of 400 and
+ * above are reported as `error` even though VICIdial did not say `ERROR:`.
  *
  * @implements ResponseContract<array<string, mixed>>
  */
@@ -64,7 +64,14 @@ final class VicidialResponse implements ResponseContract, Stringable
             return new self(self::STATUS_ERROR, $content, ['message' => 'Empty response body'], $requestId, $statusCode, $headers);
         }
 
-        if (str_contains($contentType, 'text/html') || self::looksLikeHtml($content)) {
+        $parsed = self::parseContent($content, $hasHeader);
+
+        // An HTML body is a login page, a proxy error page or a web-server error page, never
+        // API output. The body decides: VICIdial's scripts may send a text/html Content-Type
+        // for perfectly good plain-text answers, so the header only counts when the body is
+        // not a shape we recognise.
+        $unrecognised = array_keys($parsed) === ['result'];
+        if (self::looksLikeHtml($content) || ($unrecognised && str_contains($contentType, 'text/html'))) {
             return new self(
                 self::STATUS_ERROR,
                 $content,
@@ -75,7 +82,6 @@ final class VicidialResponse implements ResponseContract, Stringable
             );
         }
 
-        $parsed = self::parseContent($content, $hasHeader);
         $status = self::determineStatus($content, $statusCode);
 
         return new self($status, $content, $parsed, $requestId, $statusCode, $headers);
@@ -511,11 +517,12 @@ final class VicidialResponse implements ResponseContract, Stringable
         return self::STATUS_SUCCESS;
     }
 
+    /**
+     * Body starts with a tag: <!DOCTYPE html>, <html>, <h1>Bad Gateway</h1>, <?xml ...
+     */
     private static function looksLikeHtml(string $content): bool
     {
-        $start = strtolower(substr(ltrim($content), 0, 15));
-
-        return str_starts_with($start, '<!doctype') || str_starts_with($start, '<html');
+        return preg_match('/^\s*<(!doctype|\?xml|[a-z][a-z0-9]*)[\s>\/]/i', $content) === 1;
     }
 
     /**

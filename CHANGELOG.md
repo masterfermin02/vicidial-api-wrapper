@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `RetryException` is now thrown when retries are exhausted (the code path was unreachable: the last attempt always threw `TransportException`). A failure on the first attempt that is not retryable still throws `TransportException`.
 
 ### Changed
-- `VicidialResponse` reports `error` (so `ok()` is false) for an empty body, an HTML body (`text/html` content type or `<!DOCTYPE` / `<html` start) and for HTTP status 400+ without a `SUCCESS:` prefix. These are proxy / web-server answers, never VICIdial output, and used to read as success.
+- `VicidialResponse` reports `error` (so `ok()` is false) for an empty body, an HTML body (detected from the body: `<!DOCTYPE`, `<html`, `<h1>`, ...; the `text/html` header alone does not flip recognised output, since VICIdial's scripts may send it) and for HTTP status 400+ without a `SUCCESS:` prefix. These are proxy / web-server answers, never VICIdial output, and used to read as success.
 - `VicidialResponse::toArray()` includes `statusCode` and `headers`.
 - Default `User-Agent` is `VicidialApi-PHP-Wrapper/4.2`.
 - Dev dependencies: `illuminate/support`, `illuminate/console`, `illuminate/config` (`^11|^12`) added for the Laravel integration tests; `nunomaduro/collision` removed; `symfony/var-dumper` allows `^7.0`; phpstan runs with `--memory-limit=512M`. Runtime dependencies are unchanged (`illuminate/support` is only suggested).

@@ -84,6 +84,8 @@ final class AgentCoverageTest extends TestCase
         ];
 
         $source = (string) file_get_contents(__DIR__.'/../../src/Resources/Agent.php');
+        // Every quoted lowercase token in Agent.php, not only function names: the diff below is
+        // one-directional (documented but not wrapped), so extra tokens cannot produce a false pass.
         preg_match_all("/'([a-z_0-9]+)'/", $source, $matches);
         $wrapped = array_unique($matches[1]);
 

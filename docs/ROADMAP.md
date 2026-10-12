@@ -32,7 +32,7 @@ what was fixed, and what is still worth doing. It is meant to be edited: delete 
 - ~~`source` defaults to `'test'`~~ resolved: defaults to `vicidial-api-wrapper` (`VicidialConfig::DEFAULT_SOURCE`, exactly the 20-character API limit).
 
 ### 3. Response parsing: done in 4.2.0
-- ~~Empty bodies and HTML login pages read as success~~ resolved: empty bodies, `text/html` (or `<!DOCTYPE`/`<html`) bodies and HTTP status 400+ without a `SUCCESS:` prefix are `error`.
+- ~~Empty bodies and HTML login pages read as success~~ resolved: empty bodies, HTML bodies (detected from the body, since VICIdial's own scripts may send `text/html`) and HTTP status 400+ without a `SUCCESS:` prefix are `error`.
 - ~~`stage=csv|tab|json` reports not parsed~~ resolved: multi-line pipe / CSV / tab output becomes `rows()` (keyed by `columns()` when `header=YES` was sent or a header line is detected); `stage=json` is decoded. JSON is tried before the `key: value` branch, which used to swallow it.
 - ~~Document `data_N` / `field_N` or expose `fields()`~~ resolved: `fields()` returns the clean positional values, `message()` the text; `data_N` keeps its historical shape for compatibility. Documented in `docs/RESPONSE_DTO.md` and `docs/response-formats.md`.
 

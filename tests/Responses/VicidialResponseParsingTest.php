@@ -29,13 +29,44 @@ final class VicidialResponseParsingTest extends TestCase
         $this->assertSame('Empty response body', $response->message());
     }
 
-    public function test_html_body_is_an_error_by_content_type(): void
+    public function test_unrecognised_body_with_html_content_type_is_an_error(): void
     {
         $response = VicidialResponse::from('Welcome', ['content-type' => 'text/html; charset=utf-8'], 200);
 
         $this->assertTrue($response->failed());
         $this->assertStringContainsString('HTML response', (string) $response->message());
         $this->assertSame('Welcome', $response->get('result'));
+    }
+
+    public function test_html_content_type_does_not_override_real_api_output(): void
+    {
+        // VICIdial's PHP scripts can answer with Content-Type: text/html; the body is what counts.
+        $headers = ['Content-Type' => 'text/html; charset=UTF-8'];
+
+        $success = VicidialResponse::from('SUCCESS: external_hangup function set - 1|6666', $headers, 200);
+        $this->assertTrue($success->ok());
+
+        $error = VicidialResponse::from('ERROR: agent_user is not logged in - 6666', $headers, 200);
+        $this->assertSame('error', $error->status());
+        $this->assertSame('agent_user is not logged in - 6666', $error->message());
+
+        $list = VicidialResponse::from("TESTCAMP|Test Campaign|Y\nSALES|Sales|Y", $headers, 200);
+        $this->assertTrue($list->ok());
+        $this->assertCount(2, $list->rows());
+
+        $version = VicidialResponse::from('VERSION: 2.14-890a|BUILD: 210303-1234|DATE: 2021-03-03 12:00:00|EPOCH: 1', $headers, 200);
+        $this->assertTrue($version->ok());
+        $this->assertSame('2.14-890a', $version->get('version'));
+
+        $webserver = VicidialResponse::from("set.timezone: UTC\nhost name: web1", $headers, 200);
+        $this->assertTrue($webserver->ok());
+    }
+
+    public function test_html_fragments_from_proxies_are_errors(): void
+    {
+        $this->assertTrue(VicidialResponse::from('<h1>Bad Gateway</h1>')->failed());
+        $this->assertTrue(VicidialResponse::from('<?xml version="1.0"?><error/>')->failed());
+        $this->assertTrue(VicidialResponse::from('  <HTML><BODY>login</BODY></HTML>')->failed());
     }
 
     public function test_html_body_is_an_error_by_sniffing(): void

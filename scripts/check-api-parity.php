@@ -63,6 +63,8 @@ $root = dirname(__DIR__);
 $agentSource = (string) file_get_contents($root.'/src/Resources/Agent.php');
 $adminSource = (string) file_get_contents($root.'/src/Resources/Admin.php');
 
+// Agent.php passes function names as plain string arguments, so collect every quoted lowercase
+// token; the diff is one-directional (documented but not wrapped) so extra tokens are harmless.
 preg_match_all("/'([a-z][a-z0-9_]*)'/", $agentSource, $m);
 $agentWrapped = array_unique($m[1]);
 preg_match_all("/makeApiRequest\\('([a-z][a-z0-9_]*)'/", $adminSource, $m);
