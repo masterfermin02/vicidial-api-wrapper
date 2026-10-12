@@ -510,4 +510,4 @@ try {
 
 - [Response DTO Guide](RESPONSE_DTO.md) - Structured response handling
 - [Reliability Features](RELIABILITY_FEATURES.md) - Automatic retries, timeouts, logging
-- [Migration Guide](MIGRATION.md) - Upgrading from v1.x
+- [Migration Guide](../MIGRATION.md) - Upgrading from v1.x

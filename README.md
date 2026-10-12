@@ -1,5 +1,8 @@
 # Vicidial API PHP WRAPPER
 
+[![CI](https://github.com/masterfermin02/vicidial-api-wrapper/actions/workflows/ci.yml/badge.svg)](https://github.com/masterfermin02/vicidial-api-wrapper/actions/workflows/ci.yml)
+[![Latest Version](https://img.shields.io/packagist/v/masterfermin02/vicidial-api-wrapper.svg)](https://packagist.org/packages/masterfermin02/vicidial-api-wrapper)
+
 Beautiful and simple Implementation to integrate Vicidial API
 
 DISCLAIMER: VICIdial is a registered trademark of the Vicidial Group which i am not related in anyway.
@@ -49,7 +52,7 @@ See the [Response DTO Guide](docs/RESPONSE_DTO.md) for details.
 - **Predictable patterns**: `addLead()`, `updateFields()`, `mohList()`, `pauseCode()`
 - **No snake_case**: Legacy Vicidial API's `external_dial` becomes `dial()`, `pause_code` becomes `pauseCode()`
 
-See the [Method Naming Conventions](METHOD_NAMING_CONVENTIONS.md) for the complete guide.
+See the [Method Naming Conventions](docs/METHOD_NAMING_CONVENTIONS.md) for the complete guide.
 
 ### Reliability Features 🛡️ NEW
 - **Configurable timeouts**: Separate connect timeout and request timeout
@@ -58,7 +61,7 @@ See the [Method Naming Conventions](METHOD_NAMING_CONVENTIONS.md) for the comple
 - **Sensitive data protection**: Automatic redaction of passwords and API keys in logs
 - **Production-ready defaults**: Sensible timeout and retry configurations out of the box
 
-See the [Reliability Features Guide](RELIABILITY_FEATURES.md) for complete documentation.
+See the [Reliability Features Guide](docs/RELIABILITY_FEATURES.md) for complete documentation.
 
 ```php
 // New way (v4.0+)
@@ -155,7 +158,7 @@ if ($response->ok()) {
 $rawString = $client->agent()->updateFields("gabriel", $fields);
 ```
 
-See the [Response DTO Guide](RESPONSE_DTO.md) for complete documentation.
+See the [Response DTO Guide](docs/RESPONSE_DTO.md) for complete documentation.
 
 ### Legacy: Factory Methods (Deprecated)
 
@@ -489,7 +492,7 @@ Every query value is URL-encoded exactly once by the transport, so pass raw valu
 - [Audit and roadmap](docs/ROADMAP.md)
 - [Agent](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/agent.md)
 - [Admin](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/admin.md)
-- [Response DTO Guide](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/RESPONSE_DTO.md)
-- [Method Naming Conventions](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/METHOD_NAMING_CONVENTIONS.md)
+- [Response DTO Guide](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/RESPONSE_DTO.md)
+- [Method Naming Conventions](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/METHOD_NAMING_CONVENTIONS.md)
 - [Error Handling Guide](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/ERROR_HANDLING.md) 🎯 **NEW**
-- [Reliability Features](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/RELIABILITY_FEATURES.md) 🛡️ **NEW**
+- [Reliability Features](https://github.com/masterfermin02/vicidial-api-wrapper/blob/main/docs/RELIABILITY_FEATURES.md) 🛡️ **NEW**

@@ -14,3 +14,8 @@ graphify-out/cache/
 
 # Claude Code hooks written by `graphify claude install` reference a local absolute binary path
 .claude/settings.json
+graphify-out/20*/
+graphify-out/memory/
+graphify-out/reflections/
+graphify-out/.graphify_learning.json
+graphify-out/.graphify_labels.json.sig

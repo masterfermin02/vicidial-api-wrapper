@@ -21,7 +21,7 @@ This document summarizes all the major improvements and features implemented in 
 - `mohList()` not `moh_list()`
 
 **Documentation**:
-- [METHOD_NAMING_CONVENTIONS.md](METHOD_NAMING_CONVENTIONS.md) - Complete guide
+- [../METHOD_NAMING_CONVENTIONS.md](../METHOD_NAMING_CONVENTIONS.md) - Complete guide
 - [NAMING_CONVENTIONS_IMPLEMENTATION.md](NAMING_CONVENTIONS_IMPLEMENTATION.md) - Implementation details
 
 **Impact**: Developer-friendly API with IDE autocomplete support
@@ -98,9 +98,9 @@ $config = VicidialConfig::create(
 ```
 
 **Documentation**:
-- [RELIABILITY_FEATURES.md](RELIABILITY_FEATURES.md) - Complete guide (500+ lines)
+- [../RELIABILITY_FEATURES.md](../RELIABILITY_FEATURES.md) - Complete guide (500+ lines)
 - [RELIABILITY_IMPLEMENTATION.md](RELIABILITY_IMPLEMENTATION.md) - Technical details
-- [RELIABILITY_QUICK_REFERENCE.md](RELIABILITY_QUICK_REFERENCE.md) - Cheat sheet
+- [../RELIABILITY_QUICK_REFERENCE.md](../RELIABILITY_QUICK_REFERENCE.md) - Cheat sheet
 
 **Examples**:
 - [example/reliability_features.php](example/reliability_features.php)
@@ -163,11 +163,11 @@ if ($response->ok()) {
 3. `tests/ValueObjects/RetryConfigTest.php` - Unit tests
 
 ### Documentation (5 files)
-4. `METHOD_NAMING_CONVENTIONS.md` - Method naming guide
+4. `../METHOD_NAMING_CONVENTIONS.md` - Method naming guide
 5. `NAMING_CONVENTIONS_IMPLEMENTATION.md` - Naming implementation summary
-6. `RELIABILITY_FEATURES.md` - Complete reliability guide
+6. `../RELIABILITY_FEATURES.md` - Complete reliability guide
 7. `RELIABILITY_IMPLEMENTATION.md` - Technical implementation details
-8. `RELIABILITY_QUICK_REFERENCE.md` - Quick reference card
+8. `../RELIABILITY_QUICK_REFERENCE.md` - Quick reference card
 
 ### Examples (2 files)
 9. `example/reliability_features.php` - Production setup example
@@ -309,18 +309,18 @@ $client = VicidialClient::make($config);
 ## 📚 Documentation Suite
 
 ### Quick Start
-- [README.md](README.md) - Main documentation with examples
+- [README.md](../../README.md) - Main documentation with examples
 
 ### Guides
-- [RELIABILITY_FEATURES.md](RELIABILITY_FEATURES.md) - Complete reliability guide
-- [METHOD_NAMING_CONVENTIONS.md](METHOD_NAMING_CONVENTIONS.md) - Method naming standards
-- [MIGRATION.md](MIGRATION.md) - Migration guide (if exists)
-- [RESPONSE_DTO.md](RESPONSE_DTO.md) - Response DTO guide (if exists)
+- [../RELIABILITY_FEATURES.md](../RELIABILITY_FEATURES.md) - Complete reliability guide
+- [../METHOD_NAMING_CONVENTIONS.md](../METHOD_NAMING_CONVENTIONS.md) - Method naming standards
+- [MIGRATION.md](../../MIGRATION.md) - Migration guide (if exists)
+- [../RESPONSE_DTO.md](../RESPONSE_DTO.md) - Response DTO guide (if exists)
 
 ### Reference
-- [RELIABILITY_QUICK_REFERENCE.md](RELIABILITY_QUICK_REFERENCE.md) - Quick reference
-- [docs/agent.md](docs/agent.md) - Agent API reference
-- [docs/admin.md](docs/admin.md) - Admin API reference
+- [../RELIABILITY_QUICK_REFERENCE.md](../RELIABILITY_QUICK_REFERENCE.md) - Quick reference
+- [docs/agent.md](../agent.md) - Agent API reference
+- [docs/admin.md](../admin.md) - Admin API reference
 
 ### Technical
 - [RELIABILITY_IMPLEMENTATION.md](RELIABILITY_IMPLEMENTATION.md) - Implementation details

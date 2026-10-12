@@ -69,7 +69,7 @@ $config = VicidialConfig::createWithBasicAuth(
 
 ### New Documentation Files
 - **MIGRATION.md**: Step-by-step migration guide from v1.x
-- **QUICKSTART.md**: Quick reference for common operations
+- **../QUICKSTART.md**: Quick reference for common operations
 - **example/using_config.php**: Comprehensive examples
 
 ### Updated Documentation
@@ -138,7 +138,7 @@ composer update masterfermin02/vicidial-api-wrapper
 
 ## 🚀 Migration Guide
 
-See [MIGRATION.md](MIGRATION.md) for detailed instructions.
+See [MIGRATION.md](../../MIGRATION.md) for detailed instructions.
 
 **Quick example:**
 
@@ -237,7 +237,7 @@ Special thanks to all contributors and users who requested better configuration 
 ## 📞 Support
 
 - **Documentation**: See README.md
-- **Quick Start**: See QUICKSTART.md
+- **Quick Start**: See ../QUICKSTART.md
 - **Migration**: See MIGRATION.md
 - **Examples**: See example/using_config.php
 - **Issues**: GitHub Issues

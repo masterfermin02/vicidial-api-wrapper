@@ -142,7 +142,7 @@ Appears as `***REDACTED***` in logs.
    - Default when no logger provided
 
 ### Documentation
-3. **`RELIABILITY_FEATURES.md`** (500+ lines)
+3. **`../RELIABILITY_FEATURES.md`** (500+ lines)
    - Comprehensive guide covering all features
    - Configuration examples
    - Best practices
@@ -203,7 +203,7 @@ Appears as `***REDACTED***` in logs.
 5. **`README.md`**
    - Added "Reliability Features" to "What's New in v2.0"
    - Added production setup example
-   - Added link to RELIABILITY_FEATURES.md in docs section
+   - Added link to ../RELIABILITY_FEATURES.md in docs section
 
 ## Architecture Decisions
 

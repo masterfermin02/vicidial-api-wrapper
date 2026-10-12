@@ -603,4 +603,154 @@ try {
 - [Response Formats](response-formats.md) - Detailed information about Vicidial response formats
 - [Agent API Documentation](agent.md) - Agent API methods
 - [Admin API Documentation](admin.md) - Admin API methods
-- [Reliability Features](../RELIABILITY_FEATURES.md) - Retry mechanisms and error handling
+- [Reliability Features](RELIABILITY_FEATURES.md) - Retry mechanisms and error handling
+
+---
+
+# Appendix: naming, method list, testing and migration
+
+_Merged from the former `docs/response-dto.md`. The method list below is the v4.0 snapshot; every resource method now has a `...Response()` variant for the Admin API, see `docs/admin.md` and `docs/agent.md` for the full list._
+
+## Response Method Naming
+
+All new Response DTO methods follow a consistent naming pattern:
+
+- Original method: `methodName()` → Returns `string`
+- Response DTO method: `methodNameResponse()` → Returns `VicidialResponse`
+
+Examples:
+- `hangup()` → `hangupResponse()`
+- `dial()` → `dialResponse()`
+- `updateFields()` → `updateFieldsResponse()`
+- `mohList()` → `mohListResponse()`
+
+## Available Response Methods
+
+### Agent API
+
+- `hangupResponse()`
+- `dispoResponse()`
+- `pauseResponse()`
+- `dialResponse()`
+- `updateFieldsResponse()`
+- And more...
+
+### Admin API
+
+- `versionResponse()`
+- `mohListResponse()`
+- `vmListResponse()`
+- `agentStatusResponse()`
+- `addLeadResponse()`
+- `updateLeadResponse()`
+- `campaignsListResponse()`
+- `hopperListResponse()`
+- And more...
+
+## Error Handling
+
+```php
+try {
+    $response = $client->agent()->dialResponse("agent123", [
+        'phone_number' => '5551234567'
+    ]);
+    
+    if ($response->ok()) {
+        // Success
+        echo "Call initiated";
+    } else {
+        // API returned error
+        error_log("API Error: " . $response->raw());
+        echo "Failed to initiate call";
+    }
+} catch (Exception $e) {
+    // Network or configuration error
+    error_log("Exception: " . $e->getMessage());
+    echo "System error occurred";
+}
+```
+
+## Testing with Response DTOs
+
+```php
+use VicidialApi\Responses\VicidialResponse;
+
+// Create mock responses for testing
+$successResponse = VicidialResponse::from('SUCCESS');
+$this->assertTrue($successResponse->ok());
+
+$errorResponse = VicidialResponse::from('ERROR: Invalid user');
+$this->assertTrue($errorResponse->failed());
+
+$jsonResponse = VicidialResponse::from(json_encode([
+    'result' => 'SUCCESS',
+    'lead_id' => '12345'
+]));
+$this->assertEquals('12345', $jsonResponse->get('lead_id'));
+```
+
+## Migration Guide
+
+If you're upgrading from raw string responses:
+
+### Before (v1.x)
+```php
+$result = $client->agent()->hangup("agent123");
+
+// Manual parsing required
+if (strpos($result, 'SUCCESS') !== false) {
+    echo "Success";
+}
+
+// Regex for extracting data
+preg_match('/lead_id=(\d+)/', $result, $matches);
+$leadId = $matches[1] ?? null;
+```
+
+### After (v2.0+)
+```php
+$response = $client->agent()->hangupResponse("agent123");
+
+// Built-in status check
+if ($response->ok()) {
+    echo "Success";
+}
+
+// Direct data access
+$leadId = $response->get('lead_id');
+```
+
+## Best Practices
+
+1. **Use Response Methods**: Prefer `methodResponse()` over `method()` for new code
+2. **Check Success**: Always use `ok()` or `failed()` before processing data
+3. **Handle Errors**: Implement proper error handling with try-catch and status checks
+4. **Log Responses**: Use `toJson()` for structured logging
+5. **Type Hints**: Type hint `VicidialResponse` in your code for better IDE support
+6. **Default Values**: Use `get($key, $default)` to avoid null checks
+
+```php
+use VicidialApi\Responses\VicidialResponse;
+
+function processAgentAction(string $agent): VicidialResponse
+{
+    $response = $this->client->agent()->hangupResponse($agent);
+    
+    if ($response->ok()) {
+        $this->logger->info('Agent hangup', $response->toArray());
+    } else {
+        $this->logger->error('Agent hangup failed', [
+            'agent' => $agent,
+            'error' => $response->raw()
+        ]);
+    }
+    
+    return $response;
+}
+```
+
+## See Also
+
+- [Agent API Documentation](agent.md)
+- [Admin API Documentation](admin.md)
+- [Example: response_dto_usage.php](../example/response_dto_usage.php)

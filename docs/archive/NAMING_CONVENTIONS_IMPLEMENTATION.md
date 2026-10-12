@@ -18,7 +18,7 @@ Performed a comprehensive audit of all method names across:
 
 ### 2. Documentation Created
 
-#### Created `METHOD_NAMING_CONVENTIONS.md`
+#### Created `../METHOD_NAMING_CONVENTIONS.md`
 A comprehensive guide covering:
 - **Naming standards**: camelCase convention for all methods
 - **Complete method catalog**: All Agent, Admin, and RemoteAgent methods documented
@@ -40,7 +40,7 @@ Added a new section **"Consistent Method Naming"** to highlight:
 - camelCase convention throughout
 - Predictable patterns (add/update/get)
 - Clear examples of transformations from legacy names
-- Link to the comprehensive METHOD_NAMING_CONVENTIONS.md guide
+- Link to the comprehensive ../METHOD_NAMING_CONVENTIONS.md guide
 
 ### 4. Method Verification
 
@@ -77,7 +77,7 @@ All methods have corresponding `*Response()` variants:
 ### RemoteAgent::hangUp()
 - Uses capital 'U': `hangUp()` instead of `hangup()`
 - This is acceptable because PHP method names are case-insensitive
-- Documented in METHOD_NAMING_CONVENTIONS.md as a historical quirk
+- Documented in ../METHOD_NAMING_CONVENTIONS.md as a historical quirk
 - Both `hangUp()` and `hangup()` refer to the same method in PHP
 
 ### No Snake_Case Found
@@ -86,7 +86,7 @@ Grep search confirmed zero snake_case methods in the public API ✅
 ## Files Modified
 1. `/Users/intellisys/vicidial-api-wrapper/README.md`
    - Added "Consistent Method Naming" section
-   - Added link to METHOD_NAMING_CONVENTIONS.md
+   - Added link to ../METHOD_NAMING_CONVENTIONS.md
    - Fixed example code to use correct method names
 
 2. `/Users/intellisys/vicidial-api-wrapper/METHOD_NAMING_CONVENTIONS.md` (NEW)

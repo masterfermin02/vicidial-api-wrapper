@@ -5,6 +5,16 @@ All notable changes to the Vicidial API Wrapper will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- GitHub Actions CI (`.github/workflows/ci.yml`) running pint, rector, phpstan and phpunit on PHP 8.2, 8.3 and 8.4.
+- `docs/README.md` documentation index.
+
+### Changed
+- Repository root decluttered: `METHOD_NAMING_CONVENTIONS.md`, `QUICKSTART.md`, `RELIABILITY_FEATURES.md` and `RELIABILITY_QUICK_REFERENCE.md` moved to `docs/`; implementation summaries moved to `docs/archive/`. All links updated.
+- `docs/response-dto.md` merged into `docs/RESPONSE_DTO.md`.
+
 ## [4.1.0] - 2026-10-12
 
 ### Added
@@ -71,31 +81,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added - Documentation
 
 #### Comprehensive Guides
-- **RELIABILITY_FEATURES.md** (500+ lines) - Complete reliability features guide
+- **docs/RELIABILITY_FEATURES.md** (500+ lines) - Complete reliability features guide
   - Timeout configuration
   - Retry strategies
   - Logging setup
   - Production best practices
   - Troubleshooting guide
   
-- **RELIABILITY_QUICK_REFERENCE.md** - Quick reference cheat sheet
+- **docs/RELIABILITY_QUICK_REFERENCE.md** - Quick reference cheat sheet
   - Common configurations
   - Code snippets
   - Monitoring tips
   
-- **RELIABILITY_IMPLEMENTATION.md** - Technical implementation details
+- **docs/archive/RELIABILITY_IMPLEMENTATION.md** - Technical implementation details
   - Architecture decisions
   - Performance considerations
   - Testing strategy
   
-- **METHOD_NAMING_CONVENTIONS.md** - Complete method naming guide
+- **docs/METHOD_NAMING_CONVENTIONS.md** - Complete method naming guide
   - All methods catalogued
   - Legacy API mapping table
   - Best practices for adding new methods
   
-- **NAMING_CONVENTIONS_IMPLEMENTATION.md** - Naming implementation summary
+- **docs/archive/NAMING_CONVENTIONS_IMPLEMENTATION.md** - Naming implementation summary
   
-- **COMPLETE_FEATURE_SUMMARY.md** - v2.0 feature overview
+- **docs/archive/COMPLETE_FEATURE_SUMMARY.md** - v2.0 feature overview
 
 #### Examples
 - **example/reliability_features.php** - Production-ready setup example

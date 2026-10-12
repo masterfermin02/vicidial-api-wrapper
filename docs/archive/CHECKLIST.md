@@ -74,7 +74,7 @@
   - [x] Step-by-step instructions
   - [x] Testing guidance
   - [x] Deprecation timeline
-- [x] Created `QUICKSTART.md`
+- [x] Created `../QUICKSTART.md`
   - [x] Installation instructions
   - [x] Basic usage examples
   - [x] All configuration options
@@ -146,7 +146,7 @@
 ✓ example/using_config.php        (New - 150+ lines)
 ✓ README.md                       (Modified - major updates)
 ✓ MIGRATION.md                    (New - comprehensive guide)
-✓ QUICKSTART.md                   (New - quick reference)
+✓ ../QUICKSTART.md                   (New - quick reference)
 ✓ IMPLEMENTATION_SUMMARY.md       (New - technical summary)
 ✓ RELEASE_NOTES_v2.0.md          (New - release notes)
 ```

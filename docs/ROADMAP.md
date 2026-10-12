@@ -18,11 +18,11 @@ what was fixed, and what is still worth doing. It is meant to be edited: delete 
 
 ## Still open, in priority order
 
-### 1. Release hygiene (do before anything else)
-- **Version drift.** README says both "What's New in v2.0" and "Version 4.0", `CHANGELOG.md` tops out at 2.0.0, the User-Agent string says `2.0`, the newest git tag on the remote is `v3.0.2`, and Packagist shows 4.0.1. Pick one number for the next release, tag it, and make README, CHANGELOG, `VicidialConfig::$userAgent` agree.
-- **No CI.** `composer test` (pint, rector, phpstan level max, phpunit) exists but nothing runs it. Add a GitHub Actions workflow on PHP 8.2 / 8.3 / 8.4.
-- **Root directory clutter.** Fifteen generated summaries (`IMPLEMENTATION_SUMMARY.md`, `TEST_FIX_SUMMARY.md`, `COMPLETE_FEATURE_SUMMARY.md`, `*_IMPLEMENTATION.md`, `CHECKLIST.md`, ...) sit next to `README.md`. Move the ones worth keeping into `docs/`, delete the rest. `docs/RESPONSE_DTO.md` and `docs/response-dto.md` are near-duplicates.
-- Commit or ignore `graphify-out/`. `graph.json` and `GRAPH_REPORT.md` are useful to contributors; `graph.html` is regenerable.
+### 1. Release hygiene: done in 4.1.0 / 4.1.1
+- ~~Version drift~~ resolved: 4.1.0 tagged and released, README, CHANGELOG and User-Agent agree.
+- ~~No CI~~ resolved: `.github/workflows/ci.yml` runs pint, rector, phpstan and phpunit on PHP 8.2, 8.3 and 8.4 for every push and pull request.
+- ~~Root directory clutter~~ resolved: user guides moved to `docs/`, implementation summaries to `docs/archive/`, `docs/response-dto.md` merged into `docs/RESPONSE_DTO.md`.
+- ~~Commit or ignore `graphify-out/`~~ resolved: graph committed, machine-specific files ignored.
 
 ### 2. API surface consistency
 - 23 `Agent` methods have no `...Response()` variant (`pauseCode`, `logout`, `recording`, `parkCall`, `transferConference`, ...). Either generate the missing pairs or, better, make every method return `VicidialResponse` in the next major and keep the string variants as `...Raw()`.
