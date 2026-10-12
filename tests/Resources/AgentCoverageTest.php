@@ -84,7 +84,7 @@ final class AgentCoverageTest extends TestCase
         ];
 
         $source = (string) file_get_contents(__DIR__.'/../../src/Resources/Agent.php');
-        preg_match_all("/'function' => '([a-z_0-9]+)'/", $source, $matches);
+        preg_match_all("/'([a-z_0-9]+)'/", $source, $matches);
         $wrapped = array_unique($matches[1]);
 
         $missing = array_values(array_diff($documented, $wrapped));

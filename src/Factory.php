@@ -28,7 +28,7 @@ final class Factory
 
     private ?string $apiPass = null;
 
-    private string $source = 'test';
+    private string $source = VicidialConfig::DEFAULT_SOURCE;
 
     /**
      * The HTTP client for the requests.

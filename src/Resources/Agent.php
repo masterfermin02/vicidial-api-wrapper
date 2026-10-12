@@ -2,11 +2,18 @@
 
 namespace VicidialApi\Resources;
 
-use Exception;
 use VicidialApi\Contracts\AgentContract;
+use VicidialApi\Exceptions\InvalidArgumentException;
+use VicidialApi\Parameters\DialParameters;
+use VicidialApi\Parameters\DispoParameters;
 use VicidialApi\Responses\VicidialResponse;
-use VicidialApi\ValueObjects\Transporter\Payload;
 
+/**
+ * Agent API (`/agc/api.php`).
+ *
+ * Every function has two variants: `name()` returns the raw response string and
+ * `nameResponse()` returns a parsed VicidialResponse DTO. Both build the same query.
+ */
 final class Agent implements AgentContract
 {
     use Concerns\HasResponseHelpers;
@@ -15,720 +22,758 @@ final class Agent implements AgentContract
     public const AGENT_URL = '/agc/api.php';
 
     /**
-     * Creates the URL for  the external_hangup method and calls 'call_api_url' to execute it
+     * Fields the Agent API accepts for `update_fields` (AGENT_API.txt, updated 2025-08-30).
      *
-     * @throws Exception
+     * @var list<string>
+     */
+    public const UPDATE_FIELDS_ALLOWED = [
+        // lead data
+        'address1', 'address2', 'address3', 'alt_phone', 'city', 'comments', 'country_code',
+        'date_of_birth', 'email', 'first_name', 'gender', 'gmt_offset_now', 'last_name',
+        'middle_initial', 'phone_number', 'phone_code', 'postal_code', 'province',
+        'security_phrase', 'source_id', 'state', 'title', 'vendor_lead_code', 'rank', 'owner',
+        // optional non-lead triggers
+        'formreload', 'scriptreload', 'script2reload', 'emailreload', 'chatreload',
+    ];
+
+    // -------------------------------------------------------------------------
+    // external_hangup
+    // -------------------------------------------------------------------------
+
+    /**
+     * Hang up the agent's current call (`external_hangup`).
      */
     public function hangup(string $agentUser): string
     {
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => trim($agentUser),
-            'function' => 'external_hangup',
-            'value' => '1',
-        ]);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->hangupOptions($agentUser));
     }
 
-    /**
-     * Hangup with VicidialResponse DTO
-     *
-     * @throws Exception
-     */
     public function hangupResponse(string $agentUser): VicidialResponse
     {
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
+        return $this->requestResponse(self::AGENT_URL, $this->hangupOptions($agentUser));
+    }
+
+    /** @return array<string, string> */
+    private function hangupOptions(string $agentUser): array
+    {
+        return [
             'agent_user' => trim($agentUser),
             'function' => 'external_hangup',
             'value' => '1',
-        ]);
+        ];
+    }
 
-        return $this->transporter->requestResponse($payload);
+    // -------------------------------------------------------------------------
+    // external_status
+    // -------------------------------------------------------------------------
+
+    /**
+     * Set the disposition of the current call (`external_status`).
+     *
+     * @param  array<string, string>|DispoParameters  $options  `value` (status) plus optional callback_datetime, callback_type, callback_comments, qm_dispo_code
+     */
+    public function dispo(string $agentUser, array|DispoParameters $options): string
+    {
+        return $this->requestContent(self::AGENT_URL, $this->dispoOptions($agentUser, $options));
     }
 
     /**
-     * Creates the URL for  the external_status method and calls 'call_api_url' to execute it
-     *
-     * @param  array<string, string>  $options
-     *
-     * @throws Exception
+     * @param  array<string, string>|DispoParameters  $options
      */
-    public function dispo(string $agentUser, array $options): string
+    public function dispoResponse(string $agentUser, array|DispoParameters $options): VicidialResponse
     {
-        $options += [
+        return $this->requestResponse(self::AGENT_URL, $this->dispoOptions($agentUser, $options));
+    }
+
+    /**
+     * @param  array<string, string>|DispoParameters  $options
+     * @return array<string, string>
+     */
+    private function dispoOptions(string $agentUser, array|DispoParameters $options): array
+    {
+        return $this->optionsToArray($options) + [
             'agent_user' => trim($agentUser),
             'function' => 'external_status',
         ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
     }
 
-    /**
-     * Dispo with VicidialResponse DTO
-     *
-     * @param  array<string, string>  $options
-     *
-     * @throws Exception
-     */
-    public function dispoResponse(string $agentUser, array $options): VicidialResponse
-    {
-        $options += [
-            'agent_user' => trim($agentUser),
-            'function' => 'external_status',
-        ];
-
-        return $this->requestResponse(self::AGENT_URL, $options);
-    }
+    // -------------------------------------------------------------------------
+    // external_pause
+    // -------------------------------------------------------------------------
 
     /**
-     * Creates the URL for  the external_pause method and calls 'call_api_url' to execute it
+     * Pause or resume the agent (`external_pause`).
      *
-     * @throws Exception
+     * @param  string  $status  PAUSE or RESUME
      */
     public function pause(string $agentUser, string $status): string
     {
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => trim($agentUser),
-            'function' => 'external_pause',
-            'value' => trim($status),
-        ]);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->valueOptions($agentUser, 'external_pause', trim($status)));
     }
 
-    /**
-     * Pause with VicidialResponse DTO
-     *
-     * @throws Exception
-     */
     public function pauseResponse(string $agentUser, string $status): VicidialResponse
     {
-        return $this->requestResponse(self::AGENT_URL, [
-            'agent_user' => trim($agentUser),
-            'function' => 'external_pause',
-            'value' => trim($status),
-        ]);
+        return $this->requestResponse(self::AGENT_URL, $this->valueOptions($agentUser, 'external_pause', trim($status)));
     }
 
+    // -------------------------------------------------------------------------
+    // pause_code
+    // -------------------------------------------------------------------------
+
     /**
-     * Creates the URL for  the pause_code method and calls 'call_api_url' to execute it
-     *
-     * @throws Exception
+     * Set the pause code of a paused agent (`pause_code`).
      */
     public function pauseCode(string $agentUser, string $code): string
     {
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => trim($agentUser),
-            'function' => 'pause_code',
-            'value' => $code,
-        ]);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->valueOptions($agentUser, 'pause_code', $code));
     }
 
+    public function pauseCodeResponse(string $agentUser, string $code): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->valueOptions($agentUser, 'pause_code', $code));
+    }
+
+    // -------------------------------------------------------------------------
+    // webserver / version
+    // -------------------------------------------------------------------------
+
     /**
-     * Creates the URL for the webserver method and calls 'call_api_url' to execute it
-     *
-     * @throws Exception
+     * Show web server settings (`webserver`).
      */
     public function webserver(): string
     {
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'function' => 'webserver',
-        ]);
+        return $this->requestContent(self::AGENT_URL, ['function' => 'webserver']);
+    }
 
-        return $this->transporter->requestContent($payload);
+    public function webserverResponse(): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, ['function' => 'webserver']);
     }
 
     /**
-     * Creates the URL for the version method and calls 'call_api_url' to execute it
-     *
-     * @throws Exception
+     * Show the API version and build (`version`).
      */
     public function version(): string
     {
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'function' => 'version',
-        ]);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, ['function' => 'version']);
     }
 
+    public function versionResponse(): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, ['function' => 'version']);
+    }
+
+    // -------------------------------------------------------------------------
+    // logout
+    // -------------------------------------------------------------------------
+
     /**
-     * Creates the URL for the logout method and calls 'call_api_url' to execute it
-     *
-     * @throws Exception
+     * Log the agent out (`logout`).
      */
     public function logout(string $agentUser): string
     {
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => trim($agentUser),
-            'function' => 'logout',
-            'value' => 'LOGOUT',
-        ]);
+        return $this->requestContent(self::AGENT_URL, $this->valueOptions($agentUser, 'logout', 'LOGOUT'));
+    }
 
-        return $this->transporter->requestContent($payload);
+    public function logoutResponse(string $agentUser): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->valueOptions($agentUser, 'logout', 'LOGOUT'));
+    }
+
+    // -------------------------------------------------------------------------
+    // external_dial
+    // -------------------------------------------------------------------------
+
+    /**
+     * Place a manual dial call on the agent screen (`external_dial`).
+     *
+     * @param  array<string, string>|DialParameters  $options  `phone_number` or `lead_id` is required; search, preview and focus default to YES, NO, YES
+     *
+     * @throws InvalidArgumentException when neither phone_number nor lead_id is given
+     */
+    public function dial(string $agentUser, array|DialParameters $options): string
+    {
+        return $this->requestContent(self::AGENT_URL, $this->dialOptions($agentUser, $options));
     }
 
     /**
-     * Creates the URL for  the external_dial method and calls 'call_api_url' to execute it
+     * @param  array<string, string>|DialParameters  $options
      *
-     * @param  array<string, string>  $options
-     *
-     * @throws Exception
+     * @throws InvalidArgumentException when neither phone_number nor lead_id is given
      */
-    public function dial(string $agentUser, array $options): string
+    public function dialResponse(string $agentUser, array|DialParameters $options): VicidialResponse
     {
-        if (! isset($options['phone_number'])) {
-            throw new Exception('Please provide a valid phone number');
+        return $this->requestResponse(self::AGENT_URL, $this->dialOptions($agentUser, $options));
+    }
+
+    /**
+     * @param  array<string, string>|DialParameters  $options
+     * @return array<string, string>
+     */
+    private function dialOptions(string $agentUser, array|DialParameters $options): array
+    {
+        $options = $this->optionsToArray($options);
+
+        $phoneNumber = trim($options['phone_number'] ?? '');
+
+        if ($phoneNumber === '' && trim($options['lead_id'] ?? '') === '') {
+            throw new InvalidArgumentException('dial() needs a phone_number or a lead_id');
         }
 
-        $options += [
+        $defaults = [
             'agent_user' => trim($agentUser),
             'function' => 'external_dial',
-            'value' => trim($options['phone_number']),
             'phone_code' => trim($options['phone_code'] ?? ''),
             'search' => 'YES',
             'preview' => 'NO',
             'focus' => 'YES',
         ];
 
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
-    }
-
-    /**
-     * Dial with VicidialResponse DTO
-     *
-     * @param  array<string, string>  $options
-     *
-     * @throws Exception
-     */
-    public function dialResponse(string $agentUser, array $options): VicidialResponse
-    {
-        if (! isset($options['phone_number'])) {
-            throw new Exception('Please provide a valid phone number');
+        if ($phoneNumber !== '') {
+            $defaults['value'] = $phoneNumber;
         }
 
-        $options += [
-            'agent_user' => trim($agentUser),
-            'function' => 'external_dial',
-            'value' => trim($options['phone_number']),
-            'phone_code' => trim($options['phone_code'] ?? ''),
-            'search' => 'YES',
-            'preview' => 'NO',
-            'focus' => 'YES',
-        ];
-
-        return $this->requestResponse(self::AGENT_URL, $options);
+        return $options + $defaults;
     }
 
+    // -------------------------------------------------------------------------
+    // preview_dial_action
+    // -------------------------------------------------------------------------
+
     /**
-     * Sends a SKIP, DIALONLY, ALTDIAL, ADR3DIAL or FINISH when a lead is being previewed or in Manual Alt Dial
-     *
-     * @throws Exception
+     * Send SKIP, DIALONLY, ALTDIAL, ADR3DIAL or FINISH while a lead is previewed (`preview_dial_action`).
      */
     public function previewDial(string $agentUser, string $value): string
     {
-        $options = [
-            'agent_user' => trim($agentUser),
-            'function' => 'preview_dial_action',
-            'value' => trim($value),
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->valueOptions($agentUser, 'preview_dial_action', trim($value)));
     }
 
+    public function previewDialResponse(string $agentUser, string $value): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->valueOptions($agentUser, 'preview_dial_action', trim($value)));
+    }
+
+    // -------------------------------------------------------------------------
+    // external_add_lead
+    // -------------------------------------------------------------------------
+
     /**
-     * Adds a lead in the manual dial list of the campaign for logged-in agent. A much simplified add lead function compared to the Non-Agent API function
+     * Add a lead to the manual dial list of the agent's campaign (`external_add_lead`).
      *
      * @param  array<string, string>  $options
-     *
-     * @throws Exception
      */
     public function addLead(string $agentUser, array $options): string
     {
-        $options += [
-            'agent_user' => trim($agentUser),
-            'function' => 'external_add_lead',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->agentOptions($agentUser, 'external_add_lead', $options));
     }
 
     /**
-     * This function will change the selected in-groups for an agent that is logged into a campaign that allows
-     * for inbound calls to be handled. Allows the selected in-groups for an agent to be changed while they are
-     * logged-in to the ViciDial Agent screen only. Once changed in this way, the agent would need to log out
-     * and back in to be able to select in-groups themselves(If Agent Choose In-Groups is enabled for that user).
-     * The blended checkbox can also be changed using this function. The API user performing this function must
-     * have vicidial_users.change_agent_campaign = 1.
+     * @param  array<string, string>  $options
+     */
+    public function addLeadResponse(string $agentUser, array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->agentOptions($agentUser, 'external_add_lead', $options));
+    }
+
+    // -------------------------------------------------------------------------
+    // change_ingroups
+    // -------------------------------------------------------------------------
+
+    /**
+     * Change the in-groups of a logged-in agent (`change_ingroups`).
+     * The API user needs vicidial_users.change_agent_campaign = 1.
      *
      * @param  array<string, string>  $options
-     *
-     * @throws Exception
      */
     public function changeInGroups(string $agentUser, array $options): string
     {
-
-        $options += [
-            'agent_user' => trim($agentUser),
-            'function' => 'change_ingroups',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->agentOptions($agentUser, 'change_ingroups', $options));
     }
 
     /**
-     * Creates the URL for  the external_dial method and calls 'call_api_url' to execute it
+     * @param  array<string, string>  $options
+     */
+    public function changeInGroupsResponse(string $agentUser, array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->agentOptions($agentUser, 'change_ingroups', $options));
+    }
+
+    // -------------------------------------------------------------------------
+    // update_fields
+    // -------------------------------------------------------------------------
+
+    /**
+     * Update lead fields shown on the agent screen (`update_fields`).
      *
-     * @param  array<string, string>  $fieldsToUpdate
+     * @param  array<string, string>  $fieldsToUpdate  keys from self::UPDATE_FIELDS_ALLOWED
      *
-     * @throws Exception
+     * @throws InvalidArgumentException for a key the Agent API does not accept
      */
     public function updateFields(string $agentUser, array $fieldsToUpdate): string
     {
-        // According to the API documentation only these fields are allowed to update using this method
-        $allowedFields = ['address1', 'address2', 'address3', 'rank', 'owner', 'vendor_lead_code',
-            'alt_phone', 'city', 'comments', 'country_code', 'date_of_birth', 'email', 'first_name',
-            'gender', 'gmt_offset_now', 'last_name', 'middle_initial', 'phone_number', 'phone_code',
-            'postal_code', 'province', 'security_phrase', 'source_id', 'state', 'title',
-        ];
-
-        // Validate that every single field to update us valid
-        foreach (array_keys($fieldsToUpdate) as $key) {
-            if (! in_array($key, $allowedFields)) {
-                throw new Exception("$key is not a valid field");
-            }
-        }
-
-        $options = $fieldsToUpdate + [
-            'agent_user' => trim($agentUser),
-            'function' => 'update_fields',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->updateFieldsOptions($agentUser, $fieldsToUpdate));
     }
 
     /**
-     * Update fields with VicidialResponse DTO
-     *
      * @param  array<string, string>  $fieldsToUpdate
      *
-     * @throws Exception
+     * @throws InvalidArgumentException for a key the Agent API does not accept
      */
     public function updateFieldsResponse(string $agentUser, array $fieldsToUpdate): VicidialResponse
     {
-        // According to the API documentation only these fields are allowed to update using this method
-        $allowedFields = ['address1', 'address2', 'address3', 'rank', 'owner', 'vendor_lead_code',
-            'alt_phone', 'city', 'comments', 'country_code', 'date_of_birth', 'email', 'first_name',
-            'gender', 'gmt_offset_now', 'last_name', 'middle_initial', 'phone_number', 'phone_code',
-            'postal_code', 'province', 'security_phrase', 'source_id', 'state', 'title',
-        ];
+        return $this->requestResponse(self::AGENT_URL, $this->updateFieldsOptions($agentUser, $fieldsToUpdate));
+    }
 
-        // Validate that every single field to update us valid
+    /**
+     * @param  array<string, string>  $fieldsToUpdate
+     * @return array<string, string>
+     */
+    private function updateFieldsOptions(string $agentUser, array $fieldsToUpdate): array
+    {
         foreach (array_keys($fieldsToUpdate) as $key) {
-            if (! in_array($key, $allowedFields)) {
-                throw new Exception("$key is not a valid field");
+            if (! in_array($key, self::UPDATE_FIELDS_ALLOWED, true)) {
+                throw new InvalidArgumentException(sprintf('%s is not a valid update_fields field', $key));
             }
         }
 
-        $options = $fieldsToUpdate + [
-            'agent_user' => trim($agentUser),
-            'function' => 'update_fields',
-        ];
-
-        return $this->requestResponse(self::AGENT_URL, $options);
+        return $this->agentOptions($agentUser, 'update_fields', $fieldsToUpdate);
     }
 
+    // -------------------------------------------------------------------------
+    // set_timer_action
+    // -------------------------------------------------------------------------
+
     /**
-     * Updates the fields that are specified with the values. This will update the data
-     * that is on the agent's screen in the customer information section.
+     * Set the timer action for the current call (`set_timer_action`).
      *
      * @param  array<string, string>  $options
-     *
-     * @throws Exception
      */
     public function setTimerAction(string $agentUser, array $options): string
     {
-        $options += [
-            'agent_user' => trim($agentUser),
-            'function' => 'set_timer_action',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->agentOptions($agentUser, 'set_timer_action', $options));
     }
 
     /**
-     * Looks up the vicidial_users.custom_three field(as "agentId") to associate with a vicidial user ID.
-     * If found it will populate the custom_four field with a "teamId" value, then output the vicidial user ID
+     * @param  array<string, string>  $options
+     */
+    public function setTimerActionResponse(string $agentUser, array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->agentOptions($agentUser, 'set_timer_action', $options));
+    }
+
+    // -------------------------------------------------------------------------
+    // st_login_log / st_get_agent_active_lead
+    // -------------------------------------------------------------------------
+
+    /**
+     * Look up a user by vicidial_users.custom_three (`st_login_log`).
      *
      * @param  array<string, string>  $options
-     *
-     * @throws Exception
      */
     public function stLoginLog(array $options): string
     {
-        $options += [
-            'function' => 'st_login_log',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $options + ['function' => 'st_login_log']);
     }
 
     /**
-     * Looks up the vicidial_users.custom_three field(as "agentId") to associate with a vicidial user ID.
-     * If found it will output the active lead_id and phone number, vendor_lead_code, province, security_phrase and source_id fields.
+     * @param  array<string, string>  $options
+     */
+    public function stLoginLogResponse(array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $options + ['function' => 'st_login_log']);
+    }
+
+    /**
+     * Output the active lead of a user found by custom_three (`st_get_agent_active_lead`).
      *
      * @param  array<string, string>  $options
-     *
-     * @throws Exception
      */
     public function stGetAgentActiveLead(array $options): string
     {
-        $options += [
-            'function' => 'st_get_agent_active_lead',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $options + ['function' => 'st_get_agent_active_lead']);
     }
 
     /**
      * @param  array<string, string>  $options
+     */
+    public function stGetAgentActiveLeadResponse(array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $options + ['function' => 'st_get_agent_active_lead']);
+    }
+
+    // -------------------------------------------------------------------------
+    // ra_call_control
+    // -------------------------------------------------------------------------
+
+    /**
+     * Control a remote agent call (`ra_call_control`).
      *
-     * @throws Exception
+     * @param  array<string, string>  $options
      */
     public function raCallControl(string $agent, array $options): string
     {
-        $options['agent_user'] = $agent;
-        $options += [
-            'function' => 'ra_call_control',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->rawAgentOptions($agent, 'ra_call_control', $options));
     }
 
     /**
      * @param  array<string, string>  $options
+     */
+    public function raCallControlResponse(string $agent, array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->rawAgentOptions($agent, 'ra_call_control', $options));
+    }
+
+    // -------------------------------------------------------------------------
+    // send_dtmf
+    // -------------------------------------------------------------------------
+
+    /**
+     * Send DTMF digits on the agent's call (`send_dtmf`).
      *
-     * @throws Exception
+     * @param  array<string, string>  $options
      */
     public function sendDtmf(array $options): string
     {
-        $options += [
-            'function' => 'send_dtmf',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $options + ['function' => 'send_dtmf']);
     }
 
     /**
      * @param  array<string, string>  $options
+     */
+    public function sendDtmfResponse(array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $options + ['function' => 'send_dtmf']);
+    }
+
+    // -------------------------------------------------------------------------
+    // transfer_conference
+    // -------------------------------------------------------------------------
+
+    /**
+     * Transfer or conference the agent's call (`transfer_conference`).
      *
-     * @throws Exception
+     * @param  array<string, string>  $options
      */
     public function transferConference(string $agent, array $options): string
     {
-        $options['agent_user'] = $agent;
-        $options += [
-            'function' => 'transfer_conference',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->rawAgentOptions($agent, 'transfer_conference', $options));
     }
 
     /**
      * @param  array<string, string>  $options
+     */
+    public function transferConferenceResponse(string $agent, array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->rawAgentOptions($agent, 'transfer_conference', $options));
+    }
+
+    // -------------------------------------------------------------------------
+    // park_call
+    // -------------------------------------------------------------------------
+
+    /**
+     * Park or un-park the customer (`park_call`).
      *
-     * @throws Exception
+     * @param  array<string, string>  $options
      */
     public function parkCall(string $agent, array $options): string
     {
-        $options['agent_user'] = $agent;
-        $options += [
-            'function' => 'park_call',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->rawAgentOptions($agent, 'park_call', $options));
     }
 
     /**
-     * @throws Exception
+     * @param  array<string, string>  $options
+     */
+    public function parkCallResponse(string $agent, array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->rawAgentOptions($agent, 'park_call', $options));
+    }
+
+    // -------------------------------------------------------------------------
+    // call_agent
+    // -------------------------------------------------------------------------
+
+    /**
+     * Call the agent's phone (`call_agent`).
      */
     public function callAgent(string $agentUser, string $value): string
     {
-        $options = [
-            'function' => 'call_agent',
-            'agent_user' => trim($agentUser),
-            'value' => $value,
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->valueOptions($agentUser, 'call_agent', $value));
     }
 
+    public function callAgentResponse(string $agentUser, string $value): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->valueOptions($agentUser, 'call_agent', $value));
+    }
+
+    // -------------------------------------------------------------------------
+    // recording
+    // -------------------------------------------------------------------------
+
     /**
-     * @param  array<string, string>  $options
+     * Start, stop or query recording of the agent's call (`recording`).
      *
-     * @throws Exception
+     * @param  array<string, string>  $options
      */
     public function recording(string $agent, array $options): string
     {
-        $options['agent_user'] = $agent;
-        $options += [
-            'function' => 'recording',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function webPhoneUrl(string $agentUser, string $value): string
-    {
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, [
-            'agent_user' => trim($agentUser),
-            'function' => 'webphone_url',
-            'value' => trim($value),
-        ]);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->rawAgentOptions($agent, 'recording', $options));
     }
 
     /**
      * @param  array<string, string>  $options
+     */
+    public function recordingResponse(string $agent, array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->rawAgentOptions($agent, 'recording', $options));
+    }
+
+    // -------------------------------------------------------------------------
+    // webphone_url
+    // -------------------------------------------------------------------------
+
+    /**
+     * Get the webphone URL of the agent (`webphone_url`).
+     */
+    public function webPhoneUrl(string $agentUser, string $value): string
+    {
+        return $this->requestContent(self::AGENT_URL, $this->valueOptions($agentUser, 'webphone_url', trim($value)));
+    }
+
+    public function webPhoneUrlResponse(string $agentUser, string $value): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->valueOptions($agentUser, 'webphone_url', trim($value)));
+    }
+
+    // -------------------------------------------------------------------------
+    // audio_playback
+    // -------------------------------------------------------------------------
+
+    /**
+     * Play an audio file into the agent's call (`audio_playback`).
      *
-     * @throws Exception
+     * @param  array<string, string>  $options
      */
     public function audioPlayBack(string $agentUser, array $options): string
     {
-        $options['agent_user'] = $agentUser;
-        $options += [
-            'function' => 'audio_playback',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->rawAgentOptions($agentUser, 'audio_playback', $options));
     }
 
     /**
-     * Creates the URL for  the pause_code method and calls 'call_api_url' to execute it
-     *
-     * @throws Exception
+     * @param  array<string, string>  $options
+     */
+    public function audioPlayBackResponse(string $agentUser, array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->rawAgentOptions($agentUser, 'audio_playback', $options));
+    }
+
+    // -------------------------------------------------------------------------
+    // switch_lead
+    // -------------------------------------------------------------------------
+
+    /**
+     * Switch the lead on the agent screen (`switch_lead`). Sends `lead_id`, which is what the API reads.
      */
     public function switchLead(string $agentUser, string $leadId): string
     {
-        // The Agent API reads `lead_id` (or `vendor_lead_code`), not `value`.
-        $options = [
+        return $this->requestContent(self::AGENT_URL, $this->switchLeadOptions($agentUser, $leadId));
+    }
+
+    public function switchLeadResponse(string $agentUser, string $leadId): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->switchLeadOptions($agentUser, $leadId));
+    }
+
+    /** @return array<string, string> */
+    private function switchLeadOptions(string $agentUser, string $leadId): array
+    {
+        return [
             'agent_user' => trim($agentUser),
             'function' => 'switch_lead',
             'lead_id' => trim($leadId),
         ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
     }
 
+    // -------------------------------------------------------------------------
+    // vm_message
+    // -------------------------------------------------------------------------
+
     /**
-     * Set a custom voicemail message to be played when agent clicks the VM button on the agent screen
+     * Set a custom voicemail message for the VM button (`vm_message`).
      *
      * @param  array<string, string>  $options
-     *
-     * @throws Exception
      */
     public function vmMessage(string $agentUser, array $options): string
     {
-        $options['agent_user'] = $agentUser;
-        $options += [
-            'function' => 'vm_message',
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->rawAgentOptions($agentUser, 'vm_message', $options));
     }
 
     /**
-     * display a count of the calls waiting in queue for the specific agent
-     *
-     * @throws Exception
+     * @param  array<string, string>  $options
+     */
+    public function vmMessageResponse(string $agentUser, array $options): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->rawAgentOptions($agentUser, 'vm_message', $options));
+    }
+
+    // -------------------------------------------------------------------------
+    // calls_in_queue_count
+    // -------------------------------------------------------------------------
+
+    /**
+     * Count the calls waiting in queue for the agent (`calls_in_queue_count`).
      */
     public function callsInQueueCount(string $agentUser, string $status): string
     {
-        $options = [
-            'agent_user' => trim($agentUser),
-            'function' => 'calls_in_queue_count',
-            'value' => trim($status),
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->valueOptions($agentUser, 'calls_in_queue_count', trim($status)));
     }
 
+    public function callsInQueueCountResponse(string $agentUser, string $status): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->valueOptions($agentUser, 'calls_in_queue_count', trim($status)));
+    }
+
+    // -------------------------------------------------------------------------
+    // force_fronter_leave_3way / force_fronter_audio_stop
+    // -------------------------------------------------------------------------
+
     /**
-     * @throws Exception
+     * Force the fronter agent to leave a 3-way call (`force_fronter_leave_3way`).
      */
     public function forceFronterLeave3way(string $agentUser, string $status): string
     {
-        $options = [
-            'agent_user' => trim($agentUser),
-            'function' => 'force_fronter_leave_3way',
-            'value' => trim($status),
-        ];
+        return $this->requestContent(self::AGENT_URL, $this->valueOptions($agentUser, 'force_fronter_leave_3way', trim($status)));
+    }
 
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+    public function forceFronterLeave3wayResponse(string $agentUser, string $status): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->valueOptions($agentUser, 'force_fronter_leave_3way', trim($status)));
     }
 
     /**
-     * @throws Exception
+     * Stop audio playback on the fronter's call (`force_fronter_audio_stop`).
      */
     public function forceFronterAudioStop(string $agentUser, string $status): string
     {
-        $options = [
-            'agent_user' => trim($agentUser),
-            'function' => 'force_fronter_audio_stop',
-            'value' => trim($status),
-        ];
-
-        $payload = Payload::retrieveWithParameters(self::AGENT_URL, $options);
-
-        return $this->transporter->requestContent($payload);
+        return $this->requestContent(self::AGENT_URL, $this->valueOptions($agentUser, 'force_fronter_audio_stop', trim($status)));
     }
 
+    public function forceFronterAudioStopResponse(string $agentUser, string $status): VicidialResponse
+    {
+        return $this->requestResponse(self::AGENT_URL, $this->valueOptions($agentUser, 'force_fronter_audio_stop', trim($status)));
+    }
+
+    // -------------------------------------------------------------------------
+    // stereo_recording
+    // -------------------------------------------------------------------------
+
     /**
-     * Sends a stereo recording BEGIN/END signal or asks for the STATUS of agent-controlled stereo recording.
+     * Send BEGIN / END or ask STATUS of agent-controlled stereo recording (`stereo_recording`).
      *
      * @param  array<string, string>  $options  value (BEGIN, END, STATUS), optional stage (filename suffix, max 14 chars)
-     *
-     * @throws Exception
      */
     public function stereoRecording(string $agentUser, array $options): string
     {
-        $options += [
-            'agent_user' => trim($agentUser),
-            'function' => 'stereo_recording',
-        ];
-
-        return $this->requestContent(self::AGENT_URL, $options);
+        return $this->requestContent(self::AGENT_URL, $this->agentOptions($agentUser, 'stereo_recording', $options));
     }
 
     /**
-     * Stereo recording with VicidialResponse DTO
-     *
      * @param  array<string, string>  $options
-     *
-     * @throws Exception
      */
     public function stereoRecordingResponse(string $agentUser, array $options): VicidialResponse
     {
-        $options += [
-            'agent_user' => trim($agentUser),
-            'function' => 'stereo_recording',
-        ];
-
-        return $this->requestResponse(self::AGENT_URL, $options);
+        return $this->requestResponse(self::AGENT_URL, $this->agentOptions($agentUser, 'stereo_recording', $options));
     }
 
+    // -------------------------------------------------------------------------
+    // send_notification
+    // -------------------------------------------------------------------------
+
     /**
-     * Sends a customizable text alert and/or confetti effect to one or more active agent screens.
-     * Requires "Agent API Notifications" to be enabled on the Vicidial system.
+     * Send a text alert and/or confetti to agent screens (`send_notification`).
+     * Requires "Agent API Notifications" to be enabled on the VICIdial system.
      *
      * @param  array<string, string>  $options  recipient_type (USER, USER_GROUP, CAMPAIGN), recipient, notification_text,
      *                                          notification_date, text_size, text_font, text_weight, text_color,
      *                                          show_confetti (Y/N), duration, maxParticleCount, particleSpeed
-     *
-     * @throws Exception
      */
     public function sendNotification(array $options): string
     {
-        $options += [
-            'function' => 'send_notification',
-        ];
-
-        return $this->requestContent(self::AGENT_URL, $options);
+        return $this->requestContent(self::AGENT_URL, $options + ['function' => 'send_notification']);
     }
 
     /**
-     * Send notification with VicidialResponse DTO
-     *
      * @param  array<string, string>  $options
-     *
-     * @throws Exception
      */
     public function sendNotificationResponse(array $options): VicidialResponse
     {
-        $options += [
-            'function' => 'send_notification',
-        ];
-
-        return $this->requestResponse(self::AGENT_URL, $options);
+        return $this->requestResponse(self::AGENT_URL, $options + ['function' => 'send_notification']);
     }
 
+    // -------------------------------------------------------------------------
+    // refresh_panel
+    // -------------------------------------------------------------------------
+
     /**
-     * Refreshes one or more panels on the agent screen (script, script2, callbacks, form, email, chat).
+     * Refresh panels on the agent screen (`refresh_panel`).
      *
      * @param  array<string, string>  $options  any of formreload, scriptreload, script2reload, emailreload, chatreload, callbacksreload set to '1'
-     *
-     * @throws Exception
      */
     public function refreshPanel(string $agentUser, array $options): string
     {
-        $options += [
-            'agent_user' => trim($agentUser),
-            'function' => 'refresh_panel',
-        ];
-
-        return $this->requestContent(self::AGENT_URL, $options);
+        return $this->requestContent(self::AGENT_URL, $this->agentOptions($agentUser, 'refresh_panel', $options));
     }
 
     /**
-     * Refresh panel with VicidialResponse DTO
-     *
      * @param  array<string, string>  $options
-     *
-     * @throws Exception
      */
     public function refreshPanelResponse(string $agentUser, array $options): VicidialResponse
     {
-        $options += [
-            'agent_user' => trim($agentUser),
-            'function' => 'refresh_panel',
-        ];
+        return $this->requestResponse(self::AGENT_URL, $this->agentOptions($agentUser, 'refresh_panel', $options));
+    }
 
-        return $this->requestResponse(self::AGENT_URL, $options);
+    // -------------------------------------------------------------------------
+    // option builders
+    // -------------------------------------------------------------------------
+
+    /**
+     * agent_user (trimmed) + function + value.
+     *
+     * @return array<string, string>
+     */
+    private function valueOptions(string $agentUser, string $function, string $value): array
+    {
+        return [
+            'agent_user' => trim($agentUser),
+            'function' => $function,
+            'value' => $value,
+        ];
+    }
+
+    /**
+     * Caller options, with agent_user (trimmed) and function as defaults.
+     *
+     * @param  array<string, string>  $options
+     * @return array<string, string>
+     */
+    private function agentOptions(string $agentUser, string $function, array $options): array
+    {
+        return $options + [
+            'agent_user' => trim($agentUser),
+            'function' => $function,
+        ];
+    }
+
+    /**
+     * Caller options with agent_user forced (not trimmed, historical behaviour) and function as default.
+     *
+     * @param  array<string, string>  $options
+     * @return array<string, string>
+     */
+    private function rawAgentOptions(string $agentUser, string $function, array $options): array
+    {
+        $options['agent_user'] = $agentUser;
+
+        return $options + ['function' => $function];
     }
 }

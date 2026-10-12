@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace VicidialApi\Resources\Concerns;
 
+use VicidialApi\Parameters\Parameters;
 use VicidialApi\Responses\VicidialResponse;
 use VicidialApi\ValueObjects\Transporter\Payload;
 
@@ -34,5 +35,16 @@ trait HasResponseHelpers
         $payload = Payload::retrieveWithParameters($url, $parameters);
 
         return $this->transporter->requestContent($payload);
+    }
+
+    /**
+     * Accept either a plain options array or a typed parameter object.
+     *
+     * @param  array<string, string>|Parameters  $options
+     * @return array<string, string>
+     */
+    protected function optionsToArray(array|Parameters $options): array
+    {
+        return $options instanceof Parameters ? $options->toArray() : $options;
     }
 }

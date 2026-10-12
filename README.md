@@ -104,7 +104,7 @@ $config = VicidialConfig::create(
     timeout: 30,                 // Optional: Request timeout in seconds (default: 30)
     urlEncodeDefault: false,     // Deprecated no-op: values are always URL-encoded once by the transport
     userAgent: 'MyApp/1.0',      // Optional: Custom user agent
-    source: 'myapp'              // Optional: Source identifier (default: 'test')
+    source: 'myapp'              // Optional: Source identifier shown in VICIdial logs, max 20 chars (default: 'vicidial-api-wrapper')
 );
 
 $client = VicidialClient::make($config);

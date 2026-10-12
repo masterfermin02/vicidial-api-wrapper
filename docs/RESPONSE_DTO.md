@@ -609,7 +609,7 @@ try {
 
 # Appendix: naming, method list, testing and migration
 
-_Merged from the former `docs/response-dto.md`. The method list below is the v4.0 snapshot; every resource method now has a `...Response()` variant for the Admin API, see `docs/admin.md` and `docs/agent.md` for the full list._
+_Merged from the former `docs/response-dto.md`. Since 4.2.0 **every** Agent and Admin function has both a string variant and a `...Response()` variant (a test enforces this), see `docs/admin.md` and `docs/agent.md` for the full list._
 
 ## Response Method Naming
 
@@ -628,12 +628,13 @@ Examples:
 
 ### Agent API
 
-- `hangupResponse()`
-- `dispoResponse()`
-- `pauseResponse()`
-- `dialResponse()`
-- `updateFieldsResponse()`
-- And more...
+All 31 functions: `hangupResponse()`, `dispoResponse()`, `pauseResponse()`, `pauseCodeResponse()`, `webserverResponse()`,
+`versionResponse()`, `logoutResponse()`, `dialResponse()`, `previewDialResponse()`, `addLeadResponse()`,
+`changeInGroupsResponse()`, `updateFieldsResponse()`, `setTimerActionResponse()`, `stLoginLogResponse()`,
+`stGetAgentActiveLeadResponse()`, `raCallControlResponse()`, `sendDtmfResponse()`, `transferConferenceResponse()`,
+`parkCallResponse()`, `callAgentResponse()`, `recordingResponse()`, `webPhoneUrlResponse()`, `audioPlayBackResponse()`,
+`switchLeadResponse()`, `vmMessageResponse()`, `callsInQueueCountResponse()`, `forceFronterLeave3wayResponse()`,
+`forceFronterAudioStopResponse()`, `stereoRecordingResponse()`, `sendNotificationResponse()`, `refreshPanelResponse()`.
 
 ### Admin API
 
@@ -645,7 +646,27 @@ Examples:
 - `updateLeadResponse()`
 - `campaignsListResponse()`
 - `hopperListResponse()`
-- And more...
+- ... and every other Non-Agent function (61 in total).
+
+### Typed parameters
+
+`dial()`, `dispo()`, `addLead()` and `updateLead()` (and their `...Response()` variants) also accept a typed
+parameter object instead of an array, so a typo like `phone_numer` is caught by your IDE and by PHP:
+
+```php
+use VicidialApi\Parameters\DialParameters;
+use VicidialApi\Parameters\DispoParameters;
+use VicidialApi\Parameters\AddLeadParameters;
+use VicidialApi\Parameters\UpdateLeadParameters;
+
+$client->agent()->dialResponse('1000', new DialParameters(phoneNumber: '7275551212', phoneCode: 1, focus: false));
+$client->agent()->dispoResponse('1000', new DispoParameters(status: 'SALE'));
+$client->admin()->addLeadResponse(new AddLeadParameters(phoneNumber: '7275551212', listId: 101, firstName: 'Ada'));
+$client->admin()->updateLeadResponse((new UpdateLeadParameters(leadId: 42, customFields: true))->with('favorite_color', 'blue'));
+```
+
+`null` properties are not sent, booleans become `Y`/`N` (`YES`/`NO` for `dial`), and `with()` adds any parameter
+that is not modelled (custom list fields, options added by newer VICIdial releases).
 
 ## Error Handling
 

@@ -24,12 +24,12 @@ what was fixed, and what is still worth doing. It is meant to be edited: delete 
 - ~~Root directory clutter~~ resolved: user guides moved to `docs/`, implementation summaries to `docs/archive/`, `docs/response-dto.md` merged into `docs/RESPONSE_DTO.md`.
 - ~~Commit or ignore `graphify-out/`~~ resolved: graph committed, machine-specific files ignored.
 
-### 2. API surface consistency
-- 23 `Agent` methods have no `...Response()` variant (`pauseCode`, `logout`, `recording`, `parkCall`, `transferConference`, ...). Either generate the missing pairs or, better, make every method return `VicidialResponse` in the next major and keep the string variants as `...Raw()`.
-- `Agent::dial()` and `updateFields()` throw `\Exception`; use `InvalidArgumentException` so callers can distinguish programmer errors from transport errors.
-- `updateFields()` hard-codes the allowed field list from an old version of the doc. The current doc also allows `vendor_lead_code`-style custom fields and reload triggers (`formreload`, `scriptreload`, ...). Re-sync the list or drop the client-side check and let VICIdial validate.
-- Typed parameter objects for the high-traffic functions (`addLead`, `updateLead`, `dial`, `dispo`) would catch typos like `phone_numer` at compile time. Keep the array overloads.
-- `source` defaults to `'test'`; default it to the package name so VICIdial logs identify the caller.
+### 2. API surface consistency: done in 4.2.0
+- ~~23 `Agent` methods have no `...Response()` variant~~ resolved: every Agent function now has both variants, enforced by `AgentResponseVariantsTest`. Making `VicidialResponse` the default return type (string variants as `...Raw()`) is deferred to 5.0.
+- ~~`dial()` and `updateFields()` throw `\Exception`~~ resolved: they throw `VicidialApi\Exceptions\InvalidArgumentException` (still a `VicidialException`). `dial()` also accepts `lead_id` without `phone_number`, as the API does.
+- ~~`updateFields()` allow-list is stale~~ resolved: `Agent::UPDATE_FIELDS_ALLOWED` matches AGENT_API.txt (2025-08-30) including the `formreload`, `scriptreload`, `script2reload`, `emailreload` and `chatreload` triggers.
+- ~~Typed parameter objects~~ resolved: `DialParameters`, `DispoParameters`, `AddLeadParameters`, `UpdateLeadParameters` in `VicidialApi\Parameters`; the array overloads remain.
+- ~~`source` defaults to `'test'`~~ resolved: defaults to `vicidial-api-wrapper` (`VicidialConfig::DEFAULT_SOURCE`, exactly the 20-character API limit).
 
 ### 3. Response parsing
 - `VicidialResponse::determineStatus()` returns `success` for any body without `ERROR`, so an empty body or an HTML login page from a misconfigured proxy reads as success. Treat empty bodies and `text/html` content as errors.

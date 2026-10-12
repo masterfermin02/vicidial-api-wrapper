@@ -11,6 +11,11 @@ use VicidialApi\ValueObjects\RetryConfig;
 
 final class VicidialConfig
 {
+    /**
+     * Default `source` query parameter: identifies this wrapper in VICIdial logs (API limit is 20 characters).
+     */
+    public const DEFAULT_SOURCE = 'vicidial-api-wrapper';
+
     public function __construct(
         private readonly string $host,
         private readonly string $user,
@@ -23,7 +28,7 @@ final class VicidialConfig
         private readonly string $userAgent = 'VicidialApi-PHP-Wrapper/4.1',
         private readonly ?string $basicAuthUser = null,
         private readonly ?string $basicAuthPass = null,
-        private readonly string $source = 'test',
+        private readonly string $source = self::DEFAULT_SOURCE,
         private readonly ?RetryConfig $retryConfig = null,
         private readonly ?LoggerInterface $logger = null,
     ) {
@@ -54,7 +59,7 @@ final class VicidialConfig
         int $connectTimeout = 10,
         bool $urlEncodeDefault = false,
         string $userAgent = 'VicidialApi-PHP-Wrapper/4.1',
-        string $source = 'test',
+        string $source = self::DEFAULT_SOURCE,
         ?RetryConfig $retryConfig = null,
         ?LoggerInterface $logger = null,
     ): self {
@@ -86,7 +91,7 @@ final class VicidialConfig
         int $connectTimeout = 10,
         bool $urlEncodeDefault = false,
         string $userAgent = 'VicidialApi-PHP-Wrapper/4.1',
-        string $source = 'test',
+        string $source = self::DEFAULT_SOURCE,
         ?RetryConfig $retryConfig = null,
         ?LoggerInterface $logger = null,
     ): self {

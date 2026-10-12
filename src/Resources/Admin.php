@@ -3,6 +3,8 @@
 namespace VicidialApi\Resources;
 
 use VicidialApi\Contracts\AdminContract;
+use VicidialApi\Parameters\AddLeadParameters;
+use VicidialApi\Parameters\UpdateLeadParameters;
 use VicidialApi\Responses\VicidialResponse;
 use VicidialApi\ValueObjects\Transporter\Payload;
 
@@ -414,40 +416,42 @@ final class Admin implements AdminContract
     }
 
     /**
-     * Add lead.
+     * Add lead (`add_lead`). Accepts a plain array or an AddLeadParameters object.
      *
-     * @param  array<string, string>  $options
+     * @param  array<string, string>|AddLeadParameters  $options
      */
-    public function addLead(array $options): string
+    public function addLead(array|AddLeadParameters $options): string
     {
-        return $this->makeApiRequest('add_lead', $options);
+        return $this->makeApiRequest('add_lead', $this->optionsToArray($options));
     }
 
     /**
-     * @param  array<string, string>  $options
+     * @param  array<string, string>|AddLeadParameters  $options
      */
-    public function addLeadResponse(array $options): VicidialResponse
+    public function addLeadResponse(array|AddLeadParameters $options): VicidialResponse
     {
+        $options = $this->optionsToArray($options);
         $options['function'] = 'add_lead';
 
         return $this->requestResponse(self::ADMIN_URL, $options);
     }
 
     /**
-     * Update lead.
+     * Update lead (`update_lead`). Accepts a plain array or an UpdateLeadParameters object.
      *
-     * @param  array<string, string>  $options
+     * @param  array<string, string>|UpdateLeadParameters  $options
      */
-    public function updateLead(array $options): string
+    public function updateLead(array|UpdateLeadParameters $options): string
     {
-        return $this->makeApiRequest('update_lead', $options);
+        return $this->makeApiRequest('update_lead', $this->optionsToArray($options));
     }
 
     /**
-     * @param  array<string, string>  $options
+     * @param  array<string, string>|UpdateLeadParameters  $options
      */
-    public function updateLeadResponse(array $options): VicidialResponse
+    public function updateLeadResponse(array|UpdateLeadParameters $options): VicidialResponse
     {
+        $options = $this->optionsToArray($options);
         $options['function'] = 'update_lead';
 
         return $this->requestResponse(self::ADMIN_URL, $options);

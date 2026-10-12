@@ -72,7 +72,7 @@ $config = VicidialConfig::create(
     timeout: 30,                     // Optional: Timeout in seconds (default: 30)
     urlEncodeDefault: false,         // Optional: URL encode by default (default: false)
     userAgent: 'MyApp/1.0',         // Optional: Custom user agent
-    source: 'myapp'                  // Optional: Source tracking (default: 'test')
+    source: 'myapp'                  // Optional: Source tracking, max 20 chars (default: 'vicidial-api-wrapper')
 );
 ```
 

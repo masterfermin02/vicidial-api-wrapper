@@ -8,10 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `...Response()` variants for the 23 `Agent` methods that lacked one (`pauseCode`, `logout`, `recording`, `parkCall`, `transferConference`, ...). Every Agent and Admin function now has both a string and a `VicidialResponse` variant; `AgentResponseVariantsTest` enforces it.
+- Typed parameter objects `VicidialApi\Parameters\{DialParameters, DispoParameters, AddLeadParameters, UpdateLeadParameters}`; `dial()`, `dispo()`, `addLead()` and `updateLead()` accept them in place of an array. `with()` adds unmodelled parameters such as custom list fields.
+- `Agent::dial()` accepts `lead_id` without a `phone_number`, as documented for `external_dial`.
+- `Agent::UPDATE_FIELDS_ALLOWED` public constant.
 - GitHub Actions CI (`.github/workflows/ci.yml`) running pint, rector, phpstan and phpunit on PHP 8.2, 8.3 and 8.4.
 - `docs/README.md` documentation index.
 
 ### Changed
+- `Agent::dial()` and `Agent::updateFields()` throw `VicidialApi\Exceptions\InvalidArgumentException` (a `VicidialException`) instead of a bare `\Exception`. The stale `@deprecated` tag on that class was removed.
+- `Agent::updateFields()` allow-list re-synced with AGENT_API.txt (2025-08-30): the `formreload`, `scriptreload`, `script2reload`, `emailreload` and `chatreload` triggers are accepted.
+- Default `source` query parameter is `vicidial-api-wrapper` instead of `test` (`VicidialConfig::DEFAULT_SOURCE`). It is a free-text label that shows up in VICIdial logs; set `source:` explicitly if you depended on `test`.
+- `AgentContract` gained the new `...Response()` methods and `AdminContract::addLead()` / `updateLead()` accept the typed parameter objects. Custom implementations of these interfaces must add the methods.
 - Repository root decluttered: `METHOD_NAMING_CONVENTIONS.md`, `QUICKSTART.md`, `RELIABILITY_FEATURES.md` and `RELIABILITY_QUICK_REFERENCE.md` moved to `docs/`; implementation summaries moved to `docs/archive/`. All links updated.
 - `docs/response-dto.md` merged into `docs/RESPONSE_DTO.md`.
 

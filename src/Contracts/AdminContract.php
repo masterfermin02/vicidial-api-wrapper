@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace VicidialApi\Contracts;
 
+use VicidialApi\Parameters\AddLeadParameters;
+use VicidialApi\Parameters\UpdateLeadParameters;
+
 interface AdminContract
 {
     /**
@@ -154,16 +157,16 @@ interface AdminContract
     /**
      * Add lead.
      *
-     * @param  array<string, string>  $options
+     * @param  array<string, string>|AddLeadParameters  $options
      */
-    public function addLead(array $options): string;
+    public function addLead(array|AddLeadParameters $options): string;
 
     /**
      * Update lead.
      *
-     * @param  array<string, string>  $options
+     * @param  array<string, string>|UpdateLeadParameters  $options
      */
-    public function updateLead(array $options): string;
+    public function updateLead(array|UpdateLeadParameters $options): string;
 
     /**
      * Add user.
