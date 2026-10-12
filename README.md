@@ -105,7 +105,7 @@ $config = VicidialConfig::create(
 $client = VicidialClient::make($config);
 ```
 
-### 4.2.0 (unreleased)
+### 4.2.0 (2026-10-12)
 - Every Agent function has a `...Response()` variant; typed parameter objects (`DialParameters`, `AddLeadParameters`, ...)
 - `VicidialResponse::fields()`, `rows()`, `statusCode()`; empty / HTML / HTTP-error bodies are errors, not success
 - 5xx and non-throwing PSR-18 clients are retried; idempotency guidance for `add_lead`
