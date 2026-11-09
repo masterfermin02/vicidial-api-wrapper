@@ -16,7 +16,7 @@ final class VicidialConfig
      */
     public const DEFAULT_SOURCE = 'vicidial-api-wrapper';
 
-    public const DEFAULT_USER_AGENT = 'VicidialApi-PHP-Wrapper/4.2';
+    public const DEFAULT_USER_AGENT = 'VicidialApi-PHP-Wrapper/4.3';
 
     public function __construct(
         private readonly string $host,

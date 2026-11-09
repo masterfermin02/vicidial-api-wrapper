@@ -236,6 +236,32 @@ final class Admin implements AdminContract
     }
 
     /**
+     * Export agent email and chat statistics for a time period (one row per agent per channel).
+     *
+     * Required: datetime_start, datetime_end ("YYYY-MM-DD+HH:MM:SS"), source.
+     * Optional: agent_user, channel (EMAIL or CHAT), sla_seconds (default 7200),
+     * stage (csv, tab, json, pipe), header (YES/NO).
+     *
+     * @param  array<string, string>  $options
+     */
+    public function agentDigitalStatsExport(array $options): string
+    {
+        return $this->makeApiRequest('agent_digital_stats_export', $options);
+    }
+
+    /**
+     * Export agent email and chat statistics. Returns a VicidialResponse DTO.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function agentDigitalStatsExportResponse(array $options): VicidialResponse
+    {
+        $options['function'] = 'agent_digital_stats_export';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
      * Get user group status.
      *
      * @param  array<string, string>  $options
@@ -1017,6 +1043,30 @@ final class Admin implements AdminContract
     public function userDetailsResponse(array $options): VicidialResponse
     {
         $options['function'] = 'user_details';
+
+        return $this->requestResponse(self::ADMIN_URL, $options);
+    }
+
+    /**
+     * Display information about all users at or below the API user's level in its viewable user groups.
+     *
+     * Required: source. Optional: agent_user (one user only), stage (csv, tab, json, pipe), header (YES/NO).
+     *
+     * @param  array<string, string>  $options
+     */
+    public function usersList(array $options = []): string
+    {
+        return $this->makeApiRequest('users_list', $options);
+    }
+
+    /**
+     * Display information about all users. Returns a VicidialResponse DTO.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function usersListResponse(array $options = []): VicidialResponse
+    {
+        $options['function'] = 'users_list';
 
         return $this->requestResponse(self::ADMIN_URL, $options);
     }

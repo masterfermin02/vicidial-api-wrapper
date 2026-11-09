@@ -1,7 +1,7 @@
 {
   "_source": {
     "agent": "http://vicidial.org/docs/AGENT_API.txt (updated 2025-08-30)",
-    "non_agent": "http://vicidial.org/docs/NON-AGENT_API.txt (updated 2026-09-25)",
+    "non_agent": "http://vicidial.org/docs/NON-AGENT_API.txt (updated 2026-11-02)",
     "generator": "see scripts/README.md"
   },
   "agent": {
@@ -329,6 +329,11 @@
       "ERROR: agent_stats_export INVALID SEARCH PARAMETERS - 6666||2010-12-03 00:00:00|2010-12-03 00:00:01|",
       "ERROR: agent_stats_export NO RECORDS FOUND - 1255||2010-12-03 00:00:00|2010-12-03 00:00:01|"
     ],
+    "agent_digital_stats_export": [
+      "ERROR: agent_digital_stats_export USER DOES NOT HAVE PERMISSION TO GET AGENT INFO - 6666|0",
+      "ERROR: agent_digital_stats_export INVALID SEARCH PARAMETERS - 6666||2026-10-01 00:00:00|2026-10-07 23:59:59|SMS",
+      "ERROR: agent_digital_stats_export NO RECORDS FOUND - 6666||2026-10-01 00:00:00|2026-10-07 23:59:59|"
+    ],
     "user_group_status": [
       "ERROR: user_group_status USER DOES NOT HAVE PERMISSION TO GET USER GROUP INFO - 6666|0",
       "ERROR: user_group_status INVALID SEARCH PARAMETERS - 6666||"
@@ -347,6 +352,10 @@
       "ERROR: user_details USER DOES NOT HAVE PERMISSION TO GET USER DETAILS - 6666|0",
       "ERROR: user_details INVALID SEARCH PARAMETERS - 6666||",
       "ERROR: user_details USER NOT FOUND - 6666||"
+    ],
+    "users_list": [
+      "ERROR: users_list USER DOES NOT HAVE PERMISSION TO GET USER DETAILS - 6666|0",
+      "ERROR: users_list NO USERS FOUND - 6666|"
     ],
     "callid_info": [
       "ERROR: callid_info USER DOES NOT HAVE PERMISSION TO GET CALL INFO - 6666|0",

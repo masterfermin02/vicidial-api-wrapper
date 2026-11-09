@@ -5,7 +5,7 @@ query parameters; the body of the response is plain text. This guide condenses t
 documents so you can use this wrapper without reading 200 KB of text files:
 
 - Agent API: <http://vicidial.org/docs/AGENT_API.txt> (updated 2025-08-30, 31 functions)
-- Non-Agent API: <http://vicidial.org/docs/NON-AGENT_API.txt> (updated 2026-09-25, 61 functions)
+- Non-Agent API: <http://vicidial.org/docs/NON-AGENT_API.txt> (updated 2026-11-02, 63 functions)
 
 The wrapper covers **every** function in both documents. The coverage-guard tests in
 `tests/Resources/AdminCoverageTest.php` and `tests/Resources/AgentCoverageTest.php` fail if a

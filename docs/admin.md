@@ -28,6 +28,7 @@ API functions:
 - recording_lookup - looks up recordings based upon user and date or lead_id
 - did_log_export - exports all calls inbound to a DID for one day
 - agent_stats_export - exports agent statistics for set time period
+- agent_digital_stats_export - exports agent email and chat statistics for set time period
 - add_user - adds a user to the system
 - update_user - updates some user settings in the system
 - copy_user - copies an existing user in the system to a new user ID and name
@@ -77,6 +78,7 @@ API functions:
 - lead_dearchive - moves a lead from the archive to active leads table
 - update_remote_agent - updates some remote agent settings in the system
 - user_details - display information about one user
+- users_list - display information about all users
 - copy_phone - copies a phone in the system
 
 
@@ -455,9 +457,15 @@ header -		include a header(YES) or not(NO). This is optional, default is not to 
 time_format -		time format('H','HF','M','S') in hours, minutes or seconds: H = 1:23:45, M = 83:45, S = 5023  (default 'HF')
 				* HF will force hour format even for zero seconds time "0:00:00"
 group_by_campaign -	divide and output the agent results grouped by campaign(YES) or not(NO). This is optional, default is 'NO'
+channel -		only count activity of one channel: VOICE, EMAIL or CHAT. This is optional, default is all channels
 
 NOTES- 
 There is a hard limit of 10000000 records analyzed
+When channel is set, calls, total_talk_time, avg_talk_time, pct_of_queue, talk_time, dispo_time and dead_time
+only count the agent activity of that channel(EMAIL and CHAT activity is flagged in the agent log, everything
+else is VOICE). login_time, pause_time, sessions, pauses and wait_time always count all activity, because an
+agent is logged in for all channels at the same time, and avg_wait_time is divided by the calls of all channels.
+Without channel, the output is unchanged.
 
 Example URL strings for API calls:
 http://server/vicidial/non_agent_api.php?source=test&function=agent_stats_export&time_format=M&stage=pipe&user=6666&pass=1234&agent_user=6666&datetime_start=2012-08-09+00:00:00&datetime_end=2012-08-10+23:59:59
@@ -475,6 +483,100 @@ user|full_name|user_group|calls|login_time|total_talk_time|avg_talk_time|avg_wai
 
 * if the 'group_by_campaign' option is enabled, the format above will have 'campaign_id' as the first column, and each agent's activity will be divided on separate lines by the campaigns they were logged into during the requested time period.
 
+
+
+
+
+--------------------------------------------------------------------------------
+agent_digital_stats_export - exports agent email and chat statistics
+
+NOTE: api user for this function must have user_level set to 7 or higher and "view reports" enabled
+NOTE: only agents in the user groups the api user is allowed to view(Admin Viewable Groups) are included
+
+REQUIRED FIELDS-
+source -		description of what originated the API call (maximum 20 characters)
+datetime_start -	start date/time of the activity to pull (must be in "YYYY-MM-DD+HH:MM:SS" format)
+datetime_end -		end date/time of the activity to pull (must be in "YYYY-MM-DD+HH:MM:SS" format)
+
+SETTINGS FIELDS-
+agent_user -		2-20 characters, use only for one agent stats <optional>
+channel -		only one channel: EMAIL or CHAT. This is optional, default is both
+sla_seconds -		first response time limit used for within_sla_count, in seconds. This is optional, default is 7200
+stage -			the format of the exported data: csv, tab, json, pipe(default)
+header -		include a header(YES) or not(NO). This is optional, default is not to include a header
+
+NOTES-
+One line is output per agent per channel. All values are raw sums and counts, so averages can be calculated
+by dividing a _sum_sec field by its _count field, for example average first response = frt_sum_sec / frt_count
+contacts_handled -	EMAIL: emails delivered to the agent, CHAT: chats the agent posted in
+replies_sent -		EMAIL: replies sent by the agent, CHAT: messages posted by the agent
+frt_sum_sec -		sum of first response times in seconds
+			EMAIL: from delivery to the agent until the agent's first reply
+			CHAT: from chat start until the agent's first message
+frt_count -		contacts that have a first response time
+within_sla_count -	first responses within sla_seconds
+resolution_sum_sec -	EMAIL: from delivery to the agent until closed, CHAT: from chat start until the last message
+resolution_count -	contacts that have a resolution time
+messages_sum -		EMAIL: the inbound email plus its replies, CHAT: all chat messages, not counting system messages
+handle_sum_sec -	EMAIL: from delivery to the agent until closed, CHAT: from the agent's first message until the last message
+handle_count -		contacts that have a handle time
+
+- Emails are selected by the time they were delivered to an agent, chats by their start time
+- Emails are measured from delivery to the agent, time waiting in queue before delivery is not included
+- The replies of an email are the agent's replies to that lead between delivery and close. Replies are
+  looked up until one day after datetime_end
+- A chat is credited to the first agent that posts a message in it
+- Chats started by an agent are counted, but have no first response time(frt_count, within_sla_count).
+  A chat counts as started by the customer when the agent took it from the queue(a CHAT entry in the
+  closer log)
+- replies_sent for EMAIL counts all replies sent by the agent in the time period
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=agent_digital_stats_export&datetime_start=2026-10-01+00:00:00&datetime_end=2026-10-07+23:59:59&header=YES
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=agent_digital_stats_export&datetime_start=2026-10-01+00:00:00&datetime_end=2026-10-07+23:59:59&channel=CHAT&sla_seconds=300&stage=csv&header=YES
+
+Example responses:
+ERROR: agent_digital_stats_export USER DOES NOT HAVE PERMISSION TO GET AGENT INFO - 6666|0
+ERROR: agent_digital_stats_export INVALID SEARCH PARAMETERS - 6666||2026-10-01 00:00:00|2026-10-07 23:59:59|SMS
+ERROR: agent_digital_stats_export NO RECORDS FOUND - 6666||2026-10-01 00:00:00|2026-10-07 23:59:59|
+
+A SUCCESS response will not show "SUCCESS", but instead will just print the results in the following format:
+user|channel|contacts_handled|replies_sent|frt_sum_sec|frt_count|within_sla_count|resolution_sum_sec|resolution_count|messages_sum|handle_sum_sec|handle_count
+1029|CHAT|12|87|540|12|12|7320|12|190|6900|12
+1029|EMAIL|30|34|41200|28|21|96400|30|64|96400|30
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->agentDigitalStatsExport([
+         'datetime_start' => '2026-10-01+00:00:00',
+         'datetime_end' => '2026-10-07+23:59:59',
+         'channel' => 'CHAT',
+         'sla_seconds' => '300',
+         'stage' => 'csv',
+         'header' => 'YES',
+     ]);
+
+     // Or get a structured response (one row per agent per channel):
+     $response = $adminApi->agentDigitalStatsExportResponse([
+         'datetime_start' => '2026-10-01+00:00:00',
+         'datetime_end' => '2026-10-07+23:59:59',
+         'header' => 'YES',
+     ]);
+     if ($response->ok()) {
+         foreach ($response->rows() as $row) {
+             // average first response time in seconds
+             $avgFrt = $row['frt_count'] > 0 ? $row['frt_sum_sec'] / $row['frt_count'] : null;
+         }
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
 
 
 
@@ -2910,6 +3012,58 @@ try {
      $response = $adminApi->userDetailsResponse(['agent_user' => '1234', 'stage' => 'csv', 'header' => 'YES']);
      if ($response->ok()) {
          print_r($response->asArray());
+     }
+} catch (Exception $e) {
+     echo 'Exception: ',  $e->getMessage(), "\n";
+}
+```
+
+
+
+
+--------------------------------------------------------------------------------
+users_list - display information about all users
+
+NOTE: api user for this function must have user_level set to 7 or higher and "view reports" enabled
+NOTE: like the admin user list, only users with a user_level at or below the api user's level, and only
+      users in the user groups the api user is allowed to view(Admin Viewable Groups) are listed
+
+REQUIRED FIELDS-
+source -		description of what originated the API call (maximum 20 characters)
+
+SETTINGS FIELDS-
+agent_user -		2-20 characters, use only for one user <optional>
+stage -			the format of the exported data: csv, tab, json, pipe(default)
+header -		include a header(YES) or not(NO). This is optional, default is not to include a header
+
+Example URL strings for API calls:
+http://server/vicidial/non_agent_api.php?source=test&user=6666&pass=1234&function=users_list&stage=csv&header=YES
+
+Example responses:
+ERROR: users_list USER DOES NOT HAVE PERMISSION TO GET USER DETAILS - 6666|0
+ERROR: users_list NO USERS FOUND - 6666|
+
+A SUCCESS response will not show "SUCCESS", but instead will just print the results in the following format:
+user,full_name,user_group,user_level,active,email
+6666,Admin,ADMIN,9,Y,admin@example.com
+11111,test user,ADMIN,6,Y,
+22222,old user,AGENTS,1,N,old.user@example.com
+
+Code:
+
+```php
+<?php
+
+try {
+     $adminApi = VicidialApi::create("127.0.0.1", "6666", "1234")->admin();
+     echo $adminApi->usersList(['stage' => 'csv', 'header' => 'YES']);
+
+     // Or get a structured response:
+     $response = $adminApi->usersListResponse(['stage' => 'csv', 'header' => 'YES']);
+     if ($response->ok()) {
+         foreach ($response->rows() as $user) {
+             echo $user['user'], ' ', $user['full_name'], ' ', $user['email'], "\n";
+         }
      }
 } catch (Exception $e) {
      echo 'Exception: ',  $e->getMessage(), "\n";

@@ -235,4 +235,35 @@ final class VicidialResponseParsingTest extends TestCase
         $this->assertSame('text/plain', $response->header('content-type'));
         $this->assertSame('3', $response->rows()[0]['calls']);
     }
+
+    public function test_users_list_documented_csv_output_parses_into_rows(): void
+    {
+        $body = "user,full_name,user_group,user_level,active,email\n"
+            ."6666,Admin,ADMIN,9,Y,admin@example.com\n"
+            ."11111,test user,ADMIN,6,Y,\n"
+            .'22222,old user,AGENTS,1,N,old.user@example.com';
+
+        $rows = VicidialResponse::from($body, [], 200, true)->rows();
+
+        $this->assertCount(3, $rows);
+        $this->assertSame('admin@example.com', $rows[0]['email']);
+        $this->assertSame('', $rows[1]['email']);
+        $this->assertSame('N', $rows[2]['active']);
+    }
+
+    public function test_agent_digital_stats_export_documented_output_parses_into_rows(): void
+    {
+        $body = "user|channel|contacts_handled|replies_sent|frt_sum_sec|frt_count|within_sla_count|resolution_sum_sec|resolution_count|messages_sum|handle_sum_sec|handle_count\n"
+            ."1029|CHAT|12|87|540|12|12|7320|12|190|6900|12\n"
+            .'1029|EMAIL|30|34|41200|28|21|96400|30|64|96400|30';
+
+        $response = VicidialResponse::from($body, [], 200, true);
+        $rows = $response->rows();
+
+        $this->assertTrue($response->ok());
+        $this->assertCount(2, $rows);
+        $this->assertSame('CHAT', $rows[0]['channel']);
+        $this->assertSame('41200', $rows[1]['frt_sum_sec']);
+        $this->assertSame('30', $rows[1]['handle_count']);
+    }
 }

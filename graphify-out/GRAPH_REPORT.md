@@ -1,17 +1,17 @@
-# Graph Report - vicidial-api-wrapper  (2026-10-12)
+# Graph Report - vicidial-api-wrapper  (2026-11-09)
 
 ## Corpus Check
-- 140 files · ~90,403 words
+- 143 files · ~96,156 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 3 file(s) not represented in the graph (top: .dist 2, (none) 1)
 
 ## Summary
-- 1778 nodes · 3089 edges · 139 communities (79 shown, 60 thin omitted)
+- 1815 nodes · 3133 edges · 149 communities (90 shown, 59 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 180 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b281d845`
+- Built from commit: `b3e42083`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,7 +19,7 @@
 - VicidialResponse
 - AdminContract
 - Admin
-- README
+- Client
 - Parameter
 - VicidialConfig
 - Agent
@@ -27,7 +27,7 @@
 - AgentContract
 - RetryConfig
 - RecordingTransporter
-- BasicAuth
+- PHPUnit\Framework\TestCase
 - data_N (status line) vs field_N (raw rows) parsed key naming
 - FakeHttpTransporter
 - VicidialResponses
@@ -40,7 +40,7 @@
 - Audit of the wrapper against the official VICIdial API docs (Oct 2026)
 - VicidialServiceProviderTest.php
 - ContentType
-- Migration Guide to v2.0
+- README
 - Test suite summary (unit + contract tests without a live VICIdial)
 - VicidialResponseParsingTest
 - MockPsrClient
@@ -55,7 +55,7 @@
 - Release Notes - v2.0
 - require
 - require-dev
-- SUCCESS/ERROR/NOTICE response prefix
+- Raw data output (success inferred by output)
 - composer.json
 - InvalidResponseException
 - Response
@@ -68,7 +68,7 @@
 - Implementation Complete: Comprehensive Test Suite
 - autoload
 - rector.php
-- HasResponseHelpers
+- Six Practical VICIdial Integrations You Can Build with PHP
 - HasMetaInformation.php
 - Summary of Changes - Configuration Object Implementation
 - UpdateLeadParameters
@@ -143,19 +143,28 @@
 - PingReport
 - EndpointCheck
 - Parameters
-- OfficialResponsesTest
+- TestCase
 - ApiErrorException
 - .switchLead
-- Parameters.php
+- VicidialResponseTest
 - scrape-official-responses.py
+- Method Naming Conventions
+- user/pass/source auth parameters
+- Hard limits of the VICIdial API
+- 23 Agent methods lack a ...Response() variant
+- AgentCoverageTest
+- SUCCESS/ERROR/NOTICE response prefix
+- audio_playback (Agent API)
+- Q: do a deep search in this project and the vici forum then let us write about integration we can do with this wrapper
+- hopper_bulk_insert (Non-Agent API)
 
 ## God Nodes (most connected - your core abstractions)
-1. `VicidialResponse` - 227 edges
-2. `Admin` - 123 edges
+1. `VicidialResponse` - 233 edges
+2. `Admin` - 127 edges
 3. `Agent` - 110 edges
 4. `Payload` - 96 edges
-5. `AgentContract` - 66 edges
-6. `AdminContract` - 64 edges
+5. `AdminContract` - 66 edges
+6. `AgentContract` - 66 edges
 7. `VicidialConfig` - 62 edges
 8. `RetryConfig` - 53 edges
 9. `QueryParams` - 45 edges
@@ -182,15 +191,15 @@
 - **Wrapper exception hierarchy rooted at VicidialException** — docs_error_handling_vicidialexception, docs_error_handling_authenticationexception, src_exceptions_transportexception_transportexception, docs_error_handling_apierrorexception, docs_error_handling_invalidresponseexception, docs_error_handling_unserializableresponse, docs_error_handling_configurationexception, docs_error_handling_retryexception, docs_error_handling_invalidargumentexception, docs_error_handling_errorexception [EXTRACTED 1.00]
 - **Legacy factory to configuration-object migration flow** — migration_configuration_object_pattern, migration_legacy_factory_deprecation, src_vicidialapi_vicidialapi_create, src_vicidialapi_vicidialapi_createwithbasicauth, src_vicidialapi_vicidialapi_client, src_vicidialconfig_vicidialconfig_create, src_vicidialconfig_vicidialconfig_createwithbasicauth, src_vicidialclient_vicidialclient_make [INFERRED 0.95]
 
-## Communities (139 total, 60 thin omitted)
+## Communities (149 total, 59 thin omitted)
 
 ### Community 0 - "VicidialResponse"
 Cohesion: 0.03
-Nodes (6): ArrayAccess + Stringable, immutable (set/unset throw BadMethodCallException), get()/has()/asArray()/asText()/toJson()/toArray() accessors, JSON response parsed as-is, VicidialResponse, Stringable, VicidialResponseTest
+Nodes (7): ArrayAccess + Stringable, immutable (set/unset throw BadMethodCallException), get()/has()/asArray()/asText()/toJson()/toArray() accessors, Request ID tracking via X-Request-ID header, JSON response parsed as-is, Expose raw PSR-7 response (status, headers) on VicidialResponse, VicidialResponse, Stringable
 
-### Community 3 - "README"
-Cohesion: 0.06
-Nodes (17): CHANGELOG, VicidialApi::createWithBasicAuth() Made Static, Keep a Changelog, Semantic Versioning, update_remote_agent (Non-Agent API), 100% Backward Compatible / Opt-in Feature Policy, Legacy Factory Method Deprecation, README (+9 more)
+### Community 3 - "Client"
+Cohesion: 0.07
+Nodes (10): VicidialApi::createWithBasicAuth() Made Static, update_remote_agent (Non-Agent API), Client, TransporterContract, Transportable, RemoteAgent, VicidialApi, ClientTest (+2 more)
 
 ### Community 4 - "Parameter"
 Cohesion: 0.07
@@ -201,32 +210,32 @@ Cohesion: 0.10
 Nodes (3): VicidialConfig, VicidialConfigFromArrayTest, VicidialConfigTest
 
 ### Community 7 - "stage output format"
-Cohesion: 0.10
-Nodes (34): agent_ingroup_availability (Non-Agent API), agent_stats_export (Non-Agent API), agent_status (Non-Agent API), batch_update_lead (Non-Agent API), callid_info (Non-Agent API), ccc_lead_info (Non-Agent API), did_log_export (Non-Agent API), hopper_bulk_insert (Non-Agent API) (+26 more)
+Cohesion: 0.17
+Nodes (18): agent_ingroup_availability (Non-Agent API), callid_info (Non-Agent API), ccc_lead_info (Non-Agent API), in_group_status (Non-Agent API), lead_all_info (Non-Agent API), lead_callback_info (Non-Agent API), lead_search (Non-Agent API), list_custom_fields (Non-Agent API) (+10 more)
 
 ### Community 9 - "RetryConfig"
 Cohesion: 0.08
 Nodes (4): ConfigurationException, self, RetryConfig, RetryConfigTest
 
 ### Community 10 - "RecordingTransporter"
-Cohesion: 0.08
-Nodes (9): API Coverage Guard Tests, Full Vicidial Agent and Non-Agent API Parity, ReflectionNamedType, RecordingTransporter, AdminCoverageTest, AgentCoverageTest, AgentEncodingTest, AgentResponseVariantsTest (+1 more)
+Cohesion: 0.12
+Nodes (4): ReflectionNamedType, RecordingTransporter, AgentEncodingTest, AgentResponseVariantsTest
 
-### Community 11 - "BasicAuth"
-Cohesion: 0.10
-Nodes (5): ApiKey, self, BasicAuth, self, HeadersTest
+### Community 11 - "PHPUnit\Framework\TestCase"
+Cohesion: 0.08
+Nodes (7): PHPUnit\Framework\TestCase, ApiKey, self, BasicAuth, self, AgentTest, HeadersTest
 
 ### Community 12 - "data_N (status line) vs field_N (raw rows) parsed key naming"
-Cohesion: 0.18
-Nodes (21): add_lead (Non-Agent API), external_add_lead (Agent API), external_dial (Agent API), external_hangup (Agent API), external_pause (Agent API), external_status (Agent API), Example: pause, hangup, dispo, pauseCode in order, logout (Agent API) (+13 more)
+Cohesion: 0.32
+Nodes (13): add_lead (Non-Agent API), external_add_lead (Agent API), external_dial (Agent API), external_hangup (Agent API), external_pause (Agent API), external_status (Agent API), Example: pause, hangup, dispo, pauseCode in order, pause_code (Agent API) (+5 more)
 
 ### Community 13 - "FakeHttpTransporter"
-Cohesion: 0.13
-Nodes (4): FakeHttpTransporter, AdminResponseTest, AgentResponseTest, AgentTest
+Cohesion: 0.14
+Nodes (3): FakeHttpTransporter, AdminResponseTest, AgentResponseTest
 
 ### Community 15 - "BaseUri"
 Cohesion: 0.15
-Nodes (6): Double Slash in Request URL Fix, PHPUnit\Framework\TestCase, BaseUri, self, BaseUriTest, PayloadUriTest
+Nodes (5): Double Slash in Request URL Fix, BaseUri, self, BaseUriTest, PayloadUriTest
 
 ### Community 16 - "Automatic Retries"
 Cohesion: 0.05
@@ -241,16 +250,16 @@ Cohesion: 0.06
 Nodes (35): 1. VicidialException (Base), 2. AuthenticationException, 3. TransportException, 4. ApiErrorException, 5. InvalidResponseException, 6. ConfigurationException, 7. RetryException, Backward Compatibility (+27 more)
 
 ### Community 19 - "Reliability Features Quick Reference"
-Cohesion: 0.04
-Nodes (48): Admin API Methods (Non-Agent API), Agent API Methods, Avoid These Patterns, Best Practices for Adding New Methods, Conclusion, Core API Methods, Examples, Examples of Correct Naming: (+40 more)
+Cohesion: 0.07
+Nodes (30): 🎓 Best Practices, Bulk Operations (Conservative Retry), 🎯 Common Scenarios, Critical Operations (Aggressive Retry), Custom, DEBUG, Default (Recommended), Disabled (+22 more)
 
 ### Community 20 - "RetryStatusCodeTest"
 Cohesion: 0.10
 Nodes (4): GuzzleHttp\Exception\ClientException, GuzzleHttp\Exception\ServerException, ServerException, RetryStatusCodeTest
 
 ### Community 21 - "Audit of the wrapper against the official VICIdial API docs (Oct 2026)"
-Cohesion: 0.09
-Nodes (25): update_did (Non-Agent API), audio_playback (Agent API), force_fronter_audio_stop (Agent API), force_fronter_leave_3way (Agent API), refresh_panel (Agent API), switch_lead (Agent API), update_fields (Agent API), Audit of the wrapper against the official VICIdial API docs (Oct 2026) (+17 more)
+Cohesion: 0.12
+Nodes (20): update_did (Non-Agent API), refresh_panel (Agent API), update_fields (Agent API), Audit of the wrapper against the official VICIdial API docs (Oct 2026), VicidialApi::createWithBasicAuth() made static, Document data_N / field_N naming or expose fields(): array, Request URL host//agc/api.php joined with a single slash, Removed inner urlencode() that double-encoded values (34 places) (+12 more)
 
 ### Community 22 - "VicidialServiceProviderTest.php"
 Cohesion: 0.13
@@ -260,9 +269,9 @@ Nodes (7): Illuminate\Config\Repository, Illuminate\Console\Command, Illuminate\
 Cohesion: 0.22
 Nodes (5): Http\Discovery\Psr17Factory, Http\Message\MultipartStream\MultipartStreamBuilder, ContentType, Method, self
 
-### Community 24 - "Migration Guide to v2.0"
-Cohesion: 0.08
-Nodes (28): call_dispo_report (Non-Agent API), function query variable selects the Non-Agent API command, Non-Agent API reference (docs/admin.md), ERROR: auth USER DOES NOT HAVE PERMISSION TO USE THIS FUNCTION, Agent API reference (docs/agent.md), Agent API responses: ERROR or SUCCESS with explanation, Required variables for all Agent API calls (user, pass, agent_user, source, hasSSl), Configuration (+20 more)
+### Community 24 - "README"
+Cohesion: 0.13
+Nodes (12): CHANGELOG, Keep a Changelog, Semantic Versioning, Docs index (docs/README.md), Migration Guide to v2.0, 100% Backward Compatible / Opt-in Feature Policy, Legacy Factory Method Deprecation, README (+4 more)
 
 ### Community 25 - "Test suite summary (unit + contract tests without a live VICIdial)"
 Cohesion: 0.19
@@ -281,12 +290,12 @@ Cohesion: 0.11
 Nodes (10): Generator, GuzzleHttp\Client, IteratorAggregate, Psr\Http\Message\RequestInterface, Psr\Http\Message\ResponseInterface, Psr\Http\Message\StreamInterface, ErrorException, StreamResponse (+2 more)
 
 ### Community 31 - "VicidialException (base)"
-Cohesion: 0.20
-Nodes (14): ApiErrorException, AuthenticationException, ConfigurationException, ErrorException (deprecated, use ApiErrorException), Structured exception hierarchy rooted at VicidialException, InvalidArgumentException (deprecated, use ConfigurationException), InvalidResponseException, Log raw responses for debugging (+6 more)
+Cohesion: 0.25
+Nodes (11): ApiErrorException, AuthenticationException, ConfigurationException, ErrorException (deprecated, use ApiErrorException), Structured exception hierarchy rooted at VicidialException, InvalidArgumentException (deprecated, use ConfigurationException), Migration from v1.x strpos('ERROR:') parsing, RetryException (+3 more)
 
 ### Community 32 - "Headers"
-Cohesion: 0.16
-Nodes (5): GuzzleHttp\Exception\ConnectException, GuzzleHttp\Psr7\Request, GuzzleHttp\Psr7\Response, Headers, self
+Cohesion: 0.15
+Nodes (6): GuzzleHttp\Exception\ConnectException, GuzzleHttp\Psr7\Request, GuzzleHttp\Psr7\Response, GuzzleHttp\Psr7\Utils, Headers, self
 
 ### Community 33 - "InvalidArgumentException"
 Cohesion: 0.14
@@ -308,9 +317,9 @@ Nodes (11): require, ext-json, graham-campbell/guzzle-factory, php, php-http/dis
 Cohesion: 0.15
 Nodes (13): require-dev, guzzlehttp/guzzle, guzzlehttp/psr7, illuminate/config, illuminate/console, illuminate/support, laravel/pint, phpstan/phpstan (+5 more)
 
-### Community 39 - "SUCCESS/ERROR/NOTICE response prefix"
-Cohesion: 0.27
-Nodes (11): agent_campaigns (Non-Agent API), agent_ingroup_info (Non-Agent API), campaigns_list (Non-Agent API), user_details (Non-Agent API), ok()/failed()/status() success detection, Pipe-delimited list rows (field_N keys), Status detection rules (SUCCESS / ERROR / NOTICE / informational), VicidialResponse::determineStatus() treats any body without ERROR as success (+3 more)
+### Community 39 - "Raw data output (success inferred by output)"
+Cohesion: 0.38
+Nodes (7): agent_campaigns (Non-Agent API), agent_ingroup_info (Non-Agent API), agent_status (Non-Agent API), campaigns_list (Non-Agent API), user_details (Non-Agent API), Pipe-delimited list rows (field_N keys), Raw data output (success inferred by output)
 
 ### Community 40 - "composer.json"
 Cohesion: 0.17
@@ -319,10 +328,6 @@ Nodes (11): php-http/discovery, authors, config, allow-plugins, description, hom
 ### Community 41 - "InvalidResponseException"
 Cohesion: 0.25
 Nodes (4): JsonException, InvalidResponseException, Throwable, UnserializableResponse
-
-### Community 42 - "Response"
-Cohesion: 0.18
-Nodes (3): GuzzleHttp\Psr7\Utils, self, Response
 
 ### Community 43 - "scripts"
 Cohesion: 0.25
@@ -333,8 +338,8 @@ Cohesion: 0.19
 Nodes (8): Configuration Object Pattern (VicidialConfig + VicidialClient), Psr\Log\LoggerInterface, Psr\Log\LoggerTrait, Standard vs HTTP Basic Authentication Modes, NullLogger, Stringable, self, self
 
 ### Community 47 - "Key-value text output (version/webserver)"
-Cohesion: 0.36
-Nodes (9): version (Non-Agent API), version (Agent API), webserver (Agent API), Request ID tracking via X-Request-ID header, Multi-line key: value text (webserver), VERSION format: KEY: value pairs separated by pipes, Expose raw PSR-7 response (status, headers) on VicidialResponse, vicidial:ping console command calling version on both endpoints (+1 more)
+Cohesion: 0.52
+Nodes (7): version (Non-Agent API), version (Agent API), webserver (Agent API), Multi-line key: value text (webserver), VERSION format: KEY: value pairs separated by pipes, vicidial:ping console command calling version on both endpoints, Key-value text output (version/webserver)
 
 ### Community 48 - "--BLANK-- clear-field sentinel"
 Cohesion: 0.33
@@ -352,12 +357,16 @@ Nodes (4): autoload, files, psr-4, VicidialApi\\
 Cohesion: 0.50
 Nodes (3): Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector, Rector\Config\RectorConfig, Rector\Set\ValueObject\SetList
 
+### Community 52 - "Six Practical VICIdial Integrations You Can Build with PHP"
+Cohesion: 0.07
+Nodes (26): Forum evidence, Method and limits, Official references and narrow conclusions, Project capability map, Release and accuracy findings, Research notes: VICIdial PHP integrations, Suggested follow-up articles, Verification (+18 more)
+
 ### Community 54 - "Summary of Changes - Configuration Object Implementation"
 Cohesion: 0.08
 Nodes (24): 1. `src/VicidialApi.php`, 1. `src/VicidialConfig.php`, 2. `README.md`, 2. `src/VicidialClient.php`, 3. `tests/Resources/AgentTest.php`, 3. `tests/VicidialConfigTest.php`, 4. `example/using_config.php`, 5. `MIGRATION.md` (+16 more)
 
 ### Community 55 - "UpdateLeadParameters"
-Cohesion: 0.13
+Cohesion: 0.14
 Nodes (3): AddLeadParameters, UpdateLeadParameters, ParametersTest
 
 ### Community 56 - "VicidialServiceProvider.php"
@@ -493,12 +502,56 @@ Cohesion: 0.67
 Nodes (3): Log Storage, Security Considerations, Sensitive Data Protection
 
 ### Community 127 - "RetryException"
-Cohesion: 0.25
+Cohesion: 0.22
 Nodes (3): Throwable, RetryException, Throwable
 
 ### Community 128 - "extra"
 Cohesion: 0.29
 Nodes (7): Vicidial, dev-master, extra, branch-alias, laravel, aliases, providers
+
+### Community 131 - "Parameters"
+Cohesion: 0.19
+Nodes (5): ReflectionClass, ReflectionProperty, Parameters, HasResponseHelpers, static
+
+### Community 132 - "TestCase"
+Cohesion: 0.14
+Nodes (4): OfficialResponsesTest, AdminCoverageTest, TestCase, VicidialApiBasicAuthTest
+
+### Community 139 - "Method Naming Conventions"
+Cohesion: 0.11
+Nodes (18): Admin API Methods (Non-Agent API), Agent API Methods, Avoid These Patterns, Best Practices for Adding New Methods, Conclusion, Core API Methods, Examples, Examples of Correct Naming: (+10 more)
+
+### Community 140 - "user/pass/source auth parameters"
+Cohesion: 0.24
+Nodes (13): call_dispo_report (Non-Agent API), function query variable selects the Non-Agent API command, Non-Agent API reference (docs/admin.md), ERROR: auth USER DOES NOT HAVE PERMISSION TO USE THIS FUNCTION, Agent API reference (docs/agent.md), Agent API responses: ERROR or SUCCESS with explanation, Required variables for all Agent API calls (user, pass, agent_user, source, hasSSl), Default source to the package name instead of 'test' (+5 more)
+
+### Community 142 - "Hard limits of the VICIdial API"
+Cohesion: 0.20
+Nodes (12): agent_stats_export (Non-Agent API), batch_update_lead (Non-Agent API), did_log_export (Non-Agent API), lead_status_search (Non-Agent API), phone_number_log (Non-Agent API), recording_lookup (Non-Agent API), update_lead (Non-Agent API), update_log_entry (Non-Agent API) (+4 more)
+
+### Community 143 - "23 Agent methods lack a ...Response() variant"
+Cohesion: 0.22
+Nodes (11): logout (Agent API), park_call (Agent API), recording (Agent API), stereo_recording (Agent API), transfer_conference (Agent API), InvalidResponseException, Log raw responses for debugging, UnserializableResponse (deprecated) (+3 more)
+
+### Community 144 - "AgentCoverageTest"
+Cohesion: 0.20
+Nodes (3): API Coverage Guard Tests, Full Vicidial Agent and Non-Agent API Parity, AgentCoverageTest
+
+### Community 145 - "SUCCESS/ERROR/NOTICE response prefix"
+Cohesion: 0.32
+Nodes (8): HTTP 4xx/5xx JSON error structure {error:{message,type,code}}, ok()/failed()/status() success detection, Status detection rules (SUCCESS / ERROR / NOTICE / informational), VicidialResponse::determineStatus() treats any body without ERROR as success, Leftover 'OpenAI' wording from the transport-layer template fixed, Plain HTTP GET + plain-text API (not REST/JSON), SUCCESS/ERROR/NOTICE response prefix, VicidialResponseTest: parsing for all VICIdial formats
+
+### Community 146 - "audio_playback (Agent API)"
+Cohesion: 0.40
+Nodes (5): audio_playback (Agent API), force_fronter_audio_stop (Agent API), force_fronter_leave_3way (Agent API), switch_lead (Agent API), Agent::switchLead() sends lead_id instead of value
+
+### Community 147 - "Q: do a deep search in this project and the vici forum then let us write about integration we can do with this wrapper"
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: do a deep search in this project and the vici forum then let us write about integration we can do with this wrapper, Source Nodes
+
+### Community 148 - "hopper_bulk_insert (Non-Agent API)"
+Cohesion: 0.67
+Nodes (3): hopper_bulk_insert (Non-Agent API), hopper_list (Non-Agent API), Push a lead and queue it in the hopper
 
 ## Ambiguous Edges - Review These
 - `audio_playback (Agent API)` → `switch_lead (Agent API)`  [AMBIGUOUS]
@@ -507,9 +560,9 @@ Nodes (7): Vicidial, dev-master, extra, branch-alias, laravel, aliases, provider
   docs/RESPONSE_DTO.md · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **408 isolated node(s):** `name`, `description`, `keywords`, `homepage`, `license` (+403 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 716 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **60 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **429 isolated node(s):** `name`, `description`, `keywords`, `homepage`, `license` (+424 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 740 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **59 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -518,12 +571,12 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
 - **What is the exact relationship between `HTTP 4xx/5xx JSON error structure {error:{message,type,code}}` and `Plain HTTP GET + plain-text API (not REST/JSON)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `VicidialResponse` connect `VicidialResponse` to `EndpointCheck`, `README`, `OfficialResponsesTest`, `Agent`, `stage output format`, `AgentContract`, `.switchLead`, `RecordingTransporter`, `data_N (status line) vs field_N (raw rows) parsed key naming`, `FakeHttpTransporter`, `BaseUri`, `Audit of the wrapper against the official VICIdial API docs (Oct 2026)`, `VicidialResponseParsingTest`, `ResponseContract`, `VicidialException (base)`, `Headers`, `InvalidArgumentException`, `HttpTransporter`, `SUCCESS/ERROR/NOTICE response prefix`, `Response`, `Response DTOs (VicidialResponse)`, `ArrayAccessible`, `Key-value text output (version/webserver)`, `HasResponseHelpers`, `UpdateLeadParameters`, `.from`, `.agentOptions`, `Ping`, `HttpTransporter.php`, `DialParameters`, `DispoParameters`, `RetryException`?**
-  _High betweenness centrality (0.187) - this node is a cross-community bridge._
-- **Why does `README` connect `README` to `Admin`, `VicidialConfig`, `Agent`, `RetryConfig`, `RecordingTransporter`, `Psr\Log\LoggerInterface`, `Audit of the wrapper against the official VICIdial API docs (Oct 2026)`, `Migration Guide to v2.0`, `VicidialClient`, `.agentOptions`, `DialParameters`?**
-  _High betweenness centrality (0.148) - this node is a cross-community bridge._
-- **Why does `Agent` connect `Agent` to `InvalidArgumentException`, `README`, `VicidialConfig`, `.switchLead`, `AgentContract`, `RecordingTransporter`, `FakeHttpTransporter`, `HasResponseHelpers`, `VicidialServiceProviderTest.php`, `UpdateLeadParameters`, `Migration Guide to v2.0`, `VicidialClient`, `.agentOptions`, `DialParameters`, `DispoParameters`?**
-  _High betweenness centrality (0.098) - this node is a cross-community bridge._
+- **Why does `VicidialResponse` connect `VicidialResponse` to `EndpointCheck`, `Client`, `Admin`, `Parameters`, `Agent`, `stage output format`, `AgentContract`, `.switchLead`, `TestCase`, `RecordingTransporter`, `data_N (status line) vs field_N (raw rows) parsed key naming`, `.rawAgentOptions`, `FakeHttpTransporter`, `23 Agent methods lack a ...Response() variant`, `AgentCoverageTest`, `SUCCESS/ERROR/NOTICE response prefix`, `PHPUnit\Framework\TestCase`, `Audit of the wrapper against the official VICIdial API docs (Oct 2026)`, `VicidialResponseParsingTest`, `ResponseContract`, `VicidialException (base)`, `Headers`, `InvalidArgumentException`, `HttpTransporter`, `Raw data output (success inferred by output)`, `VicidialResponseTest`, `Response`, `Response DTOs (VicidialResponse)`, `ArrayAccessible`, `Key-value text output (version/webserver)`, `UpdateLeadParameters`, `.from`, `.agentOptions`, `Ping`, `HttpTransporter.php`, `DialParameters`, `DispoParameters`, `RetryException`?**
+  _High betweenness centrality (0.215) - this node is a cross-community bridge._
+- **Why does `README` connect `README` to `Admin`, `Client`, `VicidialConfig`, `Agent`, `RetryConfig`, `Psr\Log\LoggerInterface`, `AgentCoverageTest`, `Six Practical VICIdial Integrations You Can Build with PHP`, `Audit of the wrapper against the official VICIdial API docs (Oct 2026)`, `VicidialClient`, `.agentOptions`, `DialParameters`?**
+  _High betweenness centrality (0.184) - this node is a cross-community bridge._
+- **Why does `Admin` connect `Admin` to `VicidialResponse`, `AdminContract`, `Client`, `Parameters`, `TestCase`, `VicidialConfig`, `FakeHttpTransporter`, `AgentCoverageTest`, `UpdateLeadParameters`, `VicidialClient`?**
+  _High betweenness centrality (0.106) - this node is a cross-community bridge._
 - **Are the 24 inferred relationships involving `VicidialResponse` (e.g. with `Migration from v1.x strpos('ERROR:') parsing` and `ArrayAccess + Stringable, immutable (set/unset throw BadMethodCallException)`) actually correct?**
   _`VicidialResponse` has 24 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `Agent` (e.g. with `Full Vicidial Agent and Non-Agent API Parity` and `Single URL-Encoding Guarantee`) actually correct?**

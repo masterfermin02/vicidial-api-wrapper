@@ -704,7 +704,7 @@ All 31 functions: `hangupResponse()`, `dispoResponse()`, `pauseResponse()`, `pau
 - `updateLeadResponse()`
 - `campaignsListResponse()`
 - `hopperListResponse()`
-- ... and every other Non-Agent function (61 in total).
+- ... and every other Non-Agent function (63 in total).
 
 ### Typed parameters
 

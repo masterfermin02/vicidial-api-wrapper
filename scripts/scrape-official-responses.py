@@ -21,7 +21,7 @@ def scrape(path):
                 out[func].append(text)
     return {k: v for k, v in out.items() if v}
 agent = scrape(sys.argv[1]); non_agent = scrape(sys.argv[2])
-json.dump({'_source': {'agent': 'http://vicidial.org/docs/AGENT_API.txt (updated 2025-08-30)', 'non_agent': 'http://vicidial.org/docs/NON-AGENT_API.txt (updated 2026-09-25)', 'generator': 'see scripts/README.md'},
+json.dump({'_source': {'agent': 'http://vicidial.org/docs/AGENT_API.txt (updated 2025-08-30)', 'non_agent': 'http://vicidial.org/docs/NON-AGENT_API.txt (updated 2026-11-02)', 'generator': 'see scripts/README.md'},
            'agent': agent, 'non_agent': non_agent}, open(sys.argv[3], 'w'), indent=2)
 print('agent functions:', len(agent), 'responses:', sum(len(v) for v in agent.values()))
 print('non_agent functions:', len(non_agent), 'responses:', sum(len(v) for v in non_agent.values()))

@@ -12,7 +12,7 @@ VICIDIAL is a software suite that is designed to interact with the Asterisk Open
 http://www.vicidial.org/vicidial.php
 
 Vicidial has an AGENT API and NON AGENT API, this classes are intended to make it easier to use in PHP.
-The wrapper covers **all 31 Agent API functions and all 61 Non-Agent API functions** documented by VICIdial (guarded by tests), see [How the VICIdial API works](docs/VICIDIAL_API_GUIDE.md).
+The wrapper covers **all 31 Agent API functions and all 63 Non-Agent API functions** documented by VICIdial (guarded by tests), see [How the VICIdial API works](docs/VICIDIAL_API_GUIDE.md).
 
 - http://vicidial.org/docs/NON-AGENT_API.txt
 - http://vicidial.org/docs/AGENT_API.txt
@@ -112,6 +112,10 @@ $config = VicidialConfig::create(
 );
 $client = VicidialClient::make($config);
 ```
+
+### 4.3.0 (2026-11-09)
+- New Non-Agent functions from the 2026-11-02 VICIdial docs: `usersList()` (`users_list`) and `agentDigitalStatsExport()` (`agent_digital_stats_export`, email/chat stats per agent per channel), each with a `...Response()` variant
+- `agent_stats_export` documents the new `channel` option (VOICE, EMAIL or CHAT)
 
 ### 4.2.0 (2026-10-12)
 - Every Agent function has a `...Response()` variant; typed parameter objects (`DialParameters`, `AddLeadParameters`, ...)

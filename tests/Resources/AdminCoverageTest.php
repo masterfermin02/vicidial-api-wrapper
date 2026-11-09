@@ -11,7 +11,7 @@ use VicidialApi\Responses\VicidialResponse;
 
 /**
  * Verifies that every Non-Agent API function added for parity with
- * NON-AGENT_API.txt (updated 2026-09-25) sends the right `function` name
+ * NON-AGENT_API.txt (updated 2026-11-02) sends the right `function` name
  * to /vicidial/non_agent_api.php, for both the raw and the Response variants.
  */
 final class AdminCoverageTest extends TestCase
@@ -36,6 +36,8 @@ final class AdminCoverageTest extends TestCase
             'lead_dearchive' => ['leadDearchive', 'lead_dearchive', ['lead_id' => '274071']],
             'update_remote_agent' => ['updateRemoteAgent', 'update_remote_agent', ['agent_user' => '2424', 'status' => 'INACTIVE']],
             'user_details' => ['userDetails', 'user_details', ['agent_user' => '1234', 'stage' => 'csv']],
+            'users_list' => ['usersList', 'users_list', ['stage' => 'csv', 'header' => 'YES']],
+            'agent_digital_stats_export' => ['agentDigitalStatsExport', 'agent_digital_stats_export', ['datetime_start' => '2026-10-01+00:00:00', 'datetime_end' => '2026-10-07+23:59:59', 'channel' => 'CHAT', 'sla_seconds' => '300']],
             'copy_phone' => ['copyPhone', 'copy_phone', ['extension' => '55000', 'source_extension' => 'cc100', 'source_server_ip' => '10.0.9.8']],
         ];
     }
@@ -83,12 +85,12 @@ final class AdminCoverageTest extends TestCase
 
     public function test_every_documented_non_agent_function_is_wrapped(): void
     {
-        // Index of NON-AGENT_API.txt (vicidial.org/docs, updated 2026-09-25) plus the two
+        // Index of NON-AGENT_API.txt (vicidial.org/docs, updated 2026-11-02) plus the two
         // functions that are documented in the body but missing from the index.
         $documented = [
             'version', 'sounds_list', 'moh_list', 'vm_list', 'blind_monitor', 'add_lead', 'update_lead',
             'batch_update_lead', 'agent_ingroup_info', 'agent_ingroup_availability', 'recording_lookup',
-            'did_log_export', 'agent_stats_export', 'add_user', 'update_user', 'copy_user', 'add_phone',
+            'did_log_export', 'agent_stats_export', 'agent_digital_stats_export', 'add_user', 'update_user', 'copy_user', 'add_phone',
             'update_phone', 'add_phone_alias', 'update_phone_alias', 'add_list', 'update_list', 'list_info',
             'list_custom_fields', 'add_group_alias', 'user_group_status', 'in_group_status', 'agent_status',
             'callid_info', 'lead_field_info', 'lead_callback_info', 'lead_all_info', 'lead_status_search',
@@ -97,7 +99,7 @@ final class AdminCoverageTest extends TestCase
             'call_dispo_report', 'agent_campaigns', 'update_cid_group_entry', 'add_dnc_phone',
             'delete_dnc_phone', 'add_fpg_phone', 'delete_fpg_phone', 'campaigns_list', 'hopper_list',
             'hopper_bulk_insert', 'update_alt_url', 'update_presets', 'lead_dearchive', 'update_remote_agent',
-            'user_details', 'update_log_entry', 'copy_phone',
+            'user_details', 'users_list', 'update_log_entry', 'copy_phone',
         ];
 
         $source = (string) file_get_contents(__DIR__.'/../../src/Resources/Admin.php');

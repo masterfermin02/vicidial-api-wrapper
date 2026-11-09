@@ -92,6 +92,13 @@ interface AdminContract
     public function agentStatsExport(array $options): string;
 
     /**
+     * Export agent email and chat statistics for a time period.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function agentDigitalStatsExport(array $options): string;
+
+    /**
      * Get user group status.
      *
      * @param  array<string, string>  $options
@@ -426,6 +433,13 @@ interface AdminContract
      * @param  array<string, string>  $options
      */
     public function userDetails(array $options): string;
+
+    /**
+     * Display information about all users the API user may view.
+     *
+     * @param  array<string, string>  $options
+     */
+    public function usersList(array $options): string;
 
     /**
      * Copy an existing phone to a new extension.
